@@ -104,8 +104,37 @@ const resources = {
                 'Cord W. Mossberg is a 10-year veteran of Wall Street. Having first worked with trading clients on various trading exchange floors including the New York Stock Exchange, American Stock Exchange, Chicago Board Options Exchange, Mr. Mossberg later transitioned to support and assist more institutional investment clients. While growing his client base across different investor profiles, Mr. Mossberg supported clients in investing in various asset classes including US-listed Equities, Equity Options, and Futures. By maintaining relationships with the different investors, Mr. Mossberg has continued to learn and understand the various approaches to investing. A Colorado native, Mr. Mossberg ultimately wanted to return to his roots and use his investing knowledge in his home state. After a brief time in Mexico, where Mr. Mossberg lived to study Spanish and research the opportunities in lending internationally, he found that there was great potential in helping lower-income families procure financial stability. He returned to Colorado where he connected with his good friend and business partner Grayson Gibson. Combining Mr. Gibson’s knowledge of the Manufactured Home industry with his own investing experience, Mr. Mossberg and Mr. Gibson started Mobile Fund Services, LLC. Mr. Mossberg holds Financial Industry Regulatory Authority (FINRA/NASD) Licenses Series 7, Series 63, Series 4, Series 3.',
             'team.member3.bio':
                 'Chance Schaeffer serves as the Managing Broker at Mobile Fund Services LLC, bringing a wealth of experience in real estate and financial services. With a keen eye for market opportunities and a passion for helping clients achieve their housing goals, Chance has become a trusted advisor in the manufactured housing sector. His innovative approach to brokerage, combined with a deep understanding of the Colorado market, has enabled him to facilitate numerous successful transactions. Chance holds a degree in Business Administration from the University of Colorado and is a licensed real estate broker. His commitment to excellence and client satisfaction drives the company’s mission to provide affordable housing solutions.',
-               //Investors Page
+            //Investors Page
             'investors.title': 'Investor Login',
+
+            //Contact Page
+            contact: {
+                title: 'Contact Us',
+                subtitle: 'Questions, comments, or requests? Feel free to reach out, we’d love to hear from you.',
+                details: 'Contact Details',
+                address: 'Address',
+                mailing_address: 'Mailing Address',
+                telephone: 'Telephone',
+                email: 'Email',
+                hours: 'Business Hours',
+                hours_monday: 'Monday',
+                hours_tuesday: 'Tuesday',
+                hours_wednesday: 'Wednesday',
+                hours_thursday: 'Thursday',
+                hours_friday: 'Friday',
+                hours_saturday: 'Saturday',
+                hours_sunday: 'Sunday',
+                form_title: 'Send Us a Message',
+                form_name: 'Name',
+                form_email: 'Email',
+                form_message: 'Message',
+                send: 'Send',
+                sending: 'Sending...',
+                success: 'Your message has been sent successfully!',
+                success_title: 'Success!',
+                error: 'There was an error sending your message. Please try again.',
+                send_another: 'Send Another Message',
+            },
             // Apply Page
             'apply.title': 'New Application',
             'apply.form.stepIndicator': 'Step {{step}} of {{total}}',
@@ -287,8 +316,36 @@ const resources = {
             'team.member3.bio':
                 'Chance Schaeffer se desempeña como Corredor Administrativo en Mobile Fund Services LLC, aportando una vasta experiencia en bienes raíces y servicios financieros. Con una visión clara de las oportunidades del mercado y una pasión por ayudar a los clientes a alcanzar sus objetivos de vivienda, Chance se ha convertido en un asesor de confianza en el sector de las viviendas prefabricadas. Su enfoque innovador en la intermediación, combinado con un profundo conocimiento del mercado de Colorado, le ha permitido facilitar numerosas transacciones exitosas. Chance es licenciado en Administración de Empresas por la Universidad de Colorado y es corredor inmobiliario con licencia. Su compromiso con la excelencia y la satisfacción del cliente impulsa la misión de la empresa: brindar soluciones de vivienda asequible.',
 
-                //Investors Page
+            //Investors Page
             'investors.title': 'Inversores',
+
+            //Contact Page
+            contact: {
+                title: 'Contáctanos',
+                subtitle: '¿Preguntas, comentarios o solicitudes? No dudes en contactarnos, nos encantaría saber de ti.',
+                details: 'Detalles de Contacto',
+                address: 'Dirección',
+                mailing_address: 'Dirección Postal',
+                telephone: 'Teléfono',
+                email: 'Correo Electrónico',
+                hours: 'Horario de Atención',
+                hours_monday: 'Lunes',
+                hours_tuesday: 'Martes',
+                hours_wednesday: 'Miércoles',
+                hours_thursday: 'Jueves',
+                hours_friday: 'Viernes',
+                hours_saturday: 'Sábado',
+                hours_sunday: 'Domingo',
+                form_title: 'Envíanos un Mensaje',
+                form_name: 'Nombre',
+                form_email: 'Correo Electrónico',
+                form_message: 'Mensaje',
+                send: 'Enviar',
+                sending: 'Enviando...',
+                success: '¡Tu mensaje ha sido enviado exitosamente!',
+                error: 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo.',
+                send_another: 'Enviar Otro Mensaje',
+            },
 
             // Apply Page
             'apply.title': 'Nueva Solicitud',

@@ -20,6 +20,7 @@ export default function Investors() {
     return (
         <LandingLayout>
             <Head title={t('investors.title')} />
+            {/* <PageTransition> */}
             <section className="relative overflow-visible bg-gradient-to-b from-gray-50 to-gray-200 py-20 dark:from-gray-800 dark:to-gray-700">
                 <div className="relative z-10 container mx-auto px-4">
                     <AnimateOnView delay={0.2}>
@@ -29,7 +30,7 @@ export default function Investors() {
                         <div className="flex justify-center">
                             {isIframeLoading ? (
                                 <motion.div
-                                    className="min-h-[500px] w-full animate-pulse rounded-lg bg-gray-200 dark:bg-gray-600"
+                                    className="min-h-[500px] w-full animate-pulse rounded-lg bg-gray-500 dark:bg-gray-600"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.4, ease: 'easeInOut' }}
@@ -48,6 +49,7 @@ export default function Investors() {
                     </AnimateOnView>
                 </div>
             </section>
+            {/* </PageTransition> */}
         </LandingLayout>
     );
 }

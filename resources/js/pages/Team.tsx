@@ -48,6 +48,7 @@ export default function Team() {
     return (
         <LandingLayout>
             <Head title={t('team.title')} />
+
             <section className="relative overflow-visible bg-gradient-to-b from-gray-50 to-gray-200 py-20 dark:from-gray-800 dark:to-gray-700">
                 <div className="relative z-10 container mx-auto px-4">
                     <AnimateOnView delay={0.2}>

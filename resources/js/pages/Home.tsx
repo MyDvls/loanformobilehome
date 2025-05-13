@@ -13,7 +13,7 @@ export default function Home() {
     return (
         <LandingLayout>
             <Head title="Home" />
-            <PageTransition>
+            {/* <PageTransition> */}
                 <div className="flex min-h-screen flex-col">
                     <AnimateOnView delay={0.2}>
                         <section className="bg-gradient-to-b from-gray-50 to-gray-200 py-40 dark:from-gray-900 dark:to-gray-800">
@@ -32,7 +32,7 @@ export default function Home() {
                     <Requirements />
                     <TestimonialSection />
                 </div>
-            </PageTransition>
+            {/* </PageTransition> */}
         </LandingLayout>
     );
 }
