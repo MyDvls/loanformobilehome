@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplyController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,6 +53,8 @@ Route::get('/privacy', function () {
 Route::get('/terms', function () {
     return Inertia::render('Terms');
 })->name('terms');
+
+Route::post('/apply', [ApplyController::class, 'apply'])->name('apply.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
