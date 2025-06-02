@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useState } from 'react';
@@ -140,6 +141,7 @@ const states = [
 const ApplicationForm = () => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
+    const { toast } = useToast();
 
     const form = useForm({
         resolver: yupResolver(formSchema),
@@ -824,7 +826,10 @@ const ApplicationForm = () => {
                     Accept: 'application/json',
                 },
             });
-            alert(t('apply.form.submitSuccess'));
+            toast({
+                title: t('apply.form.submitSuccess'),
+                description: t('apply.form.submitSuccess'),
+            });
             console.log('Success:', response.data);
         } catch (error) {
             alert(t('apply.form.submitError'));
