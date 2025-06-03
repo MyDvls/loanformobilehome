@@ -305,7 +305,8 @@ const ProcessSteps = () => {
                 </AnimateOnView>
             </div>
 
-            <div className="absolute bottom-[-50px] left-0 z-0 h-[100px] w-full origin-top skew-y-[-3deg] transform bg-gray-200 dark:bg-gray-700" />
+            <div className="absolute bottom-[-50px] left-0 z-0 h-[120px] w-full origin-top skew-y-[-2.5deg] transform bg-gray-200 dark:bg-gray-700" />
+            <div className="absolute bottom-[-50px] left-0 z-0 h-[120px] w-full origin-top skew-y-[2.5deg] transform bg-gray-200 dark:bg-gray-700" />
         </section>
     );
 };
