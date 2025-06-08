@@ -100,17 +100,15 @@ const Requirements = () => {
                     <div className="relative h-[600px] w-full md:w-1/2">
                         <div className="relative h-full">
                             {requirements.map((req, index) => (
-                                <AnimateOnView key={index} delay={index * 0.1}>
-                                    <button
-                                        onClick={() => setActiveIndex(index)}
-                                        className={`absolute flex items-center justify-center rounded-full p-4 transition-all ${activeIndex === index ? 'bg-blue-100 dark:bg-blue-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-                                        style={getOscillationStyle(index)}
-                                    >
-                                        <req.icon
-                                            className={`h-8 w-8 flex-shrink-0 ${activeIndex === index ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}
-                                        />
-                                    </button>
-                                </AnimateOnView>
+                                <button
+                                    onClick={() => setActiveIndex(index)}
+                                    className={`absolute flex items-center justify-center rounded-full p-4 transition-all ${activeIndex === index ? 'bg-blue-100 dark:bg-blue-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                                    style={getOscillationStyle(index)}
+                                >
+                                    <req.icon
+                                        className={`h-8 w-8 flex-shrink-0 ${activeIndex === index ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}
+                                    />
+                                </button>
                             ))}
 
                             {/* Optional connecting path */}

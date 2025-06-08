@@ -31,6 +31,12 @@ const teamMembers: TeamMember[] = [
         bio: 'team.member3.bio',
         image: 'https://ui-avatars.com/api/?name=Chance+Schaeffer&size=128&background=8B5CF6&color=fff',
     },
+    {
+        name: 'Arhemmy',
+        role: 'Office Manager',
+        bio: 'team.member4.bio',
+        image: 'https://ui-avatars.com/api/?name=Arhemmy&size=128&background=8B5CF6&color=fff',
+    },
 ];
 
 export default function Team() {
@@ -50,7 +56,7 @@ export default function Team() {
             <Head title={t('team.title')} />
 
             <section className="relative overflow-visible bg-gradient-to-b from-gray-50 to-gray-200 py-20 dark:from-gray-800 dark:to-gray-700">
-                <div className="relative z-10 container mx-auto px-4">
+                <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-12 xl:px-24">
                     <AnimateOnView delay={0.2}>
                         <h2 className="mb-10 text-center text-4xl font-bold text-gray-800 dark:text-white">{t('team.title')}</h2>
                         <p className="mb-12 text-center text-xl text-gray-600 dark:text-gray-300">{t('team.subtitle')}</p>
@@ -83,7 +89,7 @@ export default function Team() {
                                     <p className="mb-4 line-clamp-3 text-gray-600 dark:text-gray-300">{t(member.bio.substring(0, 150))}...</p>
                                     <button
                                         onClick={() => openMemberDetails(member.name)}
-                                        className="mt-auto flex items-center rounded-md bg-purple-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-purple-700"
+                                        className="mt-7 flex min-h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg border-0 border-solid border-[#49274A] bg-[#49274A] px-4 py-3 text-center text-base font-semibold text-[#FDFAF8] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)] transition-colors hover:bg-[#3a1e3b]"
                                     >
                                         Read more
                                         <svg
@@ -119,14 +125,14 @@ export default function Team() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 20 }}
                                 transition={{ duration: 0.3 }}
-                                className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800"
+                                className="max-h-[60vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 {teamMembers
                                     .filter((member) => member.name === selectedMember)
                                     .map((member) => (
                                         <div key={member.name} className="flex flex-col md:flex-row">
-                                            <div className="flex flex-col items-center justify-start bg-purple-50 p-8 md:w-1/3 dark:bg-gray-700">
+                                            <div className="hidden flex-col items-center justify-start bg-purple-50 p-8 md:flex md:w-1/3 dark:bg-gray-700">
                                                 <div className="mb-4 h-40 w-40 overflow-hidden rounded-full">
                                                     <img
                                                         style={{

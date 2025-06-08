@@ -6,10 +6,8 @@ import TestimonialSection from '@/components/TestimonialSection';
 import { Hero } from '@/components/ui/Hero';
 import LandingLayout from '@/layouts/landing-layout';
 import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
 
 export default function Home() {
-    const { t } = useTranslation();
     return (
         <LandingLayout>
             <Head title="Home" />

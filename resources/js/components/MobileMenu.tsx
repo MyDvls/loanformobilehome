@@ -19,7 +19,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-10 h-[100vh] bg-white px-6 pt-20 md:hidden dark:bg-gray-800">
+        <div className="fixed inset-0 z-10 h-[100vh] bg-white px-6 pt-20 lg:hidden dark:bg-gray-800">
             <button className="absolute top-6 right-6 text-gray-600 dark:text-gray-400" onClick={onClose} aria-label={t('nav.closeMenu')}>
                 <X size={28} />
             </button>

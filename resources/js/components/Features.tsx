@@ -1,46 +1,41 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Features: React.FC = () => {
+    const { t } = useTranslation();
     const features = [
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/49ae7f7241201d554d39a316734c19d97c016c1d?placeholderIfAbsent=true',
-            title: 'Expert Guidance',
+            title: t('features.1.title'),
             description: (
                 <>
-                    <span className="text-[#191817]">Over </span>
-                    <span className="font-semibold text-[#191817]">35 years</span>
-                    <span className="text-[#191817]"> experience in the</span>
-                    <span className="font-semibold text-[#191817]"> Financial services</span>
-                    <span className="text-[#191817]"> Industry.</span>
+                    <span className="text-[#191817]">{t('features.1.description')}</span>
                 </>
             ),
         },
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/caa9cebb7f2ee27128b046f808519ee1b0db109b?placeholderIfAbsent=true',
-            title: 'Bilingual Support',
+            title: t('features.2.title'),
             description: (
                 <>
-                    <span className="text-[#191817]">Friendly service in </span>
-                    <span className="font-semibold text-[#191817]">English</span>
-                    <span className="text-[#191817]"> and </span>
-                    <span className="font-semibold text-[#191817]">Spanish.</span>
+                    <span className="text-[#191817]">{t('features.2.description')}</span>
                 </>
             ),
         },
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/c86d775aad3393f5c1db83c020640f53aeceb20f?placeholderIfAbsent=true',
-            title: 'Competitive Rates',
-            description: 'We offer loan options with rates designed to save you money.',
+            title: t('features.3.title'),
+            description: t('features.3.description'),
         },
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/7e70a0f079b36271b9a4cc5c402397a0339a9114?placeholderIfAbsent=true',
-            title: 'Fast Appraisals and Closings',
-            description: 'Enjoy quick desktop appraisals, smooth closings, and speedy funding to get you into your home faster.',
+            title: t('features.4.title'),
+            description: t('features.4.description'),
         },
         {
-            icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/41844be3e7f4ea425ad40fe0628a20da1bf446bd?placeholderIfAbsent=true',
-            title: 'Trusted by Homeowners',
-            description: 'Hundreds of satisfied clients and families.',
+            icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/c86d775aad3393f5c1db83c020640f53aeceb20f?placeholderIfAbsent=true',
+            title: t('features.5.title'),
+            description: t('features.5.description'),
         },
     ];
 
@@ -49,7 +44,7 @@ export const Features: React.FC = () => {
             {/* Desktop Version (md and up) */}
             <section className="mt-[88px] hidden w-full px-[120px] md:block">
                 <div className="w-full">
-                    <h2 className="text-center text-[40px] font-bold text-black dark:text-white">Why Choose Us?</h2>
+                    <h2 className="text-center text-[40px] font-bold text-black dark:text-white">{t('features.title')}</h2>
                     <div className="mt-14 flex w-full flex-wrap gap-[18px_24px]">
                         {features.map((feature, index) => (
                             <article

@@ -1,76 +1,62 @@
 import { Button } from '@/components/ui/button';
+import { useAppearance } from '@/hooks/use-appearance';
 import { Link, usePage } from '@inertiajs/react';
+import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navigation() {
     const { props } = usePage();
     const { t } = useTranslation();
+    const { appearance, updateAppearance } = useAppearance();
 
-    const isActive = (path: string) => {
-        return props.url === path;
-    };
+    const isActive = (path: string) => props.url === path;
 
     return (
-        <div className="hidden items-center space-x-6 md:flex">
-            <Link
-                href="/"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.home')}
-            </Link>
-            <Link
-                href="/services"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/services') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.services')}
-            </Link>
-            <Link
-                href="/understanding-loan"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/understanding-loan') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.understanding-loan')}
-            </Link>
-            <Link
-                href="/team"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/team') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.team')}
-            </Link>
-            <Link
-                href="/investors"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/investors') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.investors')}
-            </Link>
-            <Link
-                href="/contact"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/contact') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.contact')}
-            </Link>
-            <Link
-                href="/login"
-                className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive('/login') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                }`}
-            >
-                {t('nav.login')}
-            </Link>
-            <Link href="/apply">
-                <Button className="bg-blue-600 font-medium shadow-lg shadow-blue-500/30 hover:bg-blue-700">{t('nav.apply')}</Button>
-            </Link>
+        <div className="my-auto hidden w-full max-w-5xl flex-1 items-center justify-between self-stretch px-4 lg:flex">
+            {/* Left group: nav links */}
+            <div className="flex items-center space-x-6">
+                {[
+                    { path: '/', label: 'nav.home' },
+                    { path: '/services', label: 'nav.services' },
+                    { path: '/understanding-loan', label: 'nav.understanding-loan' },
+                    { path: '/team', label: 'nav.team' },
+                    { path: '/investors', label: 'nav.investors' },
+                    { path: '/contact', label: 'nav.contact' },
+                ].map(({ path, label }) => (
+                    <Link
+                        key={path}
+                        href={path}
+                        className={`text-sm font-medium transition-colors duration-200 ${
+                            isActive(path) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
+                        }`}
+                    >
+                        {t(label)}
+                    </Link>
+                ))}
+            </div>
+
+            {/* Right group: Language / Theme / Auth */}
+            <div className="flex items-center space-x-4">
+                <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
+                    {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                </button>
+                <LanguageSwitcher />
+                <Link
+                    href="/login"
+                    className={`text-sm font-medium transition-colors duration-200 ${
+                        isActive('/login') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
+                    }`}
+                >
+                    {t('nav.login')}
+                </Link>
+                <Link href="/apply">
+                    <Button variant="primary">
+                        {t('nav.apply')}
+                        <ArrowRight className="h-5 w-5" />
+                    </Button>
+                </Link>
+            </div>
         </div>
     );
 }

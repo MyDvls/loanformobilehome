@@ -1,87 +1,121 @@
-import { Link } from '@inertiajs/react';
-import { MessageCircle } from 'lucide-react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function Footer() {
+export const Footer: React.FC = () => {
     const { t } = useTranslation();
+    const [email, setEmail] = useState('');
+
+    const handleWhatsAppClick = () => {
+        window.open('https://wa.me/17205601018', '_blank');
+    };
+
+    const handleEmailSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('Email submitted:', email);
+        setEmail('');
+    };
 
     return (
-        <footer className="border-t border-gray-200 bg-white py-12 dark:border-gray-700 dark:bg-gray-800">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                    {/* Contact Info */}
-                    <div className="flex flex-col space-y-2">
-                        <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">{t('footer.contact')}</h3>
-                        <a
-                            href="mailto:Support@loanformobilehome.com"
-                            className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500"
-                        >
-                            Support@loanformobilehome.com
-                        </a>
-                        <a href="tel:+17205601018" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            720.560.1018
-                        </a>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            324 Main St.
-                            <br />
-                            Unit D
-                            <br />
-                            Lyons, CO 80540
-                            <br />
-                            United States
-                        </p>
+        <footer className="flex min-h-[410px] w-full flex-wrap items-stretch overflow-hidden bg-[#49274A] px-[120px] pt-[60px] max-md:max-w-full max-md:px-5">
+            <div className="w-full min-w-60 flex-1 shrink basis-[0%] max-md:max-w-full">
+                <div className="flex h-full w-full flex-1 flex-wrap gap-[118px_40px] max-md:max-w-full">
+                    <div className="min-w-[300px] flex-1 shrink basis-[0%]">
+                        <div className="flex w-[183px] max-w-full items-center gap-1.5 rounded-lg bg-[#FDFAF8] px-3 py-2 text-lg font-bold text-[#191817]">
+                            <img
+                                src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/5465d0c00c627e9e07b80a0796a13dfdc422f5b4?placeholderIfAbsent=true"
+                                className="my-auto aspect-[0.61] w-[27px] shrink-0 self-stretch object-contain"
+                                alt="Mobile Fund Services logo"
+                            />
+                            <div className="my-auto self-stretch text-[#191817]">
+                                <span className="text-[#5B3D5C]">Mobile Fund</span>
+                                <br />
+                                <span style={{ lineHeight: '21px' }}>Services</span>
+                            </div>
+                        </div>
+                        <address className="mt-5 flex w-full flex-col items-stretch text-base font-normal text-[#FDFAF8] not-italic">
+                            <div className="flex w-full items-center gap-3 leading-6">
+                                <img
+                                    src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/2a95a1f18b1bf768196367e3274c3920e397ea9e?placeholderIfAbsent=true"
+                                    className="my-auto aspect-[0.75] w-[18px] shrink-0 self-stretch object-contain"
+                                    alt="Location icon"
+                                />
+                                <div className="my-auto w-[270px] self-stretch text-[#FDFAF8]">324 Main St. Unit D Lyons, CO 80540 United States</div>
+                            </div>
+                            <div className="mt-2.5 flex w-[306px] max-w-full items-center gap-3">
+                                <img
+                                    src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/32be4b5ce60dd1aadad796e29b5b5b1b8d39eefd?placeholderIfAbsent=true"
+                                    className="my-auto aspect-[1] w-6 shrink-0 self-stretch object-contain"
+                                    alt="Email icon"
+                                />
+                                <a href="mailto:Support@loanformobilehome.com" className="my-auto self-stretch text-[#FDFAF8] hover:underline">
+                                    Support@loanformobilehome.com
+                                </a>
+                            </div>
+                            <div className="mt-2.5 flex items-center gap-3">
+                                <img
+                                    src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/244b755a7bc8b8dc16d52c6aab261a3bcb097f45?placeholderIfAbsent=true"
+                                    className="my-auto aspect-[1] w-7 shrink-0 self-stretch object-contain"
+                                    alt="Phone icon"
+                                />
+                                <a href="tel:7205601018" className="my-auto self-stretch text-[#FDFAF8] hover:underline">
+                                    (720) 560-1018
+                                </a>
+                            </div>
+                            <button
+                                onClick={handleWhatsAppClick}
+                                className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-[#2AA81A] px-4 py-2 transition-colors duration-200 hover:bg-[#248a16]"
+                            >
+                                <img
+                                    src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/02b0b9daa2b4400f0d8e2029e07e225e921d6fc4?placeholderIfAbsent=true"
+                                    className="my-auto aspect-[1] w-[30px] shrink-0 self-stretch rounded-[50%] object-contain"
+                                    alt="WhatsApp icon"
+                                />
+                                <span className="my-auto self-stretch text-[#FDFAF8]">{t('footer.whatsapp')}</span>
+                            </button>
+                        </address>
                     </div>
 
-                    {/* Links */}
-                    <div className="flex flex-col space-y-2">
-                        <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">{t('nav.services')}</h3>
-                        <Link href="/about" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.about')}
-                        </Link>
-                        <Link href="/contact" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.contact')}
-                        </Link>
-                        <Link href="/team" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.team')}
-                        </Link>
-                        <Link href="/investors" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.investors')}
-                        </Link>
-                        <Link href="/privacy" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.privacy')}
-                        </Link>
-                        <Link href="/terms" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500">
-                            {t('footer.terms')}
-                        </Link>
-                    </div>
+                    <nav className="min-w-[200px] flex-1 shrink basis-[0%] text-base text-[#FDFAF8]">
+                        <h3 className="font-semibold text-[#FDFAF8]">{t('footer.quick')}</h3>
+                        <ul className="mt-6 flex w-full flex-col items-stretch justify-center space-y-3 font-normal">
+                            <li><a href="#services" className="text-[#FDFAF8] hover:underline">{t('footer.services')}</a></li>
+                            <li><a href="#contact" className="text-[#FDFAF8] hover:underline">{t('footer.contact')}</a></li>
+                            <li><a href="#how-it-works" className="text-[#FDFAF8] hover:underline">{t('footer.how')}</a></li>
+                            <li><a href="#loan" className="text-[#FDFAF8] hover:underline">{t('footer.loan')}</a></li>
+                            <li><a href="#team" className="text-[#FDFAF8] hover:underline">{t('footer.team')}</a></li>
+                            <li><a href="#investor" className="text-[#FDFAF8] hover:underline">{t('footer.investors')}</a></li>
+                        </ul>
+                    </nav>
 
-                    {/* Working Hours */}
-                    <div className="flex flex-col space-y-2">
-                        <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">{t('footer.hours')}</h3>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.monday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.tuesday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.wednesday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.thursday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.friday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.saturday')}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{t('footer.sunday')}</p>
+                    <nav className="min-w-[200px] flex-1 shrink basis-[0%] text-base text-[#FDFAF8]">
+                        <h3 className="font-semibold text-[#FDFAF8]">{t('footer.support')}</h3>
+                        <ul className="mt-6 flex w-full flex-col items-stretch justify-center space-y-3 font-normal">
+                            <li><a href="#help" className="text-[#FDFAF8] hover:underline">{t('footer.help')}</a></li>
+                            <li><a href="#contact" className="text-[#FDFAF8] hover:underline">{t('footer.contact')}</a></li>
+                            <li><a href="#privacy" className="text-[#FDFAF8] hover:underline">{t('footer.privacy')}</a></li>
+                            <li><a href="#terms" className="text-[#FDFAF8] hover:underline">{t('footer.terms')}</a></li>
+                        </ul>
+                    </nav>
+
+                    <div className="min-w-[232px] flex-1 shrink basis-[0%] text-base text-[#FDFAF8]">
+                        <h3 className="font-semibold text-[#FDFAF8]">{t('footer.hours')}</h3>
+                        <div className="mt-6 flex w-[232px] max-w-full flex-col items-stretch justify-center space-y-3 font-normal">
+                            <div>{t('footer.monday')}</div>
+                            <div>{t('footer.tuesday')}</div>
+                            <div>{t('footer.wednesday')}</div>
+                            <div>{t('footer.thursday')}</div>
+                            <div>{t('footer.friday')}</div>
+                            <div>{t('footer.saturday')}</div>
+                            <div>{t('footer.sunday')}</div>
+                        </div>
                     </div>
                 </div>
 
-                {/* WhatsApp and Copyright */}
-                <div className="mt-8 flex flex-col items-center justify-between border-t border-gray-200 pt-8 md:flex-row dark:border-gray-700">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">© 2024 Mobile Fund Services. {t('footer.rights')}</p>
-                    <a
-                        href="https://wa.me/99999999"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 flex items-center space-x-2 text-gray-800 hover:text-blue-600 md:mt-0 dark:text-gray-200 dark:hover:text-blue-500"
-                    >
-                        <MessageCircle className="h-5 w-5" />
-                        <span>{t('footer.whatsapp')}</span>
-                    </a>
+                <div className="mt-10 flex w-full flex-col items-stretch text-center text-xs font-normal text-[#FDFAF8] max-md:max-w-full">
+                    <div className="min-h-px w-full bg-[#5B3D5C] max-md:max-w-full" />
+                    <div className="mt-1 text-[#FDFAF8] max-md:max-w-full">© 2024 Mobile Fund Services. All Rights Reserved.</div>
                 </div>
             </div>
         </footer>
     );
-}
+};

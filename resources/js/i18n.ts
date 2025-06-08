@@ -7,18 +7,21 @@ const resources = {
             // Navigation
             'nav.home': 'Home',
             'nav.services': 'Services',
-            'nav.understanding-loan': 'Understanding Your Loan',
-            'nav.team': 'Meet the Team',
+            'nav.understanding-loan': 'Loan Guide',
+            'nav.team': 'Team',
             'nav.investors': 'Investors',
             'nav.contact': 'Contact',
             'nav.login': 'Login',
             'nav.apply': 'Apply Now',
 
             // Home Page
-            'home.title': 'Your Path to Mobile Home Ownership Starts Here',
-
-            'home.subtitle': 'Simple, transparent financing solutions for your manufactured home, with competitive rates and personalized service.',
-            'home.cta': 'Start Your Application',
+            'home.title': 'Your Home. Your Future. Your Way.',
+            'home.subtitle1': 'Your Path to',
+            'home.subtitle2': 'Mobile Home',
+            'home.subtitle3': 'Ownership Starts Here',
+            'home.cta': 'Simple, transparent financing solutions for your manufactured home, with competitive rates and personalized service.',
+            'home.apply': 'Apply for Loan',
+            'home.how': 'How it Works',
 
             //Process Section
             'process.title': 'GET YOUR LOAN IN 5 EASY STEPS',
@@ -104,6 +107,8 @@ const resources = {
                 'Cord W. Mossberg is a 10-year veteran of Wall Street. Having first worked with trading clients on various trading exchange floors including the New York Stock Exchange, American Stock Exchange, Chicago Board Options Exchange, Mr. Mossberg later transitioned to support and assist more institutional investment clients. While growing his client base across different investor profiles, Mr. Mossberg supported clients in investing in various asset classes including US-listed Equities, Equity Options, and Futures. By maintaining relationships with the different investors, Mr. Mossberg has continued to learn and understand the various approaches to investing. A Colorado native, Mr. Mossberg ultimately wanted to return to his roots and use his investing knowledge in his home state. After a brief time in Mexico, where Mr. Mossberg lived to study Spanish and research the opportunities in lending internationally, he found that there was great potential in helping lower-income families procure financial stability. He returned to Colorado where he connected with his good friend and business partner Grayson Gibson. Combining Mr. Gibson’s knowledge of the Manufactured Home industry with his own investing experience, Mr. Mossberg and Mr. Gibson started Mobile Fund Services, LLC. Mr. Mossberg holds Financial Industry Regulatory Authority (FINRA/NASD) Licenses Series 7, Series 63, Series 4, Series 3.',
             'team.member3.bio':
                 'Chance Schaeffer serves as the Managing Broker at Mobile Fund Services LLC, bringing a wealth of experience in real estate and financial services. With a keen eye for market opportunities and a passion for helping clients achieve their housing goals, Chance has become a trusted advisor in the manufactured housing sector. His innovative approach to brokerage, combined with a deep understanding of the Colorado market, has enabled him to facilitate numerous successful transactions. Chance holds a degree in Business Administration from the University of Colorado and is a licensed real estate broker. His commitment to excellence and client satisfaction drives the company’s mission to provide affordable housing solutions.',
+            'team.member4.bio':
+                'Arhemy Ozuna is responsible for customer service, policy management, and payment follow-ups at Mobile Fund Services Llc. She ensures all insurance policies are kept up to date and handles collections when necessary. As a bilingual professional fluent in both English and Spanish, she serves as the main point of contact for clients. Arhemy is committed to maintaining clear, effective communication and resolving day-to-day issues with efficiency and professionalism. She holds a degree in Business Administration and Finance from Universidad Panamericana in Mexico City.',
             //Investors Page
             'investors.title': 'Investor Login',
 
@@ -135,6 +140,20 @@ const resources = {
                 error: 'There was an error sending your message. Please try again.',
                 send_another: 'Send Another Message',
             },
+
+            //Features
+            'features.title': 'Why Choose Us?',
+            'features.1.title': 'Expert Guidance',
+            'features.1.description': 'Over 35 years experience in the Financial services Industry.',
+            'features.2.title': 'Bilingual Support',
+            'features.2.description': 'Friendly service in English and Spanish.',
+            'features.3.title': 'Competitive Rates',
+            'features.3.description': 'We offer loan options with rates designed to save you money.',
+            'features.4.title': 'Fast Appraisals and Closings',
+            'features.4.description': 'Enjoy quick desktop appraisals, smooth closings, and speedy funding to get you into your home faster.',
+            'features.5.title': 'Trusted by Homeowners',
+            'features.5.description': 'Hundreds of satisfied clients and families.',
+
             // Apply Page
             'apply.title': 'New Application',
             'apply.form.stepIndicator': 'Step {{step}} of {{total}}',
@@ -207,11 +226,15 @@ const resources = {
                 'I hereby authorize Mobile Fund Services LLC and its designated agents to conduct a comprehensive review of my background causing a consumer report and/or an investigative consumer report to be generated for loan application.',
 
             // Footer
-            'footer.rights': 'All Rights Reserved.',
-            'footer.about': 'About',
-            'footer.contact': 'Contact Us',
-            'footer.team': 'Meet the Team',
+            'footer.quick': 'Quick Links',
+            'footer.services': 'Services',
+            'footer.contact': 'Contact us',
+            'footer.how': 'How it works',
+            'footer.loan': 'Get a Loan',
+            'footer.team': 'Team',
             'footer.investors': 'Investors',
+            'footer.support': 'Support',
+            'footer.help': 'Help',
             'footer.privacy': 'Privacy Policy',
             'footer.terms': 'Terms and Conditions',
             'footer.whatsapp': 'Chat on WhatsApp',
@@ -228,20 +251,24 @@ const resources = {
     es: {
         translation: {
             // Navigation
-            'nav.home': 'Inicio',
+            'nav.home': 'Hogar',
             'nav.services': 'Servicios',
-            'nav.understanding-loan': 'Entendiendo Su Préstamo',
-            'nav.team': 'Conozca al Equipo',
+            'nav.understanding-loan': 'Guía de préstamos',
+            'nav.team': 'Equipo',
             'nav.investors': 'Inversores',
             'nav.contact': 'Contacto',
             'nav.login': 'Iniciar Sesión',
             'nav.apply': 'Aplicar Ahora',
 
             // Home Page
-            'home.title': 'Su Camino hacia la Propiedad de una Casa Móvil Comienza Aquí',
-            'home.subtitle':
+            'home.title': 'Tu hogar. Tu futuro. Tu camino.',
+            'home.subtitle1': 'Tu camino hacia',
+            'home.subtitle2': 'Casa Móvil',
+            'home.subtitle3': 'La propiedad comienza aquí',
+            'home.cta':
                 'Soluciones de financiamiento simples y transparentes para su casa prefabricada, con tasas competitivas y servicio personalizado.',
-            'home.cta': 'Inicia tu solicitud',
+            'home.apply': 'Solicitar préstamo',
+            'home.how': 'Cómo funciona',
 
             //Process Section
             'process.title': 'Obtén tu préstamo en 5 sencillos pasos',
@@ -328,6 +355,8 @@ const resources = {
                 'Cord W. Mossberg es un veterano con 10 años de experiencia en Wall Street. Tras trabajar inicialmente con clientes en diversas bolsas de valores, como la Bolsa de Valores de Nueva York, la Bolsa de Valores de Estados Unidos y la Bolsa de Opciones de Chicago, el Sr. Mossberg posteriormente se dedicó a apoyar y asistir a clientes de inversión más institucionales. A la vez que ampliaba su cartera de clientes con diferentes perfiles de inversores, el Sr. Mossberg los apoyaba en la inversión en diversas clases de activos, como acciones cotizadas en EE. UU., opciones sobre acciones y futuros. Al mantener relaciones con los diferentes inversores, el Sr. Mossberg ha seguido aprendiendo y comprendiendo los diversos enfoques de inversión. Originario de Colorado, el Sr. Mossberg quiso regresar a sus raíces y aplicar sus conocimientos de inversión en su estado natal. Tras una breve estancia en México, donde residió para estudiar español e investigar las oportunidades de financiación internacional, descubrió un gran potencial para ayudar a familias de bajos ingresos a lograr estabilidad financiera. Regresó a Colorado, donde contactó con su buen amigo y socio Grayson Gibson. Combinando el conocimiento del Sr. Gibson sobre la industria de las casas prefabricadas con su propia experiencia en inversiones, el Sr. Mossberg y el Sr. Gibson fundaron Mobile Fund Services, LLC. El Sr. Mossberg posee las licencias de la Autoridad Reguladora de la Industria Financiera (FINRA/NASD) Serie 7, Serie 63, Serie 4 y Serie 3..',
             'team.member3.bio':
                 'Chance Schaeffer se desempeña como Corredor Administrativo en Mobile Fund Services LLC, aportando una vasta experiencia en bienes raíces y servicios financieros. Con una visión clara de las oportunidades del mercado y una pasión por ayudar a los clientes a alcanzar sus objetivos de vivienda, Chance se ha convertido en un asesor de confianza en el sector de las viviendas prefabricadas. Su enfoque innovador en la intermediación, combinado con un profundo conocimiento del mercado de Colorado, le ha permitido facilitar numerosas transacciones exitosas. Chance es licenciado en Administración de Empresas por la Universidad de Colorado y es corredor inmobiliario con licencia. Su compromiso con la excelencia y la satisfacción del cliente impulsa la misión de la empresa: brindar soluciones de vivienda asequible.',
+            'team.member4.bio':
+                'Arhemy Ozuna es responsable de la atención al cliente, la gestión de pólizas y el seguimiento de pagos en Mobile Fund Services Llc. Se asegura de que todas las pólizas de seguro estén al día y gestiona las cobranzas cuando es necesario. Como profesional bilingüe con fluidez en inglés y español, es el principal punto de contacto para los clientes. Arhemy se compromete a mantener una comunicación clara y eficaz, y a resolver los problemas cotidianos con eficiencia y profesionalismo. Es licenciada en Administración de Empresas y Finanzas por la Universidad Panamericana de la Ciudad de México.',
 
             //Investors Page
             'investors.title': 'Inversores',
@@ -359,6 +388,20 @@ const resources = {
                 error: 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo.',
                 send_another: 'Enviar Otro Mensaje',
             },
+
+            //Features
+            'features.title': '¿Por qué elegirnos?',
+            'features.1.title': 'Orientación experta',
+            'features.1.description': 'Más de 35 años de experiencia en la industria de servicios financieros.',
+            'features.2.title': 'Soporte bilingüe',
+            'features.2.description': 'Servicio amable en inglés y español.',
+            'features.3.title': 'Tarifas competitivas',
+            'features.3.description': 'Ofrecemos opciones de préstamos con tasas diseñadas para ahorrarle dinero.',
+            'features.4.title': 'Tasaciones y cierres rápidos',
+            'features.4.description':
+                'Disfrute de tasaciones rápidas de escritorio, cierres sin problemas y financiación rápida para poder mudarse a su casa más rápido.',
+            'features.5.title': 'De confianza por los propietarios',
+            'features.5.description': 'Cientos de clientes y familias satisfechas.',
 
             // Apply Page
             'apply.title': 'Nueva Solicitud',
@@ -418,21 +461,25 @@ const resources = {
             'apply.form.step4.backgroundCheckAccepted':
                 'Por la presente autorizo a Mobile Fund Services LLC y a sus agentes designados a realizar una revisión exhaustiva de mi historial, lo que generará un informe de consumidor y/o un informe de investigación de consumidor para la solicitud de préstamo.',
 
-            //Footer
-            'footer.rights': 'Todos los derechos reservados.',
-            'footer.about': 'Acerca de',
+            // Footer (Spanish)
+            'footer.quick': 'Enlaces rápidos',
+            'footer.services': 'Servicios',
             'footer.contact': 'Contáctanos',
-            'footer.team': 'Conoce al Equipo',
+            'footer.how': 'Cómo funciona',
+            'footer.loan': 'Solicitar un préstamo',
+            'footer.team': 'Equipo',
             'footer.investors': 'Inversores',
-            'footer.privacy': 'Política de Privacidad',
-            'footer.terms': 'Términos y Condiciones',
-            'footer.whatsapp': 'Chatear en WhatsApp',
-            'footer.hours': 'Horario de Trabajo',
-            'footer.monday': 'Lunes: 9:00 am – 5:00 pm',
-            'footer.tuesday': 'Martes: 9:00 am – 5:00 pm',
-            'footer.wednesday': 'Miércoles: 9:00 am – 5:00 pm',
-            'footer.thursday': 'Jueves: 9:00 am – 5:00 pm',
-            'footer.friday': 'Viernes: 9:00 am – 5:00 pm',
+            'footer.support': 'Soporte',
+            'footer.help': 'Ayuda',
+            'footer.privacy': 'Política de privacidad',
+            'footer.terms': 'Términos y condiciones',
+            'footer.whatsapp': 'Chatear por WhatsApp',
+            'footer.hours': 'Horario de atención',
+            'footer.monday': 'Lunes: 9:00 a. m. – 5:00 p. m.',
+            'footer.tuesday': 'Martes: 9:00 a. m. – 5:00 p. m.',
+            'footer.wednesday': 'Miércoles: 9:00 a. m. – 5:00 p. m.',
+            'footer.thursday': 'Jueves: 9:00 a. m. – 5:00 p. m.',
+            'footer.friday': 'Viernes: 9:00 a. m. – 5:00 p. m.',
             'footer.saturday': 'Sábado: Cerrado',
             'footer.sunday': 'Domingo: Cerrado',
         },
