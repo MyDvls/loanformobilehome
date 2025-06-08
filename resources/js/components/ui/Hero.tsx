@@ -6,10 +6,10 @@ export function Hero() {
   const { t } = useTranslation();
   return (
     <section className="w-full bg-gradient-to-b from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10 px-5 md:px-[60px] py-10 md:py-20">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-5 px-5 md:px-[60px] py-10 md:py-20">
         
         {/* Text Content */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 xl:pl-15 xl:pt-25">
           <div className="max-w-xl mx-auto md:mx-0 text-center md:text-left">
             <p className="text-[#191817] dark:text-gray-100 text-xl font-medium mb-2">
               "{t("home.title")}"
@@ -36,7 +36,7 @@ export function Hero() {
         </div>
 
         {/* Image */}
-        <div className="w-full md:w-1/2 max-w-xl">
+        <div className="w-full md:w-1/2">
           <img
             src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/80a06b908c71e80236cf9d2161c9443071f619c9?placeholderIfAbsent=true"
             alt="Mobile home financing illustration"
