@@ -78,22 +78,62 @@ export const Footer: React.FC = () => {
                     <nav className="min-w-[200px] flex-1 shrink basis-[0%] text-base text-[#FDFAF8]">
                         <h3 className="font-semibold text-[#FDFAF8]">{t('footer.quick')}</h3>
                         <ul className="mt-6 flex w-full flex-col items-stretch justify-center space-y-3 font-normal">
-                            <li><a href="#services" className="text-[#FDFAF8] hover:underline">{t('footer.services')}</a></li>
-                            <li><a href="#contact" className="text-[#FDFAF8] hover:underline">{t('footer.contact')}</a></li>
-                            <li><a href="#how-it-works" className="text-[#FDFAF8] hover:underline">{t('footer.how')}</a></li>
-                            <li><a href="#loan" className="text-[#FDFAF8] hover:underline">{t('footer.loan')}</a></li>
-                            <li><a href="#team" className="text-[#FDFAF8] hover:underline">{t('footer.team')}</a></li>
-                            <li><a href="#investor" className="text-[#FDFAF8] hover:underline">{t('footer.investors')}</a></li>
+                            <li>
+                                <a href="/services" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.services')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/contact" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.contact')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/understanding-loan" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.how')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/apply" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.loan')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/team" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.team')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/investors" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.investors')}
+                                </a>
+                            </li>
                         </ul>
                     </nav>
 
                     <nav className="min-w-[200px] flex-1 shrink basis-[0%] text-base text-[#FDFAF8]">
                         <h3 className="font-semibold text-[#FDFAF8]">{t('footer.support')}</h3>
                         <ul className="mt-6 flex w-full flex-col items-stretch justify-center space-y-3 font-normal">
-                            <li><a href="#help" className="text-[#FDFAF8] hover:underline">{t('footer.help')}</a></li>
-                            <li><a href="#contact" className="text-[#FDFAF8] hover:underline">{t('footer.contact')}</a></li>
-                            <li><a href="#privacy" className="text-[#FDFAF8] hover:underline">{t('footer.privacy')}</a></li>
-                            <li><a href="#terms" className="text-[#FDFAF8] hover:underline">{t('footer.terms')}</a></li>
+                            <li>
+                                <a href="#help" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.help')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/contact" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.contact')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/privacy" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.privacy')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/terms" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.terms')}
+                                </a>
+                            </li>
                         </ul>
                     </nav>
 

@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/Button";
+import { Link } from "@inertiajs/react";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export function Hero() {
   const { t } = useTranslation();
   return (
-    <section className="w-full bg-gradient-to-b from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800">
+    <section className="w-full ">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-5 px-5 md:px-[60px] py-10 md:py-20">
         
         {/* Text Content */}
@@ -24,13 +25,18 @@ export function Hero() {
             </p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-7">
-              <Button variant="secondary">
-                {t("home.apply")}
-              </Button>
-              <Button variant="primary">
-                {t("home.how")}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <Link href="/apply">
+                    <Button variant="secondary">
+                         {t("home.apply")}
+                        <ArrowRight className="h-5 w-5" />
+                    </Button>
+                </Link>
+                <Link href="/understanding-loan">
+                    <Button variant="primary">
+                        {t("home.how")}
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                </Link>
             </div>
           </div>
         </div>
@@ -38,7 +44,7 @@ export function Hero() {
         {/* Image */}
         <div className="w-full md:w-1/2">
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/80a06b908c71e80236cf9d2161c9443071f619c9?placeholderIfAbsent=true"
+            src="images/Mobile-home-autumn-comprimida.jpeg"
             alt="Mobile home financing illustration"
             className="w-full h-auto object-contain rounded-md"
           />

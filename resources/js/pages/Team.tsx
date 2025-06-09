@@ -55,10 +55,10 @@ export default function Team() {
         <LandingLayout>
             <Head title={t('team.title')} />
 
-            <section className="relative overflow-visible bg-gradient-to-b from-gray-50 to-gray-200 py-20 dark:from-gray-800 dark:to-gray-700">
+            <section className="relative mt-10 overflow-visible py-20">
                 <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-12 xl:px-24">
                     <AnimateOnView delay={0.2}>
-                        <h2 className="mb-10 text-center text-4xl font-bold text-gray-800 dark:text-white">{t('team.title')}</h2>
+                        <h2 className="mb-2 text-center text-4xl font-bold text-gray-800 dark:text-white">{t('team.title')}</h2>
                         <p className="mb-12 text-center text-xl text-gray-600 dark:text-gray-300">{t('team.subtitle')}</p>
                     </AnimateOnView>
 
@@ -68,7 +68,7 @@ export default function Team() {
                             <AnimateOnView key={member.name} delay={0.3 + index * 0.1}>
                                 <motion.div
                                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                                    className="group flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-lg transition-all duration-300 dark:bg-gray-800"
+                                    className="group flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-[-10px_10px_30px_rgba(0,0,0,0.25)] transition-all duration-300 dark:border-[#4A4A4A] dark:bg-[#333333]"
                                 >
                                     <div className="relative mb-4 h-40 w-40 overflow-hidden rounded-full">
                                         <img
@@ -125,14 +125,14 @@ export default function Team() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 20 }}
                                 transition={{ duration: 0.3 }}
-                                className="max-h-[60vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800"
+                                className="max-h-[60vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl dark:border-[#4A4A4A] dark:bg-[#333333]"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 {teamMembers
                                     .filter((member) => member.name === selectedMember)
                                     .map((member) => (
                                         <div key={member.name} className="flex flex-col md:flex-row">
-                                            <div className="hidden flex-col items-center justify-start bg-purple-50 p-8 md:flex md:w-1/3 dark:bg-gray-700">
+                                            <div className="hidden flex-col items-center justify-start bg-purple-50 p-8 md:flex md:w-1/3 dark:border-[#4A4A4A] dark:bg-[#333333]">
                                                 <div className="mb-4 h-40 w-40 overflow-hidden rounded-full">
                                                     <img
                                                         style={{
@@ -174,8 +174,10 @@ export default function Team() {
                                                         </svg>
                                                     </button>
                                                 </div>
-                                                <div className="max-h-[60vh] overflow-y-auto pr-2">
-                                                    <p className="whitespace-pre-line text-gray-600 dark:text-gray-300">{t(member.bio)}</p>
+                                                <div className="max-h-[60vh] overflow-y-scroll pr-2">
+                                                    <p className="max-h-[45vh] whitespace-pre-line text-gray-600 dark:text-gray-300">
+                                                        {t(member.bio)}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>

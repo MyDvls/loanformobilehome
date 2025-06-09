@@ -7,20 +7,12 @@ export const Features: React.FC = () => {
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/49ae7f7241201d554d39a316734c19d97c016c1d?placeholderIfAbsent=true',
             title: t('features.1.title'),
-            description: (
-                <>
-                    <span className="text-[#191817]">{t('features.1.description')}</span>
-                </>
-            ),
+            description: t('features.1.description'),
         },
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/caa9cebb7f2ee27128b046f808519ee1b0db109b?placeholderIfAbsent=true',
             title: t('features.2.title'),
-            description: (
-                <>
-                    <span className="text-[#191817]">{t('features.2.description')}</span>
-                </>
-            ),
+            description: t('features.2.description'),
         },
         {
             icon: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/c86d775aad3393f5c1db83c020640f53aeceb20f?placeholderIfAbsent=true',
@@ -49,12 +41,12 @@ export const Features: React.FC = () => {
                         {features.map((feature, index) => (
                             <article
                                 key={index}
-                                className="flex min-h-[249px] min-w-96 flex-1 shrink basis-[0%] flex-col rounded-2xl border border-solid border-[#F9F0E9] bg-[#FDFAF8] p-4 text-center shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)]"
+                                className="flex min-h-[249px] min-w-96 flex-1 shrink basis-[0%] flex-col rounded-2xl border border-solid border-[#F9F0E9] bg-[#FDFAF8] p-4 text-center shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)] dark:border-[#4A4A4A] dark:bg-[#333333]"
                             >
                                 <img src={feature.icon} className="aspect-[1] w-[76px] self-center object-contain" alt={`${feature.title} icon`} />
                                 <div className="mt-4 w-full flex-1">
-                                    <h3 className="text-xl font-medium text-[#111]">{feature.title}</h3>
-                                    <p className="mt-3 text-base leading-6 font-normal text-[#191817]">{feature.description}</p>
+                                    <h3 className="text-xl font-medium text-[#111] dark:text-gray-200">{feature.title}</h3>
+                                    <p className="mt-3 text-base leading-6 font-normal text-[#191817] dark:text-gray-200">{feature.description}</p>
                                 </div>
                             </article>
                         ))}
@@ -70,12 +62,12 @@ export const Features: React.FC = () => {
                         {features.map((feature, index) => (
                             <article
                                 key={index}
-                                className="flex w-full flex-col rounded-2xl border border-solid border-[#F9F0E9] bg-[#FDFAF8] p-4 text-center shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)]"
+                                className="flex w-full flex-col rounded-2xl border border-solid border-[#F9F0E9] bg-[#FDFAF8] p-4 text-center shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)] dark:border-[#4A4A4A] dark:bg-[#333333]"
                             >
                                 <img src={feature.icon} className="aspect-[1] w-[64px] self-center object-contain" alt={`${feature.title} icon`} />
                                 <div className="mt-4 w-full">
-                                    <h3 className="text-lg font-medium text-[#111]">{feature.title}</h3>
-                                    <p className="mt-3 text-base leading-6 font-normal text-[#191817]">{feature.description}</p>
+                                    <h3 className="text-lg font-medium text-[#111] dark:text-gray-200">{feature.title}</h3>
+                                    <p className="mt-3 text-base leading-6 font-normal text-[#191817] dark:text-gray-200">{feature.description}</p>
                                 </div>
                             </article>
                         ))}

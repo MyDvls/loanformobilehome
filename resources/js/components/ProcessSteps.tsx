@@ -138,9 +138,9 @@ const ProcessSteps = () => {
                     }}
                     className={`flex h-12 w-12 items-center justify-center rounded-full text-lg transition-all duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none ${
                         isCurrent
-                            ? 'bg-blue-500 text-white ring-4 ring-blue-200 dark:ring-blue-900'
+                            ? 'bg-[#5B3D5C] text-white ring-4 ring-blue-200 dark:ring-blue-900'
                             : isActive
-                              ? 'bg-blue-500 text-white'
+                              ? 'border-[#C8BEC9] bg-[#5B3D5C] text-white'
                               : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                     }`}
                     aria-label={`${t('process.goToStep')} ${index + 1}: ${t(step.title)}`}
@@ -152,7 +152,7 @@ const ProcessSteps = () => {
                 <span
                     className={`mt-3 text-sm font-medium whitespace-nowrap transition-colors duration-300 ${
                         isCurrent
-                            ? 'text-blue-600 dark:text-blue-400'
+                            ? 'text-purple-500 dark:text-purple-300'
                             : isActive
                               ? 'text-gray-800 dark:text-gray-200'
                               : 'text-gray-500 dark:text-gray-400'
@@ -165,23 +165,19 @@ const ProcessSteps = () => {
     };
 
     return (
-        <section
-            ref={ref}
-            className="relative overflow-visible bg-gradient-to-b from-gray-50 to-gray-200 py-20 dark:from-gray-800 dark:to-gray-700"
-            aria-labelledby="processTitle"
-        >
+        <section ref={ref} className="relative overflow-visible py-10" aria-labelledby="processTitle">
             <div className="relative z-10 container mx-auto px-4">
-                <h2 id="processTitle" className="mb-10 text-center text-4xl font-bold text-gray-800 dark:text-white">
+                <h2 id="processTitle" className="mb-10 text-center text-5xl font-bold text-gray-800 dark:text-white">
                     {t('process.title')}
                 </h2>
 
                 <AnimateOnView delay={0.2}>
-                    <div className="flex flex-col items-center justify-center gap-12">
+                    <div className="flex flex-col items-center justify-center">
                         <div className="mx-auto hidden w-full max-w-4xl px-4 md:flex">
-                            <div className="relative mb-12 flex w-full items-center justify-between">
+                            <div className="relative mb-4 flex w-full items-center justify-between">
                                 <div className="absolute top-6 right-6 left-6 h-1 rounded-full bg-gray-200 dark:bg-gray-700">
                                     <motion.div
-                                        className="h-1 rounded-full bg-blue-500"
+                                        className="h-1 rounded-full bg-[#5B3D5C]"
                                         initial={{ width: '0%' }}
                                         animate={{
                                             width: `${(currentStep / (steps.length - 1)) * 100}%`,
@@ -206,8 +202,9 @@ const ProcessSteps = () => {
                                     transition={{ duration: 0.5 }}
                                     className="w-full"
                                 >
-                                    <div className="flex flex-col items-center gap-8 md:flex-row md:items-start">
-                                        <div className="order-2 w-full md:order-1 md:w-1/2">
+                                    <div className="flex flex-col items-center gap-4">
+                                        {/* Image Section */}
+                                        <div className="w-full max-w-lg">
                                             <motion.div
                                                 className="overflow-hidden rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
                                                 initial={{ y: 15, opacity: 0 }}
@@ -225,25 +222,25 @@ const ProcessSteps = () => {
                                             </motion.div>
                                         </div>
 
-                                        <div className="order-1 flex w-full flex-col justify-center md:order-2 md:w-1/2">
+                                        {/* Text and Buttons Section */}
+                                        <div className="w-full text-center">
                                             <motion.div
                                                 initial={{ y: 15, opacity: 0 }}
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ duration: 0.5, delay: 0.1 }}
                                             >
-                                                <h2 className="mb-4 text-2xl font-medium text-gray-800 dark:text-white">
+                                                <h2 className="mb-4 text-4xl font-medium text-gray-800 dark:text-white">
                                                     {t(steps[currentStep].title)}
                                                 </h2>
                                                 <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200">
                                                     {mainText} <TypeAnimation text={lastFewWords} />
                                                 </p>
 
-                                                <div className="mt-8 flex justify-between md:hidden">
+                                                <div className="mt-8 flex justify-center gap-4 md:hidden">
                                                     {/* Previous Button */}
                                                     <button
                                                         onClick={() => {
                                                             setCurrentStep(Math.max(currentStep - 1, 0));
-                                                            // Pause auto-advance temporarily when manually clicking
                                                             setIsPaused(true);
                                                             setTimeout(() => setIsPaused(false), 1000);
                                                         }}
@@ -271,7 +268,6 @@ const ProcessSteps = () => {
                                                     <button
                                                         onClick={() => {
                                                             setCurrentStep(Math.min(currentStep + 1, steps.length - 1));
-                                                            // Pause auto-advance temporarily when manually clicking
                                                             setIsPaused(true);
                                                             setTimeout(() => setIsPaused(false), 1000);
                                                         }}
@@ -279,7 +275,7 @@ const ProcessSteps = () => {
                                                         className={`flex items-center gap-2 rounded-md px-4 py-2 transition ${
                                                             currentStep === steps.length - 1
                                                                 ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
-                                                                : 'bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700'
+                                                                : 'bg-[#5B3D5C] text-white hover:bg-[#5B3D5C] dark:bg-[#5B3D5C] dark:hover:bg-[#5B3D5C]'
                                                         }`}
                                                         aria-label={t('process.nextStep')}
                                                     >
@@ -304,9 +300,6 @@ const ProcessSteps = () => {
                     </div>
                 </AnimateOnView>
             </div>
-
-            <div className="absolute bottom-[-50px] left-0 z-0 h-[120px] w-full origin-top skew-y-[-2.5deg] transform bg-gray-200 dark:bg-gray-700" />
-            <div className="absolute bottom-[-50px] left-0 z-0 h-[120px] w-full origin-top skew-y-[2.5deg] transform bg-gray-200 dark:bg-gray-700" />
         </section>
     );
 };

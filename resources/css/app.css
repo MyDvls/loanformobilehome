@@ -157,3 +157,48 @@
         @apply bg-background text-foreground;
     }
 }
+.gradient-section {
+    background: linear-gradient(to right, #9f7199 0%, #764e72 30%, #3b2739 100%);
+    position: relative;
+    z-index: 0;
+}
+
+.dark .gradient-section::before {
+    background-color: #000;
+}
+
+.gradient-section::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gradient-section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 🔺 Bottom-left slant (white background) */
+.gradient-section::before {
+    top: 0;
+    background-color: white;
+    clip-path: polygon(0 0, 100% 0, 0 150px);
+    z-index: 0; /* Lower z-index to place it behind both gradients */
+}
+
+/* 🔺 Bottom-right slant (new opposite side) */
+.gradient-section::after {
+    top: 0;
+    background: linear-gradient(to right, #3b2739 0%, #764e72 70%, #9f7199 100%);
+    clip-path: polygon(0 100%, 0 0, 100% 15%, 100% 100%);
+    z-index: 1;
+}

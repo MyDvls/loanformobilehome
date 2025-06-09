@@ -1,8 +1,9 @@
 import { Card } from '@/components/ui/card';
-import { Banknote, CreditCard, FileCheck, FileKey, FileText, UserCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Banknote, CreditCard, FileCheck, FileKey, FileText, UserCheck } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AnimateOnView from './AnimateOnView';
+import { Button } from './ui/button';
 
 const requirements = [
     {
@@ -52,7 +53,7 @@ const Requirements = () => {
         if (index === 0) {
             return {
                 left: `${index * baseSpacing}px`,
-                top: '50%',
+                top: '30%',
                 transform: 'translateY(0px)',
                 transition: 'transform 0.5s ease-out',
             };
@@ -65,17 +66,17 @@ const Requirements = () => {
 
         return {
             left: `${index * baseSpacing}px`,
-            top: '50%',
+            top: '30%',
             transform: `translateY(${direction * amplitude}px)`,
             transition: 'transform 0.5s ease-out',
         };
     };
 
     return (
-        <section className="relative flex w-full flex-col overflow-hidden pt-20 pb-11">
-            <div className="container mx-auto px-4">
-                <h2 className="mb-4 text-center text-4xl font-bold">{t('requirements.title')}</h2>
-                <p className="mb-12 text-center text-xl text-gray-600 dark:text-gray-200">{t('requirements.subtitle')}</p>
+        <section className="gradient-section gradient-section-2 relative w-full overflow-hidden pt-[200px] pb-35">
+            <div className="relative z-10 container mx-auto px-4">
+                <h2 className="mb-4 text-center text-4xl font-bold text-gray-200">{t('requirements.title')}</h2>
+                <p className="mb-12 text-center text-xl text-gray-200">{t('requirements.subtitle')}</p>
 
                 {/* Mobile: Single column */}
                 <div className="flex flex-col gap-8 md:hidden">
@@ -85,9 +86,9 @@ const Requirements = () => {
                                 <div className="flex flex-col space-y-4">
                                     <div className="flex items-center gap-4">
                                         <req.icon className="h-8 w-8 flex-shrink-0 text-blue-600" />
-                                        <h3 className="text-lg font-semibold">{t(req.title)}</h3>
+                                        <h3 className="text-lg font-semibold text-gray-200">{t(req.title)}</h3>
                                     </div>
-                                    <p className="text-gray-600 dark:text-gray-400">{t(req.description)}</p>
+                                    <p className="text-gray-200">{t(req.description)}</p>
                                 </div>
                             </Card>
                         </AnimateOnView>
@@ -101,60 +102,67 @@ const Requirements = () => {
                         <div className="relative h-full">
                             {requirements.map((req, index) => (
                                 <button
+                                    key={index}
                                     onClick={() => setActiveIndex(index)}
-                                    className={`absolute flex items-center justify-center rounded-full p-4 transition-all ${activeIndex === index ? 'bg-blue-100 dark:bg-blue-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                                    className={`absolute z-10 flex items-center justify-center rounded-full border p-4 transition-all ${
+                                        activeIndex >= index
+                                            ? 'border-gray-600 bg-gray-800 text-gray-400'
+                                            : 'border-gray-300 bg-white text-gray-400 hover:border-gray-500 hover:bg-gray-700'
+                                    }`}
                                     style={getOscillationStyle(index)}
                                 >
-                                    <req.icon
-                                        className={`h-8 w-8 flex-shrink-0 ${activeIndex === index ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}
-                                    />
+                                    <req.icon className={`h-8 w-8 flex-shrink-0`} />
                                 </button>
                             ))}
 
-                            {/* Optional connecting path */}
+                            {/* Dynamic connecting path in segments */}
                             <svg
                                 className="pointer-events-none absolute top-0 left-0 h-full w-full"
                                 viewBox={`0 0 ${requirements.length * 120} 600`}
                                 preserveAspectRatio="none"
                             >
-                                <path
-                                    d={(() => {
-                                        const points = requirements.map((_, i) => {
-                                            const style = getOscillationStyle(i);
-                                            const x = i * 120 + 28;
-                                            const y =
-                                                300 +
-                                                (style.transform.includes('-')
-                                                    ? -parseInt(style.transform.match(/\d+/)![0])
-                                                    : parseInt(style.transform.match(/\d+/)![0]));
-                                            return { x, y };
-                                        });
+                                {(() => {
+                                    const points = requirements.map((_, i) => {
+                                        const style = getOscillationStyle(i);
+                                        const x = i * 120 + 28;
+                                        const y =
+                                            250 +
+                                            (style.transform.includes('-')
+                                                ? -parseInt(style.transform.match(/\d+/)![0])
+                                                : parseInt(style.transform.match(/\d+/)![0]));
+                                        return { x, y };
+                                    });
 
-                                        let path = `M ${points[0].x} ${points[0].y}`;
+                                    const paths = [];
+                                    for (let i = 1; i < points.length; i++) {
+                                        const current = points[i];
+                                        const previous = points[i - 1];
+                                        const controlPointOffset = 60;
 
-                                        for (let i = 1; i < points.length; i++) {
-                                            const current = points[i];
-                                            const previous = points[i - 1];
-                                            const controlPointOffset = 60; // Adjust for curve smoothness
+                                        const cp1x = previous.x + controlPointOffset;
+                                        const cp1y = previous.y;
+                                        const cp2x = current.x - controlPointOffset;
+                                        const cp2y = current.y;
 
-                                            const cp1x = previous.x + controlPointOffset;
-                                            const cp1y = previous.y;
-                                            const cp2x = current.x - controlPointOffset;
-                                            const cp2y = current.y;
+                                        const d = `M ${previous.x} ${previous.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${current.x} ${current.y}`;
 
-                                            path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${current.x} ${current.y}`;
-                                        }
+                                        paths.push(
+                                            <path
+                                                key={i}
+                                                d={d}
+                                                stroke={i <= activeIndex ? '#4B5563' : '#D1D5DB'} // gray-700 vs gray-300
+                                                strokeWidth="6"
+                                                fill="none"
+                                                className={`transition-all duration-500`}
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeDasharray="50,10"
+                                            />,
+                                        );
+                                    }
 
-                                        return path;
-                                    })()}
-                                    stroke="currentColor"
-                                    strokeWidth="6"
-                                    fill="none"
-                                    className="text-gray-300 opacity-60 dark:text-gray-600"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeDasharray="50,10"
-                                />
+                                    return paths;
+                                })()}
                             </svg>
                         </div>
                     </div>
@@ -162,18 +170,43 @@ const Requirements = () => {
                     {/* Content area - 50% width */}
                     <div className="w-full md:w-1/2">
                         <AnimateOnView key={activeIndex} delay={0.2}>
-                            <Card className="flex h-full items-start p-8 transition-all duration-300">
+                            <Card className="flex h-full items-start border-none bg-transparent p-8 transition-all duration-300">
                                 <div className="flex flex-col space-y-6">
                                     <div className="transform transition-transform duration-500 ease-in-out">
                                         <ActiveIcon className="h-12 w-12 flex-shrink-0 text-blue-600" />
                                     </div>
                                     <div>
-                                        <h3 className="mb-4 text-2xl font-semibold">{t(requirements[activeIndex].title)}</h3>
-                                        <p className="text-lg text-gray-600 dark:text-gray-400">{t(requirements[activeIndex].description)}</p>
+                                        <h3 className="mb-4 text-2xl font-semibold text-gray-200">{t(requirements[activeIndex].title)}</h3>
+                                        <p className="text-lg text-gray-200">{t(requirements[activeIndex].description)}</p>
                                     </div>
                                 </div>
                             </Card>
                         </AnimateOnView>
+                        {/* Navigation Buttons */}
+                        <div className="mt-6 flex justify-start gap-4 md:w-full">
+                            {activeIndex > 0 && (
+                                <Button
+                                    variant="primary"
+                                    onClick={() => setActiveIndex((prev) => Math.max(prev - 1, 0))}
+                                    className="cursor-pointer rounded px-4 py-2 text-white transition"
+                                >
+                                    <ArrowLeft className="mr-2 h-5 w-5" />
+                                    {t('common.previous', 'Previous')}
+                                </Button>
+                            )}
+
+                            <Button
+                                variant="primary"
+                                onClick={() => setActiveIndex((prev) => Math.min(prev + 1, requirements.length - 1))}
+                                disabled={activeIndex === requirements.length - 1}
+                                className={`rounded px-4 py-2 text-white transition ${
+                                    activeIndex === requirements.length - 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+                                }`}
+                            >
+                                {t('common.next', 'Next')}
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

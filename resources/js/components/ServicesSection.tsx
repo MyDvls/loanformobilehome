@@ -25,7 +25,7 @@ const ServicesSection = () => {
     ];
 
     return (
-        <section className="bg-gradient-to-b from-gray-50 to-gray-200 px-6 py-20 sm:px-10 lg:px-20 dark:from-gray-900 dark:to-gray-800">
+        <section className="px-6 py-20 sm:px-10 lg:px-20 dark:bg-black">
             <div className="mx-auto max-w-7xl text-center">
                 <h2 className="text-4xl font-bold text-gray-800 dark:text-white">{t('services.title')}</h2>
                 <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">{t('services.subtitle')}</p>
@@ -34,7 +34,7 @@ const ServicesSection = () => {
                     {services.map((service) => (
                         <div
                             key={service.id}
-                            className="flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-md transition-shadow hover:shadow-lg dark:bg-gray-800"
+                            className="flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-md transition-shadow hover:shadow-lg dark:bg-[#333333]"
                         >
                             <img src={service.image} alt={service.title} className="mb-4 h-20 w-20 object-contain" />
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{service.title}</h3>
