@@ -7,7 +7,35 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
-const UnderstandingLoan = () => {
+interface UnderstandingLoanSectionData {
+    title: string;
+    subtitle: string;
+    section1: {
+        title: string;
+        description: string;
+        principal: string;
+        interest: string;
+        escrow: string;
+        tip: string;
+        graph1_title: string;
+    };
+    section2: {
+        title: string;
+        additional: string;
+        interest_save: string;
+        term_shorten: string;
+        result: string;
+        graph2_tip: string;
+        image_url?: string;
+    };
+}
+
+interface UnderstandingLoanProps {
+    understandingLoanSection?: UnderstandingLoanSectionData;
+    locale: string;
+}
+
+const UnderstandingLoan = ({ understandingLoanSection, locale }: UnderstandingLoanProps) => {
     const { t } = useTranslation();
     const [activeChartIndex, setActiveChartIndex] = useState(0);
 
@@ -44,17 +72,41 @@ const UnderstandingLoan = () => {
         },
     ];
 
+    // Use dynamic data if available, otherwise fall back to translation keys
+    const pageTitle = understandingLoanSection?.title || t('understanding.title');
+    const pageSubtitle = understandingLoanSection?.subtitle || t('understanding.subtitle');
+
+    const section1Data = understandingLoanSection?.section1 || {
+        title: t('understanding.section1.title'),
+        description: t('understanding.section1.description'),
+        principal: t('understanding.section1.principal'),
+        interest: t('understanding.section1.interest'),
+        escrow: t('understanding.section1.escrow'),
+        tip: t('understanding.section1.tip'),
+        graph1_title: t('understanding.section1.graph1.title'),
+    };
+
+    const section2Data = understandingLoanSection?.section2 || {
+        title: t('understanding.section2.title'),
+        additional: t('understanding.section2.additional'),
+        interest_save: t('understanding.section2.interestSave'),
+        term_shorten: t('understanding.section2.termShorten'),
+        result: t('understanding.section2.result'),
+        graph2_tip: t('understanding.section1.graph2.tip'),
+        image_url: '/images/payoff_loans_faster.png',
+    };
+
     return (
         <LandingLayout>
-            <Head title={t('understanding.title')} />
+            <Head title={pageTitle} />
             <section className="relative overflow-visible py-12 sm:py-16 md:py-20">
                 <div className="relative z-10 container mx-auto px-4 py-20 sm:px-6 md:px-8">
                     <AnimateOnView delay={0.2}>
                         <h1 className="mb-4 text-center text-3xl font-bold text-gray-800 sm:text-3xl md:text-4xl lg:text-5xl dark:text-white">
-                            {t('understanding.title')}
+                            {pageTitle}
                         </h1>
                         <p className="mx-auto mb-8 max-w-3xl text-center text-base text-gray-600 sm:mb-10 sm:text-lg md:mb-12 md:text-xl dark:text-gray-300">
-                            {t('understanding.subtitle')}
+                            {pageSubtitle}
                         </p>
                     </AnimateOnView>
 
@@ -68,10 +120,10 @@ const UnderstandingLoan = () => {
                                         <div className="w-full">
                                             <h3 className="flex items-center text-lg font-medium sm:text-xl md:text-2xl">
                                                 <BarChart3 className="mr-2 text-purple-500 sm:mr-3" size={20} sm:size={24} md:size={28} />
-                                                {t('understanding.section1.title')}
+                                                {section1Data.title}
                                             </h3>
                                             <p className="mt-4 text-sm leading-6 font-normal sm:mt-5 sm:text-base md:text-lg">
-                                                {t('understanding.section1.description')}
+                                                {section1Data.description}
                                             </p>
                                         </div>
                                         <div className="mt-6 w-full max-w-full text-sm leading-6 font-normal sm:mt-8 sm:text-base">
@@ -80,7 +132,7 @@ const UnderstandingLoan = () => {
                                                 <div>
                                                     <strong>Principal</strong>
                                                     <br />
-                                                    {t('understanding.section1.principal')}
+                                                    {section1Data.principal}
                                                 </div>
                                             </div>
                                             <div className="mt-6 flex w-full gap-3 sm:mt-8 sm:gap-4 md:gap-[17px]">
@@ -88,7 +140,7 @@ const UnderstandingLoan = () => {
                                                 <div>
                                                     <strong>Interest</strong>
                                                     <br />
-                                                    {t('understanding.section1.interest')}
+                                                    {section1Data.interest}
                                                 </div>
                                             </div>
                                             <div className="mt-6 flex w-full gap-3 sm:mt-8 sm:gap-4 md:gap-[17px]">
@@ -96,7 +148,7 @@ const UnderstandingLoan = () => {
                                                 <div>
                                                     <strong>Escrow</strong>
                                                     <br />
-                                                    {t('understanding.section1.escrow')}
+                                                    {section1Data.escrow}
                                                 </div>
                                             </div>
                                         </div>
@@ -105,9 +157,7 @@ const UnderstandingLoan = () => {
                                     {/* Chart visualization */}
                                     <div className="min-w-0 flex-1 shrink basis-[40%] max-sm:basis-full">
                                         <div className="flex w-full min-w-0 flex-col justify-center rounded-lg bg-[#F5EEE9] p-4 text-black sm:p-5 md:p-6 dark:bg-[#4A4A4A]">
-                                            <h4 className="text-center text-lg font-medium sm:text-xl md:text-2xl">
-                                                {t('understanding.section1.graph1.title')}
-                                            </h4>
+                                            <h4 className="text-center text-lg font-medium sm:text-xl md:text-2xl">{section1Data.graph1_title}</h4>
                                             <div className="mt-6 flex w-full flex-wrap items-center justify-center gap-4 text-sm font-normal whitespace-nowrap sm:mt-8 sm:gap-6 sm:text-base md:mt-[37px] md:gap-8 lg:gap-[40px]">
                                                 <div className="my-auto flex items-center gap-2 self-stretch sm:gap-3">
                                                     <div className="my-auto flex h-3 w-3 shrink-0 self-stretch rounded bg-black sm:h-4 sm:w-4 md:h-[17px] md:w-[17px]" />
@@ -160,7 +210,7 @@ const UnderstandingLoan = () => {
                                                 alt="Information icon"
                                                 className="my-auto aspect-[1] w-8 shrink-0 rounded-[50%] object-contain sm:w-10 md:w-12"
                                             />
-                                            <p className="flex-1 text-[#C67C00]">{t('understanding.section1.tip')}</p>
+                                            <p className="flex-1 text-[#C67C00]">{section1Data.tip}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -178,16 +228,14 @@ const UnderstandingLoan = () => {
                                         <div className="min-w-0 flex-1 shrink basis-[40%] text-black max-sm:basis-full">
                                             <div className="mb-4 flex items-center sm:mb-6">
                                                 <PiggyBank className="mr-2 text-green-500 sm:mr-3" size={20} sm:size={24} md:size={28} />
-                                                <h3 className="text-lg font-medium sm:text-xl md:text-2xl dark:text-white">
-                                                    {t('understanding.section2.title')}
-                                                </h3>
+                                                <h3 className="text-lg font-medium sm:text-xl md:text-2xl dark:text-white">{section2Data.title}</h3>
                                             </div>
                                             <div className="mt-4 w-full text-sm leading-6 font-normal sm:mt-6 sm:text-base">
                                                 <div className="flex w-full flex-wrap gap-2 sm:gap-3">
                                                     <div className="flex-1 dark:text-white">
                                                         <strong>Make Extra Payments</strong>
                                                         <br />
-                                                        {t('understanding.section2.additional')}
+                                                        {section2Data.additional}
                                                     </div>
                                                 </div>
                                                 <div className="mt-6 flex w-full gap-2 sm:mt-8 sm:gap-[15px]">
@@ -195,7 +243,7 @@ const UnderstandingLoan = () => {
                                                     <div className="flex-1 dark:text-white">
                                                         <strong>Save on Interest</strong>
                                                         <br />
-                                                        {t('understanding.section2.interestSave')}
+                                                        {section2Data.interest_save}
                                                     </div>
                                                 </div>
                                                 <div className="mt-6 flex w-full gap-2 sm:mt-8 sm:gap-[18px]">
@@ -203,7 +251,7 @@ const UnderstandingLoan = () => {
                                                     <div className="flex-1 dark:text-white">
                                                         <strong>Shorten Your Loan Term</strong>
                                                         <br />
-                                                        {t('understanding.section2.termShorten')}
+                                                        {section2Data.term_shorten}
                                                     </div>
                                                 </div>
                                                 <div className="mt-6 flex w-full gap-2 sm:mt-8 sm:gap-[21px]">
@@ -211,7 +259,7 @@ const UnderstandingLoan = () => {
                                                     <div className="flex-1 dark:text-white">
                                                         <strong>Accelerate Equity Growth</strong>
                                                         <br />
-                                                        {t('understanding.section2.result')}
+                                                        {section2Data.result}
                                                     </div>
                                                 </div>
                                             </div>
@@ -220,7 +268,7 @@ const UnderstandingLoan = () => {
                                         {/* Visualization section */}
                                         <div className="min-w-0 flex-1 shrink basis-[40%] text-sm leading-6 font-normal text-[#173C19] max-sm:basis-full sm:text-base">
                                             <img
-                                                src="/images/payoff_loans_faster.png"
+                                                src={section2Data.image_url || '/images/payoff_loans_faster.png'}
                                                 alt="Example of making additional payments"
                                                 className="aspect-[1.09] w-full max-w-full rounded-lg object-contain"
                                             />
@@ -231,9 +279,7 @@ const UnderstandingLoan = () => {
                                                         alt="Success icon"
                                                         className="my-auto aspect-[1] w-8 shrink-0 rounded-[50%] object-contain sm:w-10 md:w-12"
                                                     />
-                                                    <p className="flex-1 text-[#173C19] dark:text-[#388E3C]">
-                                                        {t('understanding.section1.graph2.tip')}
-                                                    </p>
+                                                    <p className="flex-1 text-[#173C19] dark:text-[#388E3C]">{section2Data.graph2_tip}</p>
                                                 </div>
                                             </div>
                                         </div>

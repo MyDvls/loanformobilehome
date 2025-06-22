@@ -5,41 +5,54 @@ import { useTranslation } from 'react-i18next';
 import AnimateOnView from './AnimateOnView';
 import { Button } from './ui/button';
 
-const requirements = [
-    {
-        icon: CreditCard,
-        title: 'requirements.item1.title',
-        description: 'requirements.item1.description',
-    },
-    {
-        icon: FileText,
-        title: 'requirements.item2.title',
-        description: 'requirements.item2.description',
-    },
-    {
-        icon: FileCheck,
-        title: 'requirements.item3.title',
-        description: 'requirements.item3.description',
-    },
-    {
-        icon: UserCheck,
-        title: 'requirements.item4.title',
-        description: 'requirements.item4.description',
-    },
-    {
-        icon: FileKey,
-        title: 'requirements.item5.title',
-        description: 'requirements.item5.description',
-    },
-    {
-        icon: Banknote,
-        title: 'requirements.item6.title',
-        description: 'requirements.item6.description',
-    },
-];
+const iconMap: { [key: string]: any } = {
+    CreditCard,
+    FileText,
+    FileCheck,
+    UserCheck,
+    FileKey,
+    Banknote,
+};
 
-const Requirements = () => {
+const Requirements = ({ requirementsSection }: { requirementsSection: any }) => {
     const { t } = useTranslation();
+
+    // Map requirementsSection data to requirements array
+    const requirements = requirementsSection
+        ? [
+              {
+                  icon: iconMap[requirementsSection?.requirement1?.icon || 'CreditCard'] || CreditCard,
+                  title: requirementsSection?.requirement1?.title || 'Requirement 1 Title',
+                  description: requirementsSection?.requirement1?.description || 'Requirement 1 Description',
+              },
+              {
+                  icon: iconMap[requirementsSection?.requirement2?.icon || 'FileText'] || FileText,
+                  title: requirementsSection?.requirement2?.title || 'Requirement 2 Title',
+                  description: requirementsSection?.requirement2?.description || 'Requirement 2 Description',
+              },
+              {
+                  icon: iconMap[requirementsSection?.requirement3?.icon || 'FileCheck'] || FileCheck,
+                  title: requirementsSection?.requirement3?.title || 'Requirement 3 Title',
+                  description: requirementsSection?.requirement3?.description || 'Requirement 3 Description',
+              },
+              {
+                  icon: iconMap[requirementsSection?.requirement4?.icon || 'UserCheck'] || UserCheck,
+                  title: requirementsSection?.requirement4?.title || 'Requirement 4 Title',
+                  description: requirementsSection?.requirement4?.description || 'Requirement 4 Description',
+              },
+              {
+                  icon: iconMap[requirementsSection?.requirement5?.icon || 'FileKey'] || FileKey,
+                  title: requirementsSection?.requirement5?.title || 'Requirement 5 Title',
+                  description: requirementsSection?.requirement5?.description || 'Requirement 5 Description',
+              },
+              {
+                  icon: iconMap[requirementsSection?.requirement6?.icon || 'Banknote'] || Banknote,
+                  title: requirementsSection?.requirement6?.title || 'Requirement 6 Title',
+                  description: requirementsSection?.requirement6?.description || 'Requirement 6 Description',
+              },
+          ]
+        : [];
+
     const [activeIndex, setActiveIndex] = useState(0);
     const ActiveIcon = requirements[activeIndex].icon;
 
@@ -75,8 +88,8 @@ const Requirements = () => {
     return (
         <section className="gradient-section gradient-section-2 relative w-full overflow-hidden pt-[200px] pb-35">
             <div className="relative z-10 container mx-auto px-4">
-                <h2 className="mb-4 text-center text-4xl font-bold text-gray-200">{t('requirements.title')}</h2>
-                <p className="mb-12 text-center text-xl text-gray-200">{t('requirements.subtitle')}</p>
+                <h2 className="mb-4 text-center text-4xl font-bold text-gray-200">{requirementsSection?.title || t('requirements.title')}</h2>
+                <p className="mb-12 text-center text-xl text-gray-200">{requirementsSection?.subtitle || t('requirements.subtitle')}</p>
 
                 {/* Mobile: Single column */}
                 <div className="flex flex-col gap-8 md:hidden">
@@ -170,10 +183,12 @@ const Requirements = () => {
                     {/* Content area - 50% width */}
                     <div className="w-full md:w-1/2">
                         <AnimateOnView key={activeIndex} delay={0.2}>
-                            <Card className="flex h-full items-start border-none bg-transparent p-8 transition-all duration-300">
+                            <Card className="flex h-full items-start border-none bg-transparent p-8 shadow-none transition-all duration-300">
                                 <div className="flex flex-col space-y-6">
                                     <div className="transform transition-transform duration-500 ease-in-out">
-                                        <ActiveIcon className="h-12 w-12 flex-shrink-0 text-blue-600" />
+                                        <div className="m-0 flex h-20 w-20 flex-shrink-0 items-end justify-start p-0 text-4xl text-white">
+                                            0{activeIndex + 1}
+                                        </div>
                                     </div>
                                     <div>
                                         <h3 className="mb-4 text-2xl font-semibold text-gray-200">{t(requirements[activeIndex].title)}</h3>

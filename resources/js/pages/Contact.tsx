@@ -13,13 +13,24 @@ interface FormData {
     [key: string]: string;
 }
 
+interface ContactSection {
+    company_name: string;
+    address: string;
+    email: string;
+    telephone: string;
+    working_hours: string;
+    logo_url?: string;
+}
+
 interface PageProps extends Record<string, unknown> {
     flash?: { success?: string; error?: string };
+    contactSection?: ContactSection;
 }
 
 export default function Contact() {
     const { t } = useTranslation();
-    const { flash } = usePage<PageProps>().props;
+    const { flash, contactSection } = usePage<PageProps>().props;
+
     const { toast } = useToast();
     const { data, setData, post, processing, errors, reset } = useForm<FormData>({
         name: '',
@@ -29,7 +40,6 @@ export default function Contact() {
 
     const [submitted, setSubmitted] = useState(false);
 
-    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('contact.store'), {
@@ -51,7 +61,6 @@ export default function Contact() {
         });
     };
 
-    // Handle flash messages
     useEffect(() => {
         if (flash?.success) {
             toast({
@@ -75,26 +84,37 @@ export default function Contact() {
                 <div className="relative mx-auto flex w-full max-w-6xl px-4 md:w-2/3 md:px-0">
                     {/* Desktop Layout */}
                     <div className="hidden xl:block">
-                        {/* Overlapping Info Box */}
                         <div className="absolute top-1/2 left-0 z-10 w-[360px] -translate-y-1/2 transform pt-12">
-                            <CompanyInfo />
+                            {contactSection && (
+                                <CompanyInfo
+                                    companyName={contactSection.company_name}
+                                    address={contactSection.address}
+                                    email={contactSection.email}
+                                    telephone={contactSection.telephone}
+                                    workingHours={contactSection.working_hours}
+                                    logoUrl={contactSection.logo_url}
+                                />
+                            )}
                         </div>
-
-                        {/* Contact Form */}
                         <div className="flex w-full justify-end pl-[150px]">
-                            {/* Padding makes room for the overlap */}
                             <ContactForm />
                         </div>
                     </div>
 
                     {/* Mobile Layout */}
                     <div className="block w-full space-y-6 xl:hidden">
-                        {/* Company Info - Full width on mobile */}
                         <div className="w-full">
-                            <CompanyInfo />
+                            {contactSection && (
+                                <CompanyInfo
+                                    companyName={contactSection.company_name}
+                                    address={contactSection.address}
+                                    email={contactSection.email}
+                                    telephone={contactSection.telephone}
+                                    workingHours={contactSection.working_hours}
+                                    logoUrl={contactSection.logo_url}
+                                />
+                            )}
                         </div>
-
-                        {/* Contact Form - Full width on mobile */}
                         <div className="w-full">
                             <ContactForm />
                         </div>

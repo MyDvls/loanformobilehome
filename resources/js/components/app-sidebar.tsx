@@ -1,34 +1,17 @@
 import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { ChevronDown, ChevronRight, LayoutGrid } from 'lucide-react';
+import { useState } from 'react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
+    const [isWebLayoutOpen, setIsWebLayoutOpen] = useState(true);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -44,7 +27,45 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <SidebarMenu>
+                    {/* Dashboard */}
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <Link href="/dashboard">
+                                <LayoutGrid className="mr-2 h-4 w-4" />
+                                Dashboard
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={() => setIsWebLayoutOpen(!isWebLayoutOpen)} className="flex w-full items-center justify-between">
+                            <span>Web Layout</span>
+                            {isWebLayoutOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+
+                    {isWebLayoutOpen && (
+                        <>
+                            <SidebarMenuItem className="pl-6">
+                                <SidebarMenuButton asChild>
+                                    <Link href="/admin/pages/home">
+                                        <LayoutGrid className="mr-2 h-4 w-4" />
+                                        Web Pages
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem className="pl-6">
+                                <SidebarMenuButton asChild>
+                                    <Link href="/admin/pages/settings">
+                                        <LayoutGrid className="mr-2 h-4 w-4" />
+                                        Web Settings
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </>
+                    )}
+                </SidebarMenu>
             </SidebarContent>
 
             <SidebarFooter>

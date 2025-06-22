@@ -1,43 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import AnimateOnView from './AnimateOnView';
 
-const steps = [
-    {
-        number: 'ONE',
-        title: 'process.step1.title',
-        description: 'process.step1.description',
-        image: 'images/basket-ball-mobile-home-background-comprimida.jpeg',
-    },
-    {
-        number: 'TWO',
-        title: 'process.step2.title',
-        description: 'process.step2.description',
-        image: 'images/Mobile-home-autumn-comprimida.jpeg',
-    },
-    {
-        number: 'THREE',
-        title: 'process.step3.title',
-        description: 'process.step3.description',
-        image: 'images/Mobile-home-beautiful-background-comprimida.jpeg',
-    },
-    {
-        number: 'FOUR',
-        title: 'process.step4.title',
-        description: 'process.step4.description',
-        image: 'images/basket-ball-mobile-home-background-comprimida.jpeg',
-    },
-    {
-        number: 'FIVE',
-        title: 'process.step5.title',
-        description: 'process.step5.description',
-        image: 'images/Mobile-home-beautiful-background-comprimida.jpeg',
-    },
-];
-
-const ProcessSteps = () => {
-    const { t } = useTranslation();
+const ProcessSteps = ({ loanSection }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -45,28 +10,58 @@ const ProcessSteps = () => {
     const stepRefs = useRef([]);
     const timerRef = useRef(null);
 
+    // Map loanSection data to steps array
+    const steps = loanSection ? [
+        {
+            number: 'ONE',
+            title: loanSection.step1.title,
+            description: loanSection.step1.description,
+            image: loanSection.step1.image_url || '/images/placeholder-home.jpg',
+        },
+        {
+            number: 'TWO',
+            title: loanSection.step2.title,
+            description: loanSection.step2.description,
+            image: loanSection.step2.image_url || '/images/placeholder-home.jpg',
+        },
+        {
+            number: 'THREE',
+            title: loanSection.step3.title,
+            description: loanSection.step3.description,
+            image: loanSection.step3.image_url || '/images/placeholder-home.jpg',
+        },
+        {
+            number: 'FOUR',
+            title: loanSection.step4.title,
+            description: loanSection.step4.description,
+            image: loanSection.step4.image_url || '/images/placeholder-home.jpg',
+        },
+        {
+            number: 'FIVE',
+            title: loanSection.step5.title,
+            description: loanSection.step5.description,
+            image: loanSection.step5.image_url || '/images/placeholder-home.jpg',
+        },
+    ] : [];
+
     // Auto-advance timer effect
     useEffect(() => {
-        if (isVisible && !isPaused) {
-            // Clear existing timer when component is visible
+        if (isVisible && !isPaused && steps.length > 0) {
             if (timerRef.current) {
                 clearTimeout(timerRef.current);
             }
 
-            // Set new timer for 8 seconds
             timerRef.current = setTimeout(() => {
-                // Advance to the next step, or loop back to the first
                 setCurrentStep((prev) => (prev === steps.length - 1 ? 0 : prev + 1));
             }, 8000);
         }
 
-        // Clean up timer on component unmount or when visibility changes
         return () => {
             if (timerRef.current) {
                 clearTimeout(timerRef.current);
             }
         };
-    }, [currentStep, isVisible, isPaused]);
+    }, [currentStep, isVisible, isPaused, steps.length]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -87,17 +82,14 @@ const ProcessSteps = () => {
         };
     }, []);
 
-    const getDescriptionParts = (descriptionKey: string) => {
-        const description = t(descriptionKey);
+    const getDescriptionParts = (description) => {
         const words = description.split(' ');
         const lastFewWords = words.slice(-8).join(' ');
         const mainText = words.slice(0, -8).join(' ');
         return { mainText, lastFewWords };
     };
 
-    const { mainText, lastFewWords } = getDescriptionParts(steps[currentStep].description);
-
-    const TypeAnimation = ({ text }: { text: string }) => {
+    const TypeAnimation = ({ text }) => {
         const [displayedText, setDisplayedText] = useState('');
         const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -143,7 +135,7 @@ const ProcessSteps = () => {
                               ? 'border-[#C8BEC9] bg-[#5B3D5C] text-white'
                               : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                     }`}
-                    aria-label={`${t('process.goToStep')} ${index + 1}: ${t(step.title)}`}
+                    aria-label={`Go to step ${index + 1}: ${step.title}`}
                     aria-current={isCurrent ? 'step' : undefined}
                 >
                     {index + 1}
@@ -158,17 +150,23 @@ const ProcessSteps = () => {
                               : 'text-gray-500 dark:text-gray-400'
                     }`}
                 >
-                    {t(step.title)}
+                    {step.title}
                 </span>
             </div>
         );
     };
 
+    if (!loanSection || steps.length === 0) {
+        return null; // Render nothing if loanSection is not provided
+    }
+
+    const { mainText, lastFewWords } = getDescriptionParts(steps[currentStep].description);
+
     return (
         <section ref={ref} className="relative overflow-visible py-10" aria-labelledby="processTitle">
             <div className="relative z-10 container mx-auto px-4">
                 <h2 id="processTitle" className="mb-10 text-center text-5xl font-bold text-gray-800 dark:text-white">
-                    {t('process.title')}
+                    {loanSection.title}
                 </h2>
 
                 <AnimateOnView delay={0.2}>
@@ -214,7 +212,7 @@ const ProcessSteps = () => {
                                                 <div className="relative pt-[75%]">
                                                     <img
                                                         src={steps[currentStep].image}
-                                                        alt={t(steps[currentStep].title)}
+                                                        alt={steps[currentStep].title}
                                                         className="absolute inset-0 h-full w-full rounded-lg object-cover"
                                                         loading="lazy"
                                                     />
@@ -230,7 +228,7 @@ const ProcessSteps = () => {
                                                 transition={{ duration: 0.5, delay: 0.1 }}
                                             >
                                                 <h2 className="mb-4 text-4xl font-medium text-gray-800 dark:text-white">
-                                                    {t(steps[currentStep].title)}
+                                                    {steps[currentStep].title}
                                                 </h2>
                                                 <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200">
                                                     {mainText} <TypeAnimation text={lastFewWords} />
@@ -250,7 +248,7 @@ const ProcessSteps = () => {
                                                                 ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
                                                                 : 'text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
                                                         }`}
-                                                        aria-label={t('process.previousStep')}
+                                                        aria-label="Previous step"
                                                     >
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +259,7 @@ const ProcessSteps = () => {
                                                         >
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                                         </svg>
-                                                        {t('process.previousStep')}
+                                                        Previous
                                                     </button>
 
                                                     {/* Next Button */}
@@ -277,9 +275,9 @@ const ProcessSteps = () => {
                                                                 ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
                                                                 : 'bg-[#5B3D5C] text-white hover:bg-[#5B3D5C] dark:bg-[#5B3D5C] dark:hover:bg-[#5B3D5C]'
                                                         }`}
-                                                        aria-label={t('process.nextStep')}
+                                                        aria-label="Next step"
                                                     >
-                                                        {t('process.nextStep')}
+                                                        Next
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             className="h-5 w-5"

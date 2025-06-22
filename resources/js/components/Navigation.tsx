@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navigation() {
-    const { props } = usePage();
     const { t } = useTranslation();
     const { appearance, updateAppearance } = useAppearance();
+    const { props } = usePage<{ locale: string }>();
 
     const isActive = (path: string) => props.url === path;
 
@@ -41,7 +41,7 @@ export default function Navigation() {
                 <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
                     {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                 </button>
-                <LanguageSwitcher />
+                <LanguageSwitcher currentLocale={props.locale} />
                 <Link
                     href="/login"
                     className={`text-sm font-medium transition-colors duration-200 ${

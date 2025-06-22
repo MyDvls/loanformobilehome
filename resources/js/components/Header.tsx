@@ -11,9 +11,10 @@ interface HeaderProps {
     isScrolled: boolean;
     isMobileMenuOpen: boolean;
     setIsMobileMenuOpen: Dispatch<SetStateAction<boolean>>;
+    locale: string;
 }
 
-export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
+export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen, locale }: HeaderProps) {
     const { appearance, updateAppearance } = useAppearance();
 
     return (
@@ -37,7 +38,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
                     <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
                         {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                     </button>
-                    <LanguageSwitcher />
+                    <LanguageSwitcher currentLocale={locale} />
                     <button className="p-2 text-gray-600" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Toggle menu">
                         <Menu size={24} />
                     </button>

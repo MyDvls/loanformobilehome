@@ -11,7 +11,7 @@ interface LandingLayoutProps {
 export default function LandingLayout({ children }: LandingLayoutProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { props } = usePage();
+    const { props } = usePage<{ locale: string }>();
 
     // Handle scroll effect for sticky navbar
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function LandingLayout({ children }: LandingLayoutProps) {
 
     return (
         <div className="flex min-h-screen flex-col">
-            <Header isScrolled={isScrolled} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+            <Header isScrolled={isScrolled} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} locale={props.locale} />
             <main className="flex-1 pt-16">
                 <AnimateOnView>{children}</AnimateOnView>
             </main>
