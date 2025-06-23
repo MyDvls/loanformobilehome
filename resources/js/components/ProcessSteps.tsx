@@ -2,47 +2,35 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import AnimateOnView from './AnimateOnView';
 
-const ProcessSteps = ({ loanSection }) => {
+interface Step {
+    id: number;
+    title: string;
+    description: string;
+    image_url: string | null;
+}
+
+interface Props {
+    loanSection: {
+        title: string;
+    } | null;
+    loanItems: Step[];
+}
+
+const ProcessSteps = ({ loanSection, loanItems }: Props) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const ref = useRef(null);
-    const stepRefs = useRef([]);
-    const timerRef = useRef(null);
+    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Map loanSection data to steps array
-    const steps = loanSection ? [
-        {
-            number: 'ONE',
-            title: loanSection.step1.title,
-            description: loanSection.step1.description,
-            image: loanSection.step1.image_url || '/images/placeholder-home.jpg',
-        },
-        {
-            number: 'TWO',
-            title: loanSection.step2.title,
-            description: loanSection.step2.description,
-            image: loanSection.step2.image_url || '/images/placeholder-home.jpg',
-        },
-        {
-            number: 'THREE',
-            title: loanSection.step3.title,
-            description: loanSection.step3.description,
-            image: loanSection.step3.image_url || '/images/placeholder-home.jpg',
-        },
-        {
-            number: 'FOUR',
-            title: loanSection.step4.title,
-            description: loanSection.step4.description,
-            image: loanSection.step4.image_url || '/images/placeholder-home.jpg',
-        },
-        {
-            number: 'FIVE',
-            title: loanSection.step5.title,
-            description: loanSection.step5.description,
-            image: loanSection.step5.image_url || '/images/placeholder-home.jpg',
-        },
-    ] : [];
+    // Map loanItems to steps array
+    const steps = loanItems.map((item, index) => ({
+        number: ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'][index] || (index + 1).toString(),
+        title: item.title,
+        description: item.description,
+        image: item.image_url || '/images/placeholder-home.jpg',
+    }));
 
     // Auto-advance timer effect
     useEffect(() => {
@@ -63,6 +51,7 @@ const ProcessSteps = ({ loanSection }) => {
         };
     }, [currentStep, isVisible, isPaused, steps.length]);
 
+    // Intersection observer for visibility
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -82,14 +71,14 @@ const ProcessSteps = ({ loanSection }) => {
         };
     }, []);
 
-    const getDescriptionParts = (description) => {
+    const getDescriptionParts = (description: string) => {
         const words = description.split(' ');
         const lastFewWords = words.slice(-8).join(' ');
         const mainText = words.slice(0, -8).join(' ');
         return { mainText, lastFewWords };
     };
 
-    const TypeAnimation = ({ text }) => {
+    const TypeAnimation = ({ text }: { text: string }) => {
         const [displayedText, setDisplayedText] = useState('');
         const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -116,7 +105,7 @@ const ProcessSteps = ({ loanSection }) => {
         );
     };
 
-    const StepIndicator = ({ step, index }) => {
+    const StepIndicator = ({ step, index }: { step: (typeof steps)[0]; index: number }) => {
         const isActive = currentStep >= index;
         const isCurrent = currentStep === index;
 
@@ -157,7 +146,7 @@ const ProcessSteps = ({ loanSection }) => {
     };
 
     if (!loanSection || steps.length === 0) {
-        return null; // Render nothing if loanSection is not provided
+        return null; // Render nothing if loanSection or loanItems are not provided
     }
 
     const { mainText, lastFewWords } = getDescriptionParts(steps[currentStep].description);
@@ -185,7 +174,7 @@ const ProcessSteps = ({ loanSection }) => {
                                 </div>
 
                                 {steps.map((step, index) => (
-                                    <StepIndicator key={index} step={step} index={index} />
+                                    <StepIndicator key={step.id || index} step={step} index={index} />
                                 ))}
                             </div>
                         </div>

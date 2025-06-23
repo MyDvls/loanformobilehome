@@ -3,60 +3,82 @@
 namespace Database\Seeders;
 
 use App\Models\FeaturesSection;
+use App\Models\FeatureItem;
 use Illuminate\Database\Seeder;
 
 class FeaturesSectionSeeder extends Seeder
 {
     public function run(): void
     {
-        FeaturesSection::updateOrCreate(
-            ['id' => 1],
+        // Create the Features Section
+        $featuresSection = FeaturesSection::create([
+            'title' => [
+                'en' => 'Why Choose Our Loan Services?',
+                'es' => '¿Por qué elegir nuestros servicios de préstamo?',
+            ],
+        ]);
+
+        // Define the features as an array
+        $features = [
             [
                 'title' => [
-                    'en' => 'Why Choose Us?',
-                    'es' => '¿Por Qué Elegirnos?',
-                ],
-                'feature1_title' => [
                     'en' => 'Competitive Rates',
-                    'es' => 'Tasas Competitivas',
+                    'es' => 'Tasas competitivas',
                 ],
-                'feature1_description' => [
-                    'en' => 'We offer some of the most competitive interest rates in the market.',
-                    'es' => 'Ofrecemos algunas de las tasas de interés más competitivas del mercado.',
+                'description' => [
+                    'en' => 'Enjoy some of the lowest interest rates in the market, tailored to your financial needs.',
+                    'es' => 'Disfruta de algunas de las tasas de interés más bajas del mercado, adaptadas a tus necesidades financieras.',
                 ],
-                'feature2_title' => [
-                    'en' => 'Easy Application Process',
-                    'es' => 'Proceso de Solicitud Fácil',
+            ],
+            [
+                'title' => [
+                    'en' => 'Fast Approval Process',
+                    'es' => 'Proceso de aprobación rápido',
                 ],
-                'feature2_description' => [
-                    'en' => 'Our streamlined application process saves you time and effort.',
-                    'es' => 'Nuestro proceso de solicitud simplificado te ahorra tiempo y esfuerzo.',
+                'description' => [
+                    'en' => 'Get pre-approved quickly with our streamlined online application process.',
+                    'es' => 'Obtén una preaprobación rápida con nuestro proceso de solicitud en línea optimizado.',
                 ],
-                'feature3_title' => [
-                    'en' => 'Secure Transactions',
-                    'es' => 'Transacciones Seguras',
+            ],
+            [
+                'title' => [
+                    'en' => 'Flexible Terms',
+                    'es' => 'Términos flexibles',
                 ],
-                'feature3_description' => [
-                    'en' => 'Your data is protected with state-of-the-art security measures.',
-                    'es' => 'Tus datos están protegidos con medidas de seguridad de última generación.',
+                'description' => [
+                    'en' => 'Choose from a variety of loan terms to fit your budget and lifestyle.',
+                    'es' => 'Elige entre una variedad de términos de préstamo para adaptarse a tu presupuesto y estilo de vida.',
                 ],
-                'feature4_title' => [
-                    'en' => 'Excellent Customer Service',
-                    'es' => 'Excelente Servicio al Cliente',
+            ],
+            [
+                'title' => [
+                    'en' => 'Expert Support',
+                    'es' => 'Soporte experto',
                 ],
-                'feature4_description' => [
-                    'en' => 'Our team is dedicated to providing top-notch support.',
-                    'es' => 'Nuestro equipo está dedicado a proporcionar un soporte de primera calidad.',
+                'description' => [
+                    'en' => 'Our dedicated team is here to guide you through every step of the loan process.',
+                    'es' => 'Nuestro equipo dedicado está aquí para guiarte en cada paso del proceso de préstamo.',
                 ],
-                'feature5_title' => [
-                    'en' => 'Trusted by Thousands',
-                    'es' => 'Confiado por Miles',
+            ],
+            [
+                'title' => [
+                    'en' => 'Online Management',
+                    'es' => 'Gestión en línea',
                 ],
-                'feature5_description' => [
-                    'en' => 'Join thousands of satisfied customers who trust our services.',
-                    'es' => 'Únete a miles de clientes satisfechos que confían en nuestros servicios.',
+                'description' => [
+                    'en' => 'Manage your loan payments and track progress conveniently from anywhere.',
+                    'es' => 'Administra los pagos de tu préstamo y sigue el progreso cómodamente desde cualquier lugar.',
                 ],
-            ]
-        );
+            ],
+        ];
+
+        // Create FeatureItem records for each feature
+        foreach ($features as $feature) {
+            FeatureItem::create([
+                'feature_section_id' => $featuresSection->id,
+                'title' => $feature['title'],
+                'description' => $feature['description'],
+            ]);
+        }
     }
 }

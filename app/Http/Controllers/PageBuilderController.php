@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactSection;
+use App\Models\FeatureItem;
 use App\Models\FeaturesSection;
 use App\Models\HeroSection;
+use App\Models\LoanItem;
 use App\Models\LoanSection;
 use App\Models\RequirementsSection;
 use App\Models\ServiceItem;
@@ -24,9 +26,9 @@ class PageBuilderController extends Controller
     public function editHome()
     {
         $hero = HeroSection::first();
-        $loan = LoanSection::first();
+        $loanSection = LoanSection::with('loanItems')->first();
         $requirements = RequirementsSection::first();
-        $featuresSection = FeaturesSection::first();
+        $featuresSection = FeaturesSection::with('featureItems')->first();
 
         return Inertia::render('Admin/Pages/HomeEdit', [
             'hero' => $hero ? [
@@ -52,67 +54,27 @@ class PageBuilderController extends Controller
                 ],
                 'image_url' => $hero->image_url,
             ] : null,
-            'loanSection' => $loan ? [
+            'loanSection' => $loanSection ? [
+                'id' => $loanSection->id,
                 'title' => [
-                    'en' => $loan->getTranslation('title', 'en'),
-                    'es' => $loan->getTranslation('title', 'es'),
-                ],
-                'step1' => [
-                    'title' => [
-                        'en' => $loan->getTranslation('step1_title', 'en'),
-                        'es' => $loan->getTranslation('step1_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $loan->getTranslation('step1_description', 'en'),
-                        'es' => $loan->getTranslation('step1_description', 'es'),
-                    ],
-                    'image_url' => $loan->step1_image_url,
-                ],
-                'step2' => [
-                    'title' => [
-                        'en' => $loan->getTranslation('step2_title', 'en'),
-                        'es' => $loan->getTranslation('step2_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $loan->getTranslation('step2_description', 'en'),
-                        'es' => $loan->getTranslation('step2_description', 'es'),
-                    ],
-                    'image_url' => $loan->step2_image_url,
-                ],
-                'step3' => [
-                    'title' => [
-                        'en' => $loan->getTranslation('step3_title', 'en'),
-                        'es' => $loan->getTranslation('step3_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $loan->getTranslation('step3_description', 'en'),
-                        'es' => $loan->getTranslation('step3_description', 'es'),
-                    ],
-                    'image_url' => $loan->step3_image_url,
-                ],
-                'step4' => [
-                    'title' => [
-                        'en' => $loan->getTranslation('step4_title', 'en'),
-                        'es' => $loan->getTranslation('step4_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $loan->getTranslation('step4_description', 'en'),
-                        'es' => $loan->getTranslation('step4_description', 'es'),
-                    ],
-                    'image_url' => $loan->step4_image_url,
-                ],
-                'step5' => [
-                    'title' => [
-                        'en' => $loan->getTranslation('step5_title', 'en'),
-                        'es' => $loan->getTranslation('step5_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $loan->getTranslation('step5_description', 'en'),
-                        'es' => $loan->getTranslation('step5_description', 'es'),
-                    ],
-                    'image_url' => $loan->step5_image_url,
+                    'en' => $loanSection->getTranslation('title', 'en'),
+                    'es' => $loanSection->getTranslation('title', 'es'),
                 ],
             ] : null,
+            'loanItems' => $loanSection ? $loanSection->loanItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => [
+                        'en' => $item->getTranslation('title', 'en'),
+                        'es' => $item->getTranslation('title', 'es'),
+                    ],
+                    'description' => [
+                        'en' => $item->getTranslation('description', 'en'),
+                        'es' => $item->getTranslation('description', 'es'),
+                    ],
+                    'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+                ];
+            })->toArray() : [],
             'requirementsSection' => $requirements ? [
                 'title' => [
                     'en' => $requirements->getTranslation('title', 'en'),
@@ -208,61 +170,26 @@ class PageBuilderController extends Controller
                 ],
             ] : null,
             'featuresSection' => $featuresSection ? [
+                'id' => $featuresSection->id,
                 'title' => [
                     'en' => $featuresSection->getTranslation('title', 'en'),
                     'es' => $featuresSection->getTranslation('title', 'es'),
                 ],
-                'feature1' => [
-                    'title' => [
-                        'en' => $featuresSection->getTranslation('feature1_title', 'en'),
-                        'es' => $featuresSection->getTranslation('feature1_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $featuresSection->getTranslation('feature1_description', 'en'),
-                        'es' => $featuresSection->getTranslation('feature1_description', 'es'),
-                    ],
-                ],
-                'feature2' => [
-                    'title' => [
-                        'en' => $featuresSection->getTranslation('feature2_title', 'en'),
-                        'es' => $featuresSection->getTranslation('feature2_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $featuresSection->getTranslation('feature2_description', 'en'),
-                        'es' => $featuresSection->getTranslation('feature2_description', 'es'),
-                    ],
-                ],
-                'feature3' => [
-                    'title' => [
-                        'en' => $featuresSection->getTranslation('feature3_title', 'en'),
-                        'es' => $featuresSection->getTranslation('feature3_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $featuresSection->getTranslation('feature3_description', 'en'),
-                        'es' => $featuresSection->getTranslation('feature3_description', 'es'),
-                    ],
-                ],
-                'feature4' => [
-                    'title' => [
-                        'en' => $featuresSection->getTranslation('feature4_title', 'en'),
-                        'es' => $featuresSection->getTranslation('feature4_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $featuresSection->getTranslation('feature4_description', 'en'),
-                        'es' => $featuresSection->getTranslation('feature4_description', 'es'),
-                    ],
-                ],
-                'feature5' => [
-                    'title' => [
-                        'en' => $featuresSection->getTranslation('feature5_title', 'en'),
-                        'es' => $featuresSection->getTranslation('feature5_title', 'es'),
-                    ],
-                    'description' => [
-                        'en' => $featuresSection->getTranslation('feature5_description', 'en'),
-                        'es' => $featuresSection->getTranslation('feature5_description', 'es'),
-                    ],
-                ],
             ] : null,
+            'featureItems' => $featuresSection ? $featuresSection->featureItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => [
+                        'en' => $item->getTranslation('title', 'en'),
+                        'es' => $item->getTranslation('title', 'es'),
+                    ],
+                    'description' => [
+                        'en' => $item->getTranslation('description', 'en'),
+                        'es' => $item->getTranslation('description', 'es'),
+                    ],
+                    'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+                ];
+            })->toArray() : [],
         ]);
     }
 
@@ -313,55 +240,50 @@ class PageBuilderController extends Controller
         $request->validate([
             'title.en' => 'required|string|max:255',
             'title.es' => 'required|string|max:255',
-            'step1.title.en' => 'required|string|max:255',
-            'step1.title.es' => 'required|string|max:255',
-            'step1.description.en' => 'required|string|max:1000',
-            'step1.description.es' => 'required|string|max:1000',
-            'step1.image' => 'nullable|image|max:2048',
-            'step2.title.en' => 'required|string|max:255',
-            'step2.title.es' => 'required|string|max:255',
-            'step2.description.en' => 'required|string|max:1000',
-            'step2.description.es' => 'required|string|max:1000',
-            'step2.image' => 'nullable|image|max:2048',
-            'step3.title.en' => 'required|string|max:255',
-            'step3.title.es' => 'required|string|max:255',
-            'step3.description.en' => 'required|string|max:1000',
-            'step3.description.es' => 'required|string|max:1000',
-            'step3.image' => 'nullable|image|max:2048',
-            'step4.title.en' => 'required|string|max:255',
-            'step4.title.es' => 'required|string|max:255',
-            'step4.description.en' => 'required|string|max:1000',
-            'step4.description.es' => 'required|string|max:1000',
-            'step4.image' => 'nullable|image|max:2048',
-            'step5.title.en' => 'required|string|max:255',
-            'step5.title.es' => 'required|string|max:255',
-            'step5.description.en' => 'required|string|max:1000',
-            'step5.description.es' => 'required|string|max:1000',
-            'step5.image' => 'nullable|image|max:2048',
+            'loanItems' => 'required|array',
+            'loanItems.*.id' => 'sometimes|nullable|integer|exists:loan_items,id',
+            'loanItems.*.title.en' => 'required|string|max:255',
+            'loanItems.*.title.es' => 'required|string|max:255',
+            'loanItems.*.description.en' => 'required|string|max:1000',
+            'loanItems.*.description.es' => 'required|string|max:1000',
+            'loanItems.*.image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        Log::info('Updating loan section with data: ', $request->all());
-        $loan = LoanSection::firstOrCreate([]);
+        $loanSection = LoanSection::firstOrCreate([]);
+        $loanSection->setTranslation('title', 'en', $request->input('title.en'));
+        $loanSection->setTranslation('title', 'es', $request->input('title.es'));
+        $loanSection->save();
 
-        $loan->setTranslation('title', 'en', $request->input('title.en'));
-        $loan->setTranslation('title', 'es', $request->input('title.es'));
+        $requestLoanItemIds = collect($request->input('loanItems'))
+            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->pluck('id')
+            ->toArray();
 
-        foreach (['step1', 'step2', 'step3', 'step4', 'step5'] as $step) {
-            $loan->setTranslation("{$step}_title", 'en', $request->input("{$step}.title.en"));
-            $loan->setTranslation("{$step}_title", 'es', $request->input("{$step}.title.es"));
-            $loan->setTranslation("{$step}_description", 'en', $request->input("{$step}.description.en"));
-            $loan->setTranslation("{$step}_description", 'es', $request->input("{$step}.description.es"));
+        LoanItem::where('loan_section_id', $loanSection->id)
+            ->whereNotIn('id', $requestLoanItemIds)
+            ->delete();
 
-            if ($request->hasFile("{$step}.image")) {
-                if ($loan->{"{$step}_image_path"}) {
-                    Storage::disk('public')->delete(str_replace('public/', '', $loan->{"{$step}_image_path"}));
+        foreach ($request->input('loanItems') as $index => $loanItemData) {
+            $loanItem = isset($loanItemData['id']) && $loanItemData['id']
+                ? LoanItem::find($loanItemData['id'])
+                : new LoanItem();
+
+            $loanItem->loan_section_id = $loanSection->id;
+            $loanItem->setTranslation('title', 'en', $loanItemData['title']['en']);
+            $loanItem->setTranslation('title', 'es', $loanItemData['title']['es']);
+            $loanItem->setTranslation('description', 'en', $loanItemData['description']['en']);
+            $loanItem->setTranslation('description', 'es', $loanItemData['description']['es']);
+
+            if ($request->hasFile("loanItems.{$index}.image")) {
+                if ($loanItem->image_path) {
+                    Storage::disk('public')->delete(str_replace('public/', '', $loanItem->image_path));
                 }
-                $path = $request->file("{$step}.image")->store('loan', 'public');
-                $loan->{"{$step}_image_path"} = $path;
+                $path = $request->file("loanItems.{$index}.image")->store('loan', 'public');
+                $loanItem->image_path = $path;
             }
-        }
 
-        $loan->save();
+            $loanItem->save();
+        }
 
         return redirect()->route('admin.pages.home.edit')->with('success', 'Loan section updated successfully.');
     }
@@ -438,42 +360,52 @@ class PageBuilderController extends Controller
         $request->validate([
             'title.en' => 'required|string|max:255',
             'title.es' => 'required|string|max:255',
-            'feature1.title.en' => 'required|string|max:255',
-            'feature1.title.es' => 'required|string|max:255',
-            'feature1.description.en' => 'required|string|max:1000',
-            'feature1.description.es' => 'required|string|max:1000',
-            'feature2.title.en' => 'required|string|max:255',
-            'feature2.title.es' => 'required|string|max:255',
-            'feature2.description.en' => 'required|string|max:1000',
-            'feature2.description.es' => 'required|string|max:1000',
-            'feature3.title.en' => 'required|string|max:255',
-            'feature3.title.es' => 'required|string|max:255',
-            'feature3.description.en' => 'required|string|max:1000',
-            'feature3.description.es' => 'required|string|max:1000',
-            'feature4.title.en' => 'required|string|max:255',
-            'feature4.title.es' => 'required|string|max:255',
-            'feature4.description.en' => 'required|string|max:1000',
-            'feature4.description.es' => 'required|string|max:1000',
-            'feature5.title.en' => 'required|string|max:255',
-            'feature5.title.es' => 'required|string|max:255',
-            'feature5.description.en' => 'required|string|max:1000',
-            'feature5.description.es' => 'required|string|max:1000',
+            'featureItems' => 'required|array',
+            'featureItems.*.id' => 'sometimes|nullable|integer|exists:feature_items,id',
+            'featureItems.*.title.en' => 'required|string|max:255',
+            'featureItems.*.title.es' => 'required|string|max:255',
+            'featureItems.*.description.en' => 'required|string|max:1000',
+            'featureItems.*.description.es' => 'required|string|max:1000',
+            'featureItems.*.image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         Log::info('Updating features section with data: ', $request->all());
-        $features = FeaturesSection::firstOrCreate([]);
 
-        $features->setTranslation('title', 'en', $request->input('title.en'));
-        $features->setTranslation('title', 'es', $request->input('title.es'));
+        $featuresSection = FeaturesSection::firstOrCreate([]);
+        $featuresSection->setTranslation('title', 'en', $request->input('title.en'));
+        $featuresSection->setTranslation('title', 'es', $request->input('title.es'));
+        $featuresSection->save();
 
-        foreach (['feature1', 'feature2', 'feature3', 'feature4', 'feature5'] as $feat) {
-            $features->setTranslation("{$feat}_title", 'en', $request->input("{$feat}.title.en"));
-            $features->setTranslation("{$feat}_title", 'es', $request->input("{$feat}.title.es"));
-            $features->setTranslation("{$feat}_description", 'en', $request->input("{$feat}.description.en"));
-            $features->setTranslation("{$feat}_description", 'es', $request->input("{$feat}.description.es"));
+        $requestFeatureItemIds = collect($request->input('featureItems'))
+            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->pluck('id')
+            ->toArray();
+
+        FeatureItem::where('feature_section_id', $featuresSection->id)
+            ->whereNotIn('id', $requestFeatureItemIds)
+            ->delete();
+
+        foreach ($request->input('featureItems') as $index => $featureItemData) {
+            $featureItem = isset($featureItemData['id']) && $featureItemData['id']
+                ? FeatureItem::find($featureItemData['id'])
+                : new FeatureItem();
+
+            $featureItem->feature_section_id = $featuresSection->id;
+            $featureItem->setTranslation('title', 'en', $featureItemData['title']['en']);
+            $featureItem->setTranslation('title', 'es', $featureItemData['title']['es']);
+            $featureItem->setTranslation('description', 'en', $featureItemData['description']['en']);
+            $featureItem->setTranslation('description', 'es', $featureItemData['description']['es']);
+
+            if ($request->hasFile("featureItems.{$index}.image")) {
+                if ($featureItem->image_path) {
+                    Storage::disk('public')->delete(str_replace('public/', '', $featureItem->image_path));
+                }
+                $path = $request->file("featureItems.{$index}.image")->store('feature', 'public');
+                $featureItem->image_path = $path;
+            }
+
+            $featureItem->save();
         }
-
-        $features->save();
 
         return redirect()->route('admin.pages.home.edit')->with('success', 'Features section updated successfully.');
     }

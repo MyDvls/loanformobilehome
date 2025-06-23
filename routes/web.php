@@ -22,9 +22,9 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $hero = HeroSection::first();
-    $loan = LoanSection::first();
+    $loanSection = LoanSection::with('loanItems')->first();
     $requirements = RequirementsSection::first();
-    $features = FeaturesSection::first();
+    $featuresSection = FeaturesSection::with('featureItems')->first();
     $locale = app()->getLocale();
 
     return Inertia::render('Home', [
@@ -36,34 +36,17 @@ Route::get('/', function () {
             'sub_heading' => $hero->getTranslation('sub_heading', $locale),
             'image_url' => $hero->image_url,
         ] : null,
-        'loanSection' => $loan ? [
-            'title' => $loan->getTranslation('title', $locale),
-            'step1' => [
-                'title' => $loan->getTranslation('step1_title', $locale),
-                'description' => $loan->getTranslation('step1_description', $locale),
-                'image_url' => $loan->step1_image_url,
-            ],
-            'step2' => [
-                'title' => $loan->getTranslation('step2_title', $locale),
-                'description' => $loan->getTranslation('step2_description', $locale),
-                'image_url' => $loan->step2_image_url,
-            ],
-            'step3' => [
-                'title' => $loan->getTranslation('step3_title', $locale),
-                'description' => $loan->getTranslation('step3_description', $locale),
-                'image_url' => $loan->step3_image_url,
-            ],
-            'step4' => [
-                'title' => $loan->getTranslation('step4_title', $locale),
-                'description' => $loan->getTranslation('step4_description', $locale),
-                'image_url' => $loan->step4_image_url,
-            ],
-            'step5' => [
-                'title' => $loan->getTranslation('step5_title', $locale),
-                'description' => $loan->getTranslation('step5_description', $locale),
-                'image_url' => $loan->step5_image_url,
-            ],
+        'loanSection' => $loanSection ? [
+            'title' => $loanSection->getTranslation('title', $locale),
         ] : null,
+        'loanItems' => $loanSection ? $loanSection->loanItems->map(function ($item) use ($locale) {
+            return [
+                'id' => $item->id,
+                'title' => $item->getTranslation('title', $locale),
+                'description' => $item->getTranslation('description', $locale),
+                'image_url' => $item->image_path ? Storage::url($item->image_path) : null,
+            ];
+        })->toArray() : [],
         'requirementsSection' => $requirements ? [
             'title' => $requirements->getTranslation('title', $locale),
             'subtitle' => $requirements->getTranslation('subtitle', $locale),
@@ -98,29 +81,17 @@ Route::get('/', function () {
                 'description' => $requirements->getTranslation('requirement6_description', $locale),
             ],
         ] : null,
-        'featuresSection' => $features ? [
-            'title' => $features->getTranslation('title', $locale),
-            'feature1' => [
-                'title' => $features->getTranslation('feature1_title', $locale),
-                'description' => $features->getTranslation('feature1_description', $locale),
-            ],
-            'feature2' => [
-                'title' => $features->getTranslation('feature2_title', $locale),
-                'description' => $features->getTranslation('feature2_description', $locale),
-            ],
-            'feature3' => [
-                'title' => $features->getTranslation('feature3_title', $locale),
-                'description' => $features->getTranslation('feature3_description', $locale),
-            ],
-            'feature4' => [
-                'title' => $features->getTranslation('feature4_title', $locale),
-                'description' => $features->getTranslation('feature4_description', $locale),
-            ],
-            'feature5' => [
-                'title' => $features->getTranslation('feature5_title', $locale),
-                'description' => $features->getTranslation('feature5_description', $locale),
-            ],
+        'featuresSection' => $featuresSection ? [
+            'title' => $featuresSection->getTranslation('title', $locale),
         ] : null,
+        'featureItems' => $featuresSection ? $featuresSection->featureItems->map(function ($item) use ($locale) {
+            return [
+                'id' => $item->id,
+                'title' => $item->getTranslation('title', $locale),
+                'description' => $item->getTranslation('description', $locale),
+                'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+            ];
+        })->toArray() : [],
         'locale' => $locale,
     ]);
 })->name('home');

@@ -7,19 +7,30 @@ import { Hero } from '@/components/ui/Hero';
 import LandingLayout from '@/layouts/landing-layout';
 import { Head } from '@inertiajs/react';
 
-export default function Home({
-    hero,
-    loanSection,
-    requirementsSection,
-    featuresSection,
-    locale,
-}: {
+interface Step {
+    id?: number;
+    title: string;
+    description: string;
+    image_url: string | null;
+}
+
+interface FeatureItem {
+    id?: number;
+    title: string;
+    description: string;
+}
+
+interface Props {
     hero: any;
-    loanSection: any;
+    loanSection: { title: string } | null;
+    loanItems: Step[];
     requirementsSection: any;
-    featuresSection: any;
+    featuresSection: { title: string } | null;
+    featureItems: FeatureItem[];
     locale: string;
-}) {
+}
+
+export default function Home({ hero, loanSection, loanItems, requirementsSection, featuresSection, featureItems, locale }: Props) {
     return (
         <LandingLayout>
             <Head title="Home" />
@@ -27,9 +38,9 @@ export default function Home({
                 <AnimateOnView delay={0.2}>
                     <Hero hero={hero} />
                 </AnimateOnView>
-                <ProcessSteps loanSection={loanSection} />
+                <ProcessSteps loanSection={loanSection} loanItems={loanItems} />
                 <Requirements requirementsSection={requirementsSection} />
-                <Features featuresSection={featuresSection} />
+                <Features featuresSection={featuresSection} featureItems={featureItems} />
                 <div className="h-[80px]"></div>
                 <TestimonialSection />
             </div>
