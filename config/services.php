@@ -34,5 +34,18 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'google_translate' => [
+        'key' => env('GOOGLE_TRANSLATE_API_KEY'),
+    ],
+
+    'aws' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'translation' => [
+        'provider' => env('TRANSLATION_PROVIDER', 'google'), // 'google' or 'amazon'
+    ],
 
 ];

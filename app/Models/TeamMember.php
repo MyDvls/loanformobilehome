@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TeamMember extends Model
 {
-    use HasTranslations;
+    protected $fillable = [
+        'team_section_id',
+        'name',
+        'role',
+        'bio',
+        'image_path',
+        'order',
+    ];
 
-    protected $fillable = ['team_section_id', 'name', 'role', 'bio', 'image_path', 'order'];
-
-    protected $translatable = ['name', 'role', 'bio'];
-
-    public function section()
+    public function teamSection(): BelongsTo
     {
-        return $this->belongsTo(TeamSection::class, 'team_section_id');
+        return $this->belongsTo(TeamSection::class);
     }
 }

@@ -3,21 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Translatable\HasTranslations;
 
 class LoanItem extends Model
 {
-    use HasTranslations;
+    protected $fillable = [
+        'loan_section_id',
+        'title',
+        'description',
+        'image_path',
+    ];
 
-    public $translatable = ['title', 'description'];
-
-    protected $fillable = ['loan_section_id', 'title', 'description', 'image_path'];
-
-    public function loanSection()
+    public function loanSection(): BelongsTo
     {
         return $this->belongsTo(LoanSection::class);
     }
+
 
     protected static function boot()
     {

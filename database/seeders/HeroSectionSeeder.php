@@ -11,26 +11,11 @@ class HeroSectionSeeder extends Seeder
     {
         HeroSection::query()->delete();
         HeroSection::create([
-            'slogan' => [
-                'en' => 'Your Home. Your Future. Your Way.',
-                'es' => 'Tu Hogar. Tu Futuro. Tu Camino.',
-            ],
-            'heading_part1' => [
-                'en' => 'Your Path to ',
-                'es' => 'Tu Camino hacia la Propiedad de tu ',
-            ],
-            'heading_part2' => [
-                'en' => 'Mobile Home',
-                'es' => 'Casa Móvil',
-            ],
-            'heading_part3' => [
-                'en' => ' Ownership Starts Here .',
-                'es' => ' Comienza Aquí .',
-            ],
-            'sub_heading' => [
-                'en' => 'Simple, transparent financing solutions for your manufactured home, with competitive rates and personalized service.',
-                'es' => 'Soluciones de financiamiento simples y transparentes para tu casa prefabricada, con tasas competitivas y servicio personalizado.',
-            ],
+            'slogan' => 'Your Home. Your Future. Your Way.',
+            'heading_part1' => 'Your Path to ',
+            'heading_part2' => 'Mobile Home',
+            'heading_part3' => ' Ownership Starts Here .',
+            'sub_heading' => 'Simple, transparent financing solutions for your manufactured home, with competitive rates and personalized service.',
             'image_path' => 'images/Mobile-home-autumn-comprimida.jpeg',
         ]);
     }

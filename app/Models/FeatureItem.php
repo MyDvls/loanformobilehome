@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Translatable\HasTranslations;
 
 class FeatureItem extends Model
 {
-    use HasTranslations;
+    protected $fillable = [
+        'features_section_id',
+        'title',
+        'description',
+        'image_path',
+    ];
 
-    public $translatable = ['title', 'description'];
-
-    protected $fillable = ['feature_section_id', 'title', 'description', 'image_path'];
-
-    public function featureSection()
+    public function featureSection(): BelongsTo
     {
-        return $this->belongsTo(FeaturesSection::class);
+        return $this->belongsTo(FeatureSection::class);
     }
 
     protected static function boot()

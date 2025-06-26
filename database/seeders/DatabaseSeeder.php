@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\ContactSection;
+use App\Models\RequirementsSection;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,10 +18,15 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            RequirementsSectionSeeder::class,
+            ContactSectionSeeder::class,
+            TeamSectionSeeder::class,
+            LoanSectionSeeder::class,
             FeaturesSectionSeeder::class,
             HeroSectionSeeder::class,
-            LoanSectionSeeder::class,
+            ServicesSectionSeeder::class,
+            UnderstandingLoanSectionSeeder::class,
+            RequirementsSectionSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

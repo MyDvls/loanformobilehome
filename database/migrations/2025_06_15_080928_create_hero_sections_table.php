@@ -8,13 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('hero_sections', function (Blueprint $table) {
+        Schema::create('hero_section', function (Blueprint $table) {
             $table->id();
-            $table->json('slogan');
-            $table->json('heading_part1');
-            $table->json('heading_part2');
-            $table->json('heading_part3');
-            $table->json('sub_heading');
+            $table->text('slogan');
+            $table->text('heading_part1');
+            $table->text('heading_part2');
+            $table->text('heading_part3');
+            $table->text('sub_heading');
             $table->string('image_path')->nullable();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('hero_sections');
+        Schema::dropIfExists('hero_section');
     }
 };

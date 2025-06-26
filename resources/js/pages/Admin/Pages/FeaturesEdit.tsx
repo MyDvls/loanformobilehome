@@ -1,30 +1,29 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
-import { Globe } from 'lucide-react';
 import { useState } from 'react';
 import FileUpload from '../components/FileUpload';
 import TranslatedInput from '../components/TranslatedInput';
 
-interface TranslatedField {
-    en: string;
-    es: string;
-}
-
 interface FeatureItem {
     id?: number;
-    title: TranslatedField;
-    description: TranslatedField;
-    image_path?: string | null;
+    title: string;
+    description: string;
+    image_path?: string;
 }
 
 interface FeaturesSection {
     id?: number;
-    title?: TranslatedField;
+    title?: string;
 }
 
 interface FeaturesFormData {
-    title: TranslatedField;
-    featureItems: FeatureItem[];
+    title: string;
+    featureItems: Array<{
+        id?: number;
+        title: string;
+        description: string;
+        image: File | null;
+        image_path?: string;
+    }>;
 }
 
 interface Props {
@@ -34,26 +33,17 @@ interface Props {
 
 export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
     const { data, setData, post, errors, processing } = useForm<FeaturesFormData>({
-        title: {
-            en: featuresSection?.title?.en || '',
-            es: featuresSection?.title?.es || '',
-        },
+        title: featuresSection?.title || '',
         featureItems: featureItems?.map((item) => ({
             id: item.id,
-            title: {
-                en: item.title?.en || '',
-                es: item.title?.es || '',
-            },
-            description: {
-                en: item.description?.en || '',
-                es: item.description?.es || '',
-            },
+            title: item.title || '',
+            description: item.description || '',
             image: null,
-            image_path: item.image_path ? `${item.image_path}` : '',
+            image_path: item.image_path || '',
         })) || [
             {
-                title: { en: '', es: '' },
-                description: { en: '', es: '' },
+                title: '',
+                description: '',
                 image: null,
                 image_path: '',
             },
@@ -63,10 +53,10 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
     const [imageErrors, setImageErrors] = useState<{ [key: number]: string | null }>({});
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const updateItem = (index: number, key: 'title' | 'description', lang: 'en' | 'es', value: string) => {
+    const updateItem = (index: number, key: 'title' | 'description', value: string) => {
         setData(
             'featureItems',
-            data.featureItems.map((item, i) => (i === index ? { ...item, [key]: { ...item[key], [lang]: value } } : item)),
+            data.featureItems.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
         );
     };
 
@@ -104,23 +94,20 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
 
     const addItem = () => {
         const newIndex = data.featureItems.length;
-        setData('featureItems', [...data.featureItems, { title: { en: '', es: '' }, description: { en: '', es: '' }, image: null, image_path: '' }]);
+        setData('featureItems', [...data.featureItems, { title: '', description: '', image: null, image_path: '' }]);
         setSelectedIndex(newIndex);
     };
 
     const resetItem = () => {
         setData({
-            title: {
-                en: featuresSection?.title?.en || '',
-                es: featuresSection?.title?.es || '',
-            },
+            title: featuresSection?.title || '',
             featureItems: featureItems?.map((item) => ({
                 id: item.id,
-                title: { en: item.title?.en || '', es: item.title?.es || '' },
-                description: { en: item.description?.en || '', es: item.description?.es || '' },
+                title: item.title || '',
+                description: item.description || '',
                 image: null,
-                image_path: item.image_path ? `${item.image_path}` : '',
-            })) || [{ title: { en: '', es: '' }, description: { en: '', es: '' }, image: null, image_path: '' }],
+                image_path: item.image_path || '',
+            })) || [{ title: '', description: '', image: null, image_path: '' }],
         });
         setImageErrors({});
         setSelectedIndex(0);
@@ -144,17 +131,14 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
         e.preventDefault();
         const formData = new FormData();
         formData.append('_method', 'PUT');
-        formData.append('title[en]', data.title.en);
-        formData.append('title[es]', data.title.es);
+        formData.append('title', data.title);
 
         data.featureItems.forEach((item, index) => {
             if (item.id) {
                 formData.append(`featureItems[${index}][id]`, item.id.toString());
             }
-            formData.append(`featureItems[${index}][title][en]`, item.title.en);
-            formData.append(`featureItems[${index}][title][es]`, item.title.es);
-            formData.append(`featureItems[${index}][description][en]`, item.description.en);
-            formData.append(`featureItems[${index}][description][es]`, item.description.es);
+            formData.append(`featureItems[${index}][title]`, item.title);
+            formData.append(`featureItems[${index}][description]`, item.description);
             formData.append(`featureItems[${index}][image]`, item.image instanceof File ? item.image : '');
         });
 
@@ -173,54 +157,14 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-            <TabGroup>
-                <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                    <Tab
-                        className={({ selected }) =>
-                            `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                selected
-                                    ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                    : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                            }`
-                        }
-                    >
-                        <Globe className="mr-2 h-4 w-4" /> English
-                    </Tab>
-                    <Tab
-                        className={({ selected }) =>
-                            `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                selected
-                                    ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                    : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                            }`
-                        }
-                    >
-                        <Globe className="mr-2 h-4 w-4" /> Spanish
-                    </Tab>
-                </TabList>
-                <TabPanels className="mt-6">
-                    <TabPanel className="space-y-6">
-                        <TranslatedInput
-                            label="Features Section Title"
-                            value={data.title.en}
-                            onChange={(value) => setData('title', { ...data.title, en: value })}
-                            error={errors['title.en']}
-                            placeholder="Features section title in English"
-                            required
-                        />
-                    </TabPanel>
-                    <TabPanel className="space-y-6">
-                        <TranslatedInput
-                            label="Título de la Sección de Características"
-                            value={data.title.es}
-                            onChange={(value) => setData('title', { ...data.title, es: value })}
-                            error={errors['title.es']}
-                            placeholder="Título de la sección de características en español"
-                            required
-                        />
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
+            <TranslatedInput
+                label="Features Section Title"
+                value={data.title}
+                onChange={(value) => setData('title', value)}
+                error={errors.title}
+                placeholder="Features section title"
+                required
+            />
 
             <div className="flex items-center gap-4">
                 {data.featureItems.map((_, index) => (
@@ -247,72 +191,23 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
             {data.featureItems.length > 0 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <div className="space-y-4 lg:col-span-2">
-                        <TabGroup>
-                            <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                                <Tab
-                                    className={({ selected }) =>
-                                        `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                            selected
-                                                ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                                : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                        }`
-                                    }
-                                >
-                                    <Globe className="mr-2 h-4 w-4" /> English
-                                </Tab>
-                                <Tab
-                                    className={({ selected }) =>
-                                        `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                            selected
-                                                ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                                : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                        }`
-                                    }
-                                >
-                                    <Globe className="mr-2 h-4 w-4" /> Spanish
-                                </Tab>
-                            </TabList>
-                            <TabPanels className="mt-6">
-                                <TabPanel className="space-y-6">
-                                    <TranslatedInput
-                                        label="Title"
-                                        value={data.featureItems[selectedIndex].title.en}
-                                        onChange={(value) => updateItem(selectedIndex, 'title', 'en', value)}
-                                        error={errors[`featureItems.${selectedIndex}.title.en`]}
-                                        placeholder="Enter title in English"
-                                        required
-                                    />
-                                    <TranslatedInput
-                                        label="Description"
-                                        value={data.featureItems[selectedIndex].description.en}
-                                        onChange={(value) => updateItem(selectedIndex, 'description', 'en', value)}
-                                        error={errors[`featureItems.${selectedIndex}.description.en`]}
-                                        placeholder="Enter description in English"
-                                        type="textarea"
-                                        required
-                                    />
-                                </TabPanel>
-                                <TabPanel className="space-y-6">
-                                    <TranslatedInput
-                                        label="Título"
-                                        value={data.featureItems[selectedIndex].title.es}
-                                        onChange={(value) => updateItem(selectedIndex, 'title', 'es', value)}
-                                        error={errors[`featureItems.${selectedIndex}.title.es`]}
-                                        placeholder="Ingrese título en español"
-                                        required
-                                    />
-                                    <TranslatedInput
-                                        label="Descripción"
-                                        value={data.featureItems[selectedIndex].description.es}
-                                        onChange={(value) => updateItem(selectedIndex, 'description', 'es', value)}
-                                        error={errors[`featureItems.${selectedIndex}.description.es`]}
-                                        placeholder="Ingrese descripción en español"
-                                        type="textarea"
-                                        required
-                                    />
-                                </TabPanel>
-                            </TabPanels>
-                        </TabGroup>
+                        <TranslatedInput
+                            label={`Feature Item ${selectedIndex + 1} Title`}
+                            value={data.featureItems[selectedIndex].title}
+                            onChange={(value) => updateItem(selectedIndex, 'title', value)}
+                            error={errors[`featureItems.${selectedIndex}.title`]}
+                            placeholder="Enter title"
+                            required
+                        />
+                        <TranslatedInput
+                            label={`Feature Item ${selectedIndex + 1} Description`}
+                            value={data.featureItems[selectedIndex].description}
+                            onChange={(value) => updateItem(selectedIndex, 'description', value)}
+                            error={errors[`featureItems.${selectedIndex}.description`]}
+                            placeholder="Enter description"
+                            type="textarea"
+                            required
+                        />
                     </div>
                     <div>
                         <FileUpload

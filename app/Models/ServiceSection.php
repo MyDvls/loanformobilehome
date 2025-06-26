@@ -4,20 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Translatable\HasTranslations;
 
 class ServiceSection extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory;
 
+    protected $table = 'service_section';
     protected $fillable = ['heading', 'sub_heading'];
-
-    protected $casts = [
-        'heading' => 'array',
-        'sub_heading' => 'array',
-    ];
-
-    protected $translatable = ['heading', 'sub_heading'];
 
     public function items()
     {

@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('service_sections', function (Blueprint $table) {
+        Schema::create('service_section', function (Blueprint $table) {
             $table->id();
-            $table->json('heading')->nullable();
-            $table->json('sub_heading')->nullable();
+            $table->text('heading')->nullable();
+            $table->text('sub_heading')->nullable();
             $table->timestamps();
         });
 
         Schema::create('service_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_section_id')->constrained('service_sections')->onDelete('cascade');
-            $table->json('title')->nullable();
-            $table->json('description')->nullable();
+            $table->foreignId('service_section_id')->constrained('service_section')->onDelete('cascade');
+            $table->text('title')->nullable();
+            $table->text('description')->nullable();
             $table->string('image_path')->nullable();
             $table->timestamps();
         });
@@ -27,7 +27,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('service_section');
         Schema::dropIfExists('service_items');
-        Schema::dropIfExists('service_sections');
     }
 };

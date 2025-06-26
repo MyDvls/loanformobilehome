@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class LoanSection extends Model
+class FeatureSection extends Model
 {
-    protected $table = 'loan_section';
+    protected $table = 'feature_section';
     protected $fillable = [
         'title',
     ];
 
-    public function loanItems(): HasMany
+    public function featureItems(): HasMany
     {
-        return $this->hasMany(LoanItem::class);
+        return $this->hasMany(FeatureItem::class);
     }
 }

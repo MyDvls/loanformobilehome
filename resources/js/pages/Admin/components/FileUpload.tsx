@@ -42,7 +42,7 @@ export default function FileUpload({ label, onChange, error, currentImageUrl, pr
                 />
                 {(previewUrl || currentImageUrl) && (
                     <div className="relative">
-                        <img src={previewUrl} alt="Preview" className="h-16 w-16 rounded-md object-cover" />
+                        <img src={previewUrl} alt="Preview" className="h-40 w-40 rounded-md object-cover" />
                         {onRemove && (
                             <button
                                 type="button"

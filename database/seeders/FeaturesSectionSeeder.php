@@ -2,82 +2,52 @@
 
 namespace Database\Seeders;
 
-use App\Models\FeaturesSection;
-use App\Models\FeatureItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class FeaturesSectionSeeder extends Seeder
 {
     public function run(): void
     {
         // Create the Features Section
-        $featuresSection = FeaturesSection::create([
-            'title' => [
-                'en' => 'Why Choose Our Loan Services?',
-                'es' => '¿Por qué elegir nuestros servicios de préstamo?',
-            ],
+        $sectionId = DB::table('feature_section')->insertGetId([
+            'title' => 'Why Choose Our Loan Services?',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         // Define the features as an array
         $features = [
             [
-                'title' => [
-                    'en' => 'Competitive Rates',
-                    'es' => 'Tasas competitivas',
-                ],
-                'description' => [
-                    'en' => 'Enjoy some of the lowest interest rates in the market, tailored to your financial needs.',
-                    'es' => 'Disfruta de algunas de las tasas de interés más bajas del mercado, adaptadas a tus necesidades financieras.',
-                ],
+                'title' => 'Competitive Rates',
+                'description' => 'Enjoy some of the lowest interest rates in the market, tailored to your financial needs.',
             ],
             [
-                'title' => [
-                    'en' => 'Fast Approval Process',
-                    'es' => 'Proceso de aprobación rápido',
-                ],
-                'description' => [
-                    'en' => 'Get pre-approved quickly with our streamlined online application process.',
-                    'es' => 'Obtén una preaprobación rápida con nuestro proceso de solicitud en línea optimizado.',
-                ],
+                'title' => 'Fast Approval Process',
+                'description' => 'Get pre-approved quickly with our streamlined online application process.',
             ],
             [
-                'title' => [
-                    'en' => 'Flexible Terms',
-                    'es' => 'Términos flexibles',
-                ],
-                'description' => [
-                    'en' => 'Choose from a variety of loan terms to fit your budget and lifestyle.',
-                    'es' => 'Elige entre una variedad de términos de préstamo para adaptarse a tu presupuesto y estilo de vida.',
-                ],
+                'title' => 'Flexible Terms',
+                'description' => 'Choose from a variety of loan terms to fit your budget and lifestyle.',
             ],
             [
-                'title' => [
-                    'en' => 'Expert Support',
-                    'es' => 'Soporte experto',
-                ],
-                'description' => [
-                    'en' => 'Our dedicated team is here to guide you through every step of the loan process.',
-                    'es' => 'Nuestro equipo dedicado está aquí para guiarte en cada paso del proceso de préstamo.',
-                ],
+                'title' => 'Expert Support',
+                'description' => 'Our dedicated team is here to guide you through every step of the loan process.',
             ],
             [
-                'title' => [
-                    'en' => 'Online Management',
-                    'es' => 'Gestión en línea',
-                ],
-                'description' => [
-                    'en' => 'Manage your loan payments and track progress conveniently from anywhere.',
-                    'es' => 'Administra los pagos de tu préstamo y sigue el progreso cómodamente desde cualquier lugar.',
-                ],
+                'title' => 'Online Management',
+                'description' => 'Manage your loan payments and track progress conveniently from anywhere.',
             ],
         ];
 
-        // Create FeatureItem records for each feature
+        // Create feature items
         foreach ($features as $feature) {
-            FeatureItem::create([
-                'feature_section_id' => $featuresSection->id,
+            DB::table('feature_items')->insert([
+                'feature_section_id' => $sectionId,
                 'title' => $feature['title'],
                 'description' => $feature['description'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

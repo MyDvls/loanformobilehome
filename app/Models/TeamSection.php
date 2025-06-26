@@ -3,17 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TeamSection extends Model
 {
-    use HasTranslations;
+    protected $table = 'team_section';
+    protected $fillable = [
+        'heading',
+        'sub_heading',
+    ];
 
-    protected $fillable = ['heading', 'sub_heading'];
-
-    protected $translatable = ['heading', 'sub_heading'];
-
-    public function members()
+    public function teamMembers(): HasMany
     {
         return $this->hasMany(TeamMember::class);
     }

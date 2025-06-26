@@ -5,193 +5,280 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Middleware\CustomTrimStrings;
 use App\Models\ContactSection;
+use App\Models\FeatureSection;
 use App\Models\FeaturesSection;
 use App\Models\HeroSection;
 use App\Models\LoanSection;
-use App\Models\RequirementsSection;
+use App\Models\RequirementSection;
 use App\Models\ServiceItem;
 use App\Models\ServiceSection;
 use App\Models\TeamMember;
 use App\Models\TeamSection;
 use App\Models\UnderstandingLoanSection;
+use App\Services\TranslationService;
 use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-Route::get('/', function () {
+Route::get('/', function (TranslationService $translator) {
     $hero = HeroSection::first();
-    $loanSection = LoanSection::with('loanItems')->first();
-    $requirements = RequirementsSection::first();
-    $featuresSection = FeaturesSection::with('featureItems')->first();
+    $loanSection = LoanSection::with(['loanItems' => function ($query) {
+        $query->orderBy('id');
+    }])->first();
+    $requirements = RequirementSection::with(['requirementItems' => function ($query) {
+        $query->orderBy('id');
+    }])->first();
+    $featuresSection = FeatureSection::with(['featureItems' => function ($query) {
+        $query->orderBy('id');
+    }])->first();
     $locale = app()->getLocale();
 
+    // Prepare hero data in English first
+    $heroData = $hero ? [
+        'slogan' => $hero->slogan,
+        'heading_part1' => $hero->heading_part1,
+        'heading_part2' => $hero->heading_part2,
+        'heading_part3' => $hero->heading_part3,
+        'sub_heading' => $hero->sub_heading,
+        'image_path' => $hero->image_path ? Storage::url($hero->image_path) : null,
+    ] : null;
+
+    // Prepare loan section data
+    $loanData = $loanSection ? [
+        'title' => $loanSection->title,
+    ] : null;
+
+    // Prepare loan items data
+    $loanItemsData = $loanSection ? $loanSection->loanItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'description' => $item->description,
+            'image_url' => $item->image_path ? Storage::url($item->image_path) : null,
+        ];
+    })->toArray() : [];
+
+    // Prepare requirements section data
+    $requirementsData = $requirements ? [
+        'title' => $requirements->title,
+        'subtitle' => $requirements->subtitle,
+    ] : null;
+
+    // Prepare requirement items data
+    $requirementItemsData = $requirements ? $requirements->requirementItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'description' => $item->description,
+            'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+        ];
+    })->toArray() : [];
+
+    // Prepare features section data
+    $featuresData = $featuresSection ? [
+        'title' => $featuresSection->title,
+    ] : null;
+
+    // Prepare feature items data
+    $featureItemsData = $featuresSection ? $featuresSection->featureItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'description' => $item->description,
+            'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+        ];
+    })->toArray() : [];
+
+    // Translate if locale is not English
+    if ($locale !== 'en') {
+        // Translate hero data
+        if ($heroData) {
+            $heroData = $translator->translateArray($heroData, $locale);
+        }
+
+        // Translate loan section data
+        if ($loanData) {
+            $loanData = $translator->translateArray($loanData, $locale);
+        }
+
+        // Translate loan items data
+        if (!empty($loanItemsData)) {
+            $loanItemsData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $loanItemsData);
+        }
+
+        // Translate requirements data
+        if ($requirementsData) {
+            $requirementsData = $translator->translateArray($requirementsData, $locale);
+        }
+
+        // Translate requirements item data
+        if (!empty($requirementItemsData)) {
+            $requirementItemsData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $requirementItemsData);
+        }
+
+        // Translate features section data
+        if ($featuresData) {
+            $featuresData = $translator->translateArray($featuresData, $locale);
+        }
+
+        // Translate feature items data
+        if (!empty($featureItemsData)) {
+            $featureItemsData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $featureItemsData);
+        }
+    }
+
     return Inertia::render('Home', [
-        'hero' => $hero ? [
-            'slogan' => $hero->getTranslation('slogan', $locale),
-            'heading_part1' => $hero->getTranslation('heading_part1', $locale),
-            'heading_part2' => $hero->getTranslation('heading_part2', $locale),
-            'heading_part3' => $hero->getTranslation('heading_part3', $locale),
-            'sub_heading' => $hero->getTranslation('sub_heading', $locale),
-            'image_url' => $hero->image_url,
-        ] : null,
-        'loanSection' => $loanSection ? [
-            'title' => $loanSection->getTranslation('title', $locale),
-        ] : null,
-        'loanItems' => $loanSection ? $loanSection->loanItems->map(function ($item) use ($locale) {
-            return [
-                'id' => $item->id,
-                'title' => $item->getTranslation('title', $locale),
-                'description' => $item->getTranslation('description', $locale),
-                'image_url' => $item->image_path ? Storage::url($item->image_path) : null,
-            ];
-        })->toArray() : [],
-        'requirementsSection' => $requirements ? [
-            'title' => $requirements->getTranslation('title', $locale),
-            'subtitle' => $requirements->getTranslation('subtitle', $locale),
-            'requirement1' => [
-                'icon' => $requirements->getTranslation('requirement1_icon', $locale),
-                'title' => $requirements->getTranslation('requirement1_title', $locale),
-                'description' => $requirements->getTranslation('requirement1_description', $locale),
-            ],
-            'requirement2' => [
-                'icon' => $requirements->getTranslation('requirement2_icon', $locale),
-                'title' => $requirements->getTranslation('requirement2_title', $locale),
-                'description' => $requirements->getTranslation('requirement2_description', $locale),
-            ],
-            'requirement3' => [
-                'icon' => $requirements->getTranslation('requirement3_icon', $locale),
-                'title' => $requirements->getTranslation('requirement3_title', $locale),
-                'description' => $requirements->getTranslation('requirement3_description', $locale),
-            ],
-            'requirement4' => [
-                'icon' => $requirements->getTranslation('requirement4_icon', $locale),
-                'title' => $requirements->getTranslation('requirement4_title', $locale),
-                'description' => $requirements->getTranslation('requirement4_description', $locale),
-            ],
-            'requirement5' => [
-                'icon' => $requirements->getTranslation('requirement5_icon', $locale),
-                'title' => $requirements->getTranslation('requirement5_title', $locale),
-                'description' => $requirements->getTranslation('requirement5_description', $locale),
-            ],
-            'requirement6' => [
-                'icon' => $requirements->getTranslation('requirement6_icon', $locale),
-                'title' => $requirements->getTranslation('requirement6_title', $locale),
-                'description' => $requirements->getTranslation('requirement6_description', $locale),
-            ],
-        ] : null,
-        'featuresSection' => $featuresSection ? [
-            'title' => $featuresSection->getTranslation('title', $locale),
-        ] : null,
-        'featureItems' => $featuresSection ? $featuresSection->featureItems->map(function ($item) use ($locale) {
-            return [
-                'id' => $item->id,
-                'title' => $item->getTranslation('title', $locale),
-                'description' => $item->getTranslation('description', $locale),
-                'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
-            ];
-        })->toArray() : [],
+        'hero' => $heroData,
+        'loanSection' => $loanData,
+        'loanItems' => $loanItemsData,
+        'requirementsSection' => $requirementsData,
+        'requirementItems' => $requirementItemsData,
+        'featuresSection' => $featuresData,
+        'featureItems' => $featureItemsData,
         'locale' => $locale,
     ]);
 })->name('home');
 
-Route::get('/services', function () {
+Route::get('/services', function (TranslationService $translator) {
     $serviceSection = ServiceSection::first();
     $serviceItems = ServiceItem::orderBy('id', 'asc')->get();
+    $featuresSection = FeatureSection::with('featureItems')->first();
     $locale = app()->getLocale();
-    $features = FeaturesSection::first();
+
+    $serviceSectionData = $serviceSection ? [
+        'heading' => $serviceSection->heading,
+        'sub_heading' => $serviceSection->sub_heading,
+    ] : null;
+
+    $serviceItemsData = $serviceItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'description' => $item->description,
+            'image_url' => $item->image_path ? Storage::url($item->image_path) : null,
+        ];
+    })->toArray();
+
+    $featuresData = $featuresSection ? [
+        'title' => $featuresSection->title,
+    ] : null;
+
+    $featureItemsData = $featuresSection ? $featuresSection->featureItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'description' => $item->description,
+            'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+        ];
+    })->toArray() : [];
+
+    if ($locale !== 'en') {
+        if ($serviceSectionData) {
+            $serviceSectionData = $translator->translateArray($serviceSectionData, $locale);
+        }
+        if (!empty($serviceItemsData)) {
+            $serviceItemsData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $serviceItemsData);
+        }
+        if ($featuresData) {
+            $featuresData = $translator->translateArray($featuresData, $locale);
+        }
+        if (!empty($featureItemsData)) {
+            $featureItemsData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $featureItemsData);
+        }
+    }
 
     return Inertia::render('Services', [
-        'serviceSection' => $serviceSection ? [
-            'heading' => $serviceSection->getTranslation('heading', $locale),
-            'sub_heading' => $serviceSection->getTranslation('sub_heading', $locale),
-        ] : null,
-        'serviceItems' => $serviceItems->map(function ($item) use ($locale) {
-            return [
-                'id' => $item->id,
-                'title' => $item->getTranslation('title', $locale),
-                'description' => $item->getTranslation('description', $locale),
-                'image_url' => $item->image_path ? Storage::url($item->image_path) : null,
-            ];
-        })->toArray(),
-        'featuresSection' => $features ? [
-            'title' => $features->getTranslation('title', $locale),
-            'feature1' => [
-                'title' => $features->getTranslation('feature1_title', $locale),
-                'description' => $features->getTranslation('feature1_description', $locale),
-            ],
-            'feature2' => [
-                'title' => $features->getTranslation('feature2_title', $locale),
-                'description' => $features->getTranslation('feature2_description', $locale),
-            ],
-            'feature3' => [
-                'title' => $features->getTranslation('feature3_title', $locale),
-                'description' => $features->getTranslation('feature3_description', $locale),
-            ],
-            'feature4' => [
-                'title' => $features->getTranslation('feature4_title', $locale),
-                'description' => $features->getTranslation('feature4_description', $locale),
-            ],
-            'feature5' => [
-                'title' => $features->getTranslation('feature5_title', $locale),
-                'description' => $features->getTranslation('feature5_description', $locale),
-            ],
-        ] : null,
+        'serviceSection' => $serviceSectionData,
+        'serviceItems' => $serviceItemsData,
+        'featuresSection' => $featuresData,
+        'featureItems' => $featureItemsData,
         'locale' => $locale,
     ]);
 })->name('services');
 
-Route::get('/understanding-loan', function () {
+Route::get('/understanding-loan', function (TranslationService $translator) {
     $understandingLoanSection = UnderstandingLoanSection::first();
     $locale = app()->getLocale();
 
+    $understandingLoanSectionData = $understandingLoanSection ? [
+        'title' => $understandingLoanSection->title,
+        'subtitle' => $understandingLoanSection->subtitle,
+        'section1' => [
+            'title' => $understandingLoanSection->section1_title,
+            'description' => $understandingLoanSection->section1_description,
+            'principal' => $understandingLoanSection->section1_principal,
+            'interest' => $understandingLoanSection->section1_interest,
+            'escrow' => $understandingLoanSection->section1_escrow,
+            'tip' => $understandingLoanSection->section1_tip,
+            'graph1_title' => $understandingLoanSection->section1_graph1_title,
+        ],
+        'section2' => [
+            'title' => $understandingLoanSection->section2_title,
+            'additional' => $understandingLoanSection->section2_additional,
+            'interest_save' => $understandingLoanSection->section2_interest_save,
+            'term_shorten' => $understandingLoanSection->section2_term_shorten,
+            'result' => $understandingLoanSection->section2_result,
+            'graph2_tip' => $understandingLoanSection->section2_graph2_tip,
+            'image_url' => $understandingLoanSection->section2_image_url,
+        ],
+    ] : null;
+
+    if ($locale !== 'en' && $understandingLoanSectionData) {
+        $understandingLoanSectionData = $translator->translateArray($understandingLoanSectionData, $locale);
+    }
+
     return Inertia::render('UnderstandingLoan', [
-        'understandingLoanSection' => $understandingLoanSection ? [
-            'title' => $understandingLoanSection->getTranslation('title', $locale),
-            'subtitle' => $understandingLoanSection->getTranslation('subtitle', $locale),
-            'section1' => [
-                'title' => $understandingLoanSection->getTranslation('section1_title', $locale),
-                'description' => $understandingLoanSection->getTranslation('section1_description', $locale),
-                'principal' => $understandingLoanSection->getTranslation('section1_principal', $locale),
-                'interest' => $understandingLoanSection->getTranslation('section1_interest', $locale),
-                'escrow' => $understandingLoanSection->getTranslation('section1_escrow', $locale),
-                'tip' => $understandingLoanSection->getTranslation('section1_tip', $locale),
-                'graph1_title' => $understandingLoanSection->getTranslation('section1_graph1_title', $locale),
-            ],
-            'section2' => [
-                'title' => $understandingLoanSection->getTranslation('section2_title', $locale),
-                'additional' => $understandingLoanSection->getTranslation('section2_additional', $locale),
-                'interest_save' => $understandingLoanSection->getTranslation('section2_interest_save', $locale),
-                'term_shorten' => $understandingLoanSection->getTranslation('section2_term_shorten', $locale),
-                'result' => $understandingLoanSection->getTranslation('section2_result', $locale),
-                'graph2_tip' => $understandingLoanSection->getTranslation('section2_graph2_tip', $locale),
-                'image_url' => $understandingLoanSection->section2_image_url,
-            ],
-        ] : null,
+        'understandingLoanSection' => $understandingLoanSectionData,
         'locale' => $locale,
     ]);
 })->name('understanding-loan');
 
-Route::get('/team', function () {
+Route::get('/team', function (TranslationService $translator) {
     $teamSection = TeamSection::first();
     $teamMembers = TeamMember::orderBy('id', 'asc')->get();
     $locale = app()->getLocale();
 
+    $teamSectionData = $teamSection ? [
+        'heading' => $teamSection->heading,
+        'sub_heading' => $teamSection->sub_heading,
+    ] : null;
+
+    $teamMembersData = $teamMembers->map(function ($member) {
+        return [
+            'id' => $member->id,
+            'name' => $member->name,
+            'role' => $member->role,
+            'bio' => $member->bio,
+            'image_url' => $member->image_path ? Storage::url($member->image_path) : null,
+        ];
+    })->toArray();
+
+    if ($locale !== 'en') {
+        if ($teamSectionData) {
+            $teamSectionData = $translator->translateArray($teamSectionData, $locale);
+        }
+        if (!empty($teamMembersData)) {
+            $teamMembersData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $teamMembersData);
+        }
+    }
+
     return Inertia::render('Team', [
-        'teamSection' => $teamSection ? [
-            'heading' => $teamSection->getTranslation('heading', $locale),
-            'sub_heading' => $teamSection->getTranslation('sub_heading', $locale),
-        ] : null,
-        'teamMembers' => $teamMembers->map(function ($member) use ($locale) {
-            return [
-                'id' => $member->id,
-                'name' => $member->getTranslation('name', $locale),
-                'role' => $member->getTranslation('role', $locale),
-                'bio' => $member->getTranslation('bio', $locale),
-                'image_url' => $member->image_path ? Storage::url($member->image_path) : null,
-            ];
-        })->toArray(),
+        'teamSection' => $teamSectionData,
+        'teamMembers' => $teamMembersData,
         'locale' => $locale,
     ]);
 })->name('team');
@@ -200,18 +287,26 @@ Route::get('/investors', function () {
     return Inertia::render('Investors');
 })->name('investors');
 
-Route::get('/contact', function () {
+Route::get('/contact', function (TranslationService $translator) {
     $contactSection = ContactSection::first();
     $locale = app()->getLocale();
+
+    $contactSectionData = $contactSection ? [
+        'company_name' => $contactSection->company_name,
+        'address' => $contactSection->address,
+        'email' => $contactSection->email,
+        'telephone' => $contactSection->telephone,
+        'working_hours' => $contactSection->working_hours,
+        'logo_url' => $contactSection->logo_path ? Storage::url($contactSection->logo_path) : null,
+    ] : null;
+
+    if ($locale !== 'en' && $contactSectionData) {
+        $contactSectionData = $translator->translateArray($contactSectionData, $locale);
+    }
+
     return Inertia::render('Contact', [
-        'contactSection' => $contactSection ? [
-            'company_name' => $contactSection->getTranslation('company_name', $locale),
-            'address' => $contactSection->getTranslation('address', $locale),
-            'email' => $contactSection->getTranslation('email', $locale),
-            'telephone' => $contactSection->getTranslation('telephone', $locale),
-            'working_hours' => $contactSection->getTranslation('working_hours', $locale),
-            'logo_url' => $contactSection->logo_path ? Storage::url($contactSection->logo_path) : null,
-        ] : null,
+        'contactSection' => $contactSectionData,
+        'locale' => $locale,
     ]);
 })->name('contact');
 

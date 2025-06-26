@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/react";
 import { ArrowRight } from "lucide-react";
 
 export function Hero({ hero }: { hero: any }) {
+    console.log('Hero component rendered with hero data:', hero);
     return (
         <section className="w-full ">
             <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-5 px-5 md:px-[60px] py-10 md:py-20">
@@ -33,7 +34,7 @@ export function Hero({ hero }: { hero: any }) {
                 </div>
                 <div className="w-full md:w-1/2">
                     <img
-                        src={hero?.image_url || 'images/Mobile-home-autumn-comprimida.jpeg'}
+                        src={hero?.image_path || 'images/Mobile-home-autumn-comprimida.jpeg'}
                         alt="Mobile home financing illustration"
                         className="w-full h-auto object-contain rounded-md"
                     />

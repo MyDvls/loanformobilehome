@@ -1,89 +1,17 @@
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Banknote, CreditCard, FileCheck, FileKey, FileText, UserCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AnimateOnView from './AnimateOnView';
 import { Button } from './ui/button';
 
-const iconMap: { [key: string]: any } = {
-    CreditCard,
-    FileText,
-    FileCheck,
-    UserCheck,
-    FileKey,
-    Banknote,
-};
-
-const Requirements = ({ requirementsSection }: { requirementsSection: any }) => {
+const Requirements = ({ requirementsSection, requirementItems }: { requirementsSection: any; requirementItems: any[] }) => {
     const { t } = useTranslation();
 
-    // Map requirementsSection data to requirements array
-    const requirements = requirementsSection
-        ? [
-              {
-                  icon: iconMap[requirementsSection?.requirement1?.icon || 'CreditCard'] || CreditCard,
-                  title: requirementsSection?.requirement1?.title || 'Requirement 1 Title',
-                  description: requirementsSection?.requirement1?.description || 'Requirement 1 Description',
-              },
-              {
-                  icon: iconMap[requirementsSection?.requirement2?.icon || 'FileText'] || FileText,
-                  title: requirementsSection?.requirement2?.title || 'Requirement 2 Title',
-                  description: requirementsSection?.requirement2?.description || 'Requirement 2 Description',
-              },
-              {
-                  icon: iconMap[requirementsSection?.requirement3?.icon || 'FileCheck'] || FileCheck,
-                  title: requirementsSection?.requirement3?.title || 'Requirement 3 Title',
-                  description: requirementsSection?.requirement3?.description || 'Requirement 3 Description',
-              },
-              {
-                  icon: iconMap[requirementsSection?.requirement4?.icon || 'UserCheck'] || UserCheck,
-                  title: requirementsSection?.requirement4?.title || 'Requirement 4 Title',
-                  description: requirementsSection?.requirement4?.description || 'Requirement 4 Description',
-              },
-              {
-                  icon: iconMap[requirementsSection?.requirement5?.icon || 'FileKey'] || FileKey,
-                  title: requirementsSection?.requirement5?.title || 'Requirement 5 Title',
-                  description: requirementsSection?.requirement5?.description || 'Requirement 5 Description',
-              },
-              {
-                  icon: iconMap[requirementsSection?.requirement6?.icon || 'Banknote'] || Banknote,
-                  title: requirementsSection?.requirement6?.title || 'Requirement 6 Title',
-                  description: requirementsSection?.requirement6?.description || 'Requirement 6 Description',
-              },
-          ]
-        : [];
+    // Use requirementItems directly instead of mapping from requirementsSection
+    const requirements = requirementItems || [];
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const ActiveIcon = requirements[activeIndex].icon;
-
-    // Calculate oscillation with decaying amplitude - first item starts at center
-    const getOscillationStyle = (index: number) => {
-        const baseSpacing = 120; // Base horizontal spacing between items
-        const initialAmplitude = 240; // Starting vertical amplitude
-        const decayFactor = 0.7; // How quickly the amplitude decreases (0.7 = 30% reduction each step)
-
-        // First item (index 0) starts at center with no oscillation
-        if (index === 0) {
-            return {
-                left: `${index * baseSpacing}px`,
-                top: '30%',
-                transform: 'translateY(0px)',
-                transition: 'transform 0.5s ease-out',
-            };
-        }
-
-        // Calculate decaying amplitude for subsequent items
-        const amplitude = initialAmplitude * Math.pow(decayFactor, index - 1);
-        // Alternate direction for each item (starting from index 1)
-        const direction = index % 2 === 1 ? -1 : 1;
-
-        return {
-            left: `${index * baseSpacing}px`,
-            top: '30%',
-            transform: `translateY(${direction * amplitude}px)`,
-            transition: 'transform 0.5s ease-out',
-        };
-    };
 
     return (
         <section className="gradient-section gradient-section-2 relative w-full overflow-hidden pt-[200px] pb-35">
@@ -98,7 +26,7 @@ const Requirements = ({ requirementsSection }: { requirementsSection: any }) => 
                             <Card className="p-6 transition-all">
                                 <div className="flex flex-col space-y-4">
                                     <div className="flex items-center gap-4">
-                                        <req.icon className="h-8 w-8 flex-shrink-0 text-blue-600" />
+                                        <img src={req.image_path} alt={req.title} className="h-8 w-8 flex-shrink-0 object-contain" />
                                         <h3 className="text-lg font-semibold text-gray-200">{t(req.title)}</h3>
                                     </div>
                                     <p className="text-gray-200">{t(req.description)}</p>
@@ -108,79 +36,20 @@ const Requirements = ({ requirementsSection }: { requirementsSection: any }) => 
                     ))}
                 </div>
 
-                {/* Desktop: Side-by-side layout with decaying oscillation */}
+                {/* Desktop: Side-by-side layout */}
                 <div className="hidden flex-col gap-8 md:flex md:flex-row">
-                    {/* Icons sidebar - 50% width with dynamic oscillation */}
+                    {/* Images sidebar - 50% width */}
                     <div className="relative h-[600px] w-full md:w-1/2">
-                        <div className="relative h-full">
-                            {requirements.map((req, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setActiveIndex(index)}
-                                    className={`absolute z-10 flex items-center justify-center rounded-full border p-4 transition-all ${
-                                        activeIndex >= index
-                                            ? 'border-gray-600 bg-gray-800 text-gray-400'
-                                            : 'border-gray-300 bg-white text-gray-400 hover:border-gray-500 hover:bg-gray-700'
-                                    }`}
-                                    style={getOscillationStyle(index)}
-                                >
-                                    <req.icon className={`h-8 w-8 flex-shrink-0`} />
-                                </button>
-                            ))}
-
-                            {/* Dynamic connecting path in segments */}
-                            <svg
-                                className="pointer-events-none absolute top-0 left-0 h-full w-full"
-                                viewBox={`0 0 ${requirements.length * 120} 600`}
-                                preserveAspectRatio="none"
-                            >
-                                {(() => {
-                                    const points = requirements.map((_, i) => {
-                                        const style = getOscillationStyle(i);
-                                        const x = i * 120 + 28;
-                                        const y =
-                                            250 +
-                                            (style.transform.includes('-')
-                                                ? -parseInt(style.transform.match(/\d+/)![0])
-                                                : parseInt(style.transform.match(/\d+/)![0]));
-                                        return { x, y };
-                                    });
-
-                                    const paths = [];
-                                    for (let i = 1; i < points.length; i++) {
-                                        const current = points[i];
-                                        const previous = points[i - 1];
-                                        const controlPointOffset = 60;
-
-                                        const cp1x = previous.x + controlPointOffset;
-                                        const cp1y = previous.y;
-                                        const cp2x = current.x - controlPointOffset;
-                                        const cp2y = current.y;
-
-                                        const d = `M ${previous.x} ${previous.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${current.x} ${current.y}`;
-
-                                        paths.push(
-                                            <path
-                                                key={i}
-                                                d={d}
-                                                stroke={i <= activeIndex ? '#4B5563' : '#D1D5DB'} // gray-700 vs gray-300
-                                                strokeWidth="6"
-                                                fill="none"
-                                                className={`transition-all duration-500`}
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeDasharray="50,10"
-                                            />,
-                                        );
-                                    }
-
-                                    return paths;
-                                })()}
-                            </svg>
+                        <div className="relative flex h-full items-center justify-center">
+                            <img
+                                src={requirements[activeIndex]?.image_path}
+                                alt={requirements[activeIndex]?.title}
+                                className="h-full w-full object-contain transition-all duration-500"
+                            />
                         </div>
                     </div>
 
-                    {/* Content area - 50% width */}
+                    {/* Content area - 50% width (same as before) */}
                     <div className="w-full md:w-1/2">
                         <AnimateOnView key={activeIndex} delay={0.2}>
                             <Card className="flex h-full items-start border-none bg-transparent p-8 shadow-none transition-all duration-300">
@@ -191,8 +60,8 @@ const Requirements = ({ requirementsSection }: { requirementsSection: any }) => 
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 className="mb-4 text-2xl font-semibold text-gray-200">{t(requirements[activeIndex].title)}</h3>
-                                        <p className="text-lg text-gray-200">{t(requirements[activeIndex].description)}</p>
+                                        <h3 className="mb-4 text-2xl font-semibold text-gray-200">{requirements[activeIndex]?.title || ''}</h3>
+                                        <p className="text-lg text-gray-200">{requirements[activeIndex]?.description || ''}</p>
                                     </div>
                                 </div>
                             </Card>

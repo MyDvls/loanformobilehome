@@ -1,30 +1,29 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
-import { Globe } from 'lucide-react';
 import { useState } from 'react';
 import FileUpload from '../components/FileUpload';
 import TranslatedInput from '../components/TranslatedInput';
 
-interface TranslatedField {
-    en: string;
-    es: string;
-}
-
 interface LoanItem {
     id?: number;
-    title: TranslatedField;
-    description: TranslatedField;
+    title: string;
+    description: string;
     image_path?: string;
 }
 
 interface LoanSection {
     id?: number;
-    title?: TranslatedField;
+    title?: string;
 }
 
 interface LoanFormData {
-    title: TranslatedField;
-    loanItems: LoanItem[];
+    title: string;
+    loanItems: Array<{
+        id?: number;
+        title: string;
+        description: string;
+        image: File | null;
+        image_path?: string;
+    }>;
 }
 
 interface Props {
@@ -34,15 +33,12 @@ interface Props {
 
 export default function LoanEdit({ loanSection, loanItems }: Props) {
     const { data, setData, post, errors, processing } = useForm<LoanFormData>({
-        title: {
-            en: loanSection?.title?.en || '',
-            es: loanSection?.title?.es || '',
-        },
+        title: loanSection?.title || '',
         loanItems:
             loanItems?.map((item) => ({
                 id: item.id,
-                title: { en: item.title?.en || '', es: item.title?.es || '' },
-                description: { en: item.description?.en || '', es: item.description?.es || '' },
+                title: item.title || '',
+                description: item.description || '',
                 image: null,
                 image_path: item.image_path ? `${item.image_path}` : '',
             })) || [],
@@ -51,10 +47,10 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
     const [imageErrors, setImageErrors] = useState<{ [key: number]: string | null }>({});
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const updateItem = (index: number, key: 'title' | 'description', lang: 'en' | 'es', value: string) => {
+    const updateItem = (index: number, key: 'title' | 'description', value: string) => {
         setData(
             'loanItems',
-            data.loanItems.map((item, i) => (i === index ? { ...item, [key]: { ...item[key], [lang]: value } } : item)),
+            data.loanItems.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
         );
     };
 
@@ -92,23 +88,20 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
 
     const addItem = () => {
         const newIndex = data.loanItems.length;
-        setData('loanItems', [...data.loanItems, { title: { en: '', es: '' }, description: { en: '', es: '' }, image: null, image_path: '' }]);
+        setData('loanItems', [...data.loanItems, { title: '', description: '', image: null, image_path: '' }]);
         setSelectedIndex(newIndex);
     };
 
     const resetItem = () => {
         setData({
-            title: {
-                en: loanSection?.title?.en || '',
-                es: loanSection?.title?.es || '',
-            },
+            title: loanSection?.title || '',
             loanItems:
                 loanItems?.map((item) => ({
                     id: item.id,
-                    title: { en: item.title?.en || '', es: item.title?.es || '' },
-                    description: { en: item.description?.en || '', es: item.description?.es || '' },
+                    title: item.title || '',
+                    description: item.description || '',
                     image: null,
-                    image_path: item.image_path ? `/storage/${item.image_path}` : '',
+                    image_path: item.image_path ? `${item.image_path}` : '',
                 })) || [],
         });
         setImageErrors({});
@@ -133,17 +126,14 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
         e.preventDefault();
         const formData = new FormData();
         formData.append('_method', 'PUT');
-        formData.append('title[en]', data.title.en);
-        formData.append('title[es]', data.title.es);
+        formData.append('title', data.title);
 
         data.loanItems.forEach((item, index) => {
             if (item.id) {
                 formData.append(`loanItems[${index}][id]`, item.id.toString());
             }
-            formData.append(`loanItems[${index}][title][en]`, item.title.en);
-            formData.append(`loanItems[${index}][title][es]`, item.title.es);
-            formData.append(`loanItems[${index}][description][en]`, item.description.en);
-            formData.append(`loanItems[${index}][description][es]`, item.description.es);
+            formData.append(`loanItems[${index}][title]`, item.title);
+            formData.append(`loanItems[${index}][description]`, item.description);
             formData.append(`loanItems[${index}][image]`, item.image instanceof File ? item.image : '');
         });
 
@@ -162,54 +152,14 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-            <TabGroup>
-                <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                    <Tab
-                        className={({ selected }) =>
-                            `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                selected
-                                    ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                    : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                            }`
-                        }
-                    >
-                        <Globe className="mr-2 h-4 w-4" /> English
-                    </Tab>
-                    <Tab
-                        className={({ selected }) =>
-                            `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                selected
-                                    ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                    : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                            }`
-                        }
-                    >
-                        <Globe className="mr-2 h-4 w-4" /> Spanish
-                    </Tab>
-                </TabList>
-                <TabPanels className="mt-6">
-                    <TabPanel className="space-y-6">
-                        <TranslatedInput
-                            label="Loan Section Title"
-                            value={data.title.en}
-                            onChange={(value) => setData('title', { ...data.title, en: value })}
-                            error={errors['title.en']}
-                            placeholder="Loan section title in English"
-                            required
-                        />
-                    </TabPanel>
-                    <TabPanel className="space-y-6">
-                        <TranslatedInput
-                            label="Título de la Sección de Préstamos"
-                            value={data.title.es}
-                            onChange={(value) => setData('title', { ...data.title, es: value })}
-                            error={errors['title.es']}
-                            placeholder="Título de la sección de préstamos en español"
-                            required
-                        />
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
+            <TranslatedInput
+                label="Loan Section Title"
+                value={data.title}
+                onChange={(value) => setData('title', value)}
+                error={errors.title}
+                placeholder="Loan section title"
+                required
+            />
 
             <div className="flex items-center gap-4">
                 {data.loanItems.map((_, index) => (
@@ -236,72 +186,23 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
             {data.loanItems.length > 0 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <div className="space-y-4 lg:col-span-2">
-                        <TabGroup>
-                            <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                                <Tab
-                                    className={({ selected }) =>
-                                        `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                            selected
-                                                ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                                : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                        }`
-                                    }
-                                >
-                                    <Globe className="mr-2 h-4 w-4" /> English
-                                </Tab>
-                                <Tab
-                                    className={({ selected }) =>
-                                        `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                            selected
-                                                ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                                : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                        }`
-                                    }
-                                >
-                                    <Globe className="mr-2 h-4 w-4" /> Spanish
-                                </Tab>
-                            </TabList>
-                            <TabPanels className="mt-6">
-                                <TabPanel className="space-y-6">
-                                    <TranslatedInput
-                                        label="Title"
-                                        value={data.loanItems[selectedIndex].title.en}
-                                        onChange={(value) => updateItem(selectedIndex, 'title', 'en', value)}
-                                        error={errors[`loanItems.${selectedIndex}.title.en`]}
-                                        placeholder="Enter title in English"
-                                        required
-                                    />
-                                    <TranslatedInput
-                                        label="Description"
-                                        value={data.loanItems[selectedIndex].description.en}
-                                        onChange={(value) => updateItem(selectedIndex, 'description', 'en', value)}
-                                        error={errors[`loanItems.${selectedIndex}.description.en`]}
-                                        placeholder="Enter description in English"
-                                        type="textarea"
-                                        required
-                                    />
-                                </TabPanel>
-                                <TabPanel className="space-y-6">
-                                    <TranslatedInput
-                                        label="Título"
-                                        value={data.loanItems[selectedIndex].title.es}
-                                        onChange={(value) => updateItem(selectedIndex, 'title', 'es', value)}
-                                        error={errors[`loanItems.${selectedIndex}.title.es`]}
-                                        placeholder="Ingrese título en español"
-                                        required
-                                    />
-                                    <TranslatedInput
-                                        label="Descripción"
-                                        value={data.loanItems[selectedIndex].description.es}
-                                        onChange={(value) => updateItem(selectedIndex, 'description', 'es', value)}
-                                        error={errors[`loanItems.${selectedIndex}.description.es`]}
-                                        placeholder="Ingrese descripción en español"
-                                        type="textarea"
-                                        required
-                                    />
-                                </TabPanel>
-                            </TabPanels>
-                        </TabGroup>
+                        <TranslatedInput
+                            label="Title"
+                            value={data.loanItems[selectedIndex].title}
+                            onChange={(value) => updateItem(selectedIndex, 'title', value)}
+                            error={errors[`loanItems.${selectedIndex}.title`]}
+                            placeholder="Enter title"
+                            required
+                        />
+                        <TranslatedInput
+                            label="Description"
+                            value={data.loanItems[selectedIndex].description}
+                            onChange={(value) => updateItem(selectedIndex, 'description', value)}
+                            error={errors[`loanItems.${selectedIndex}.description`]}
+                            placeholder="Enter description"
+                            type="textarea"
+                            required
+                        />
                     </div>
                     <div>
                         <FileUpload
