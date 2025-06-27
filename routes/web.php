@@ -14,6 +14,7 @@ use App\Models\ServiceItem;
 use App\Models\ServiceSection;
 use App\Models\TeamMember;
 use App\Models\TeamSection;
+use App\Models\TestimonialSection;
 use App\Models\UnderstandingLoanSection;
 use App\Services\TranslationService;
 use Illuminate\Foundation\Http\Middleware\TrimStrings;
@@ -33,6 +34,7 @@ Route::get('/', function (TranslationService $translator) {
     $featuresSection = FeatureSection::with(['featureItems' => function ($query) {
         $query->orderBy('id');
     }])->first();
+    $testimonialSection = TestimonialSection::all();
     $locale = app()->getLocale();
 
     // Prepare hero data in English first
@@ -91,6 +93,16 @@ Route::get('/', function (TranslationService $translator) {
         ];
     })->toArray() : [];
 
+
+    $testimonialData = $testimonialSection->map(function ($testimonial) {
+        return [
+            'id' => $testimonial->id,
+            'quote' => $testimonial->post,
+            'name' => $testimonial->full_name,
+            'title' => $testimonial->heading,
+        ];
+    })->toArray();
+
     // Translate if locale is not English
     if ($locale !== 'en') {
         // Translate hero data
@@ -133,6 +145,13 @@ Route::get('/', function (TranslationService $translator) {
                 return $translator->translateArray($item, $locale);
             }, $featureItemsData);
         }
+
+        // Translate testimonial data
+        if (!empty($testimonialData)) {
+            $testimonialData = array_map(function ($item) use ($translator, $locale) {
+                return $translator->translateArray($item, $locale);
+            }, $testimonialData);
+        }
     }
 
     return Inertia::render('Home', [
@@ -143,6 +162,7 @@ Route::get('/', function (TranslationService $translator) {
         'requirementItems' => $requirementItemsData,
         'featuresSection' => $featuresData,
         'featureItems' => $featureItemsData,
+        'testimonialSection' => $testimonialData,
         'locale' => $locale,
     ]);
 })->name('home');
@@ -344,6 +364,7 @@ Route::middleware(['auth', 'verified', 'custom.trim'])->group(function () {
     Route::post('/admin/pages/home/loan-section', [PageBuilderController::class, 'updateLoanSection'])->name('admin.pages.home.loan.update');
     Route::post('/admin/pages/home/requirements-section', [PageBuilderController::class, 'updateRequirementsSection'])->name('admin.pages.home.requirements.update');
     Route::post('/admin/pages/home/features-section', [PageBuilderController::class, 'updateFeaturesSection'])->name('admin.pages.home.features.update');
+    Route::post('/admin/pages/testimonials/section', [PageBuilderController::class, 'updateTestimonialSection'])->name('admin.pages.testimonials.section.update');
 
     Route::get('/admin/pages/services', [PageBuilderController::class, 'editServices'])->name('admin.pages.services.edit');
     Route::post('/admin/pages/services/section', [PageBuilderController::class, 'updateServiceSection'])->name('admin.pages.services.section.update');

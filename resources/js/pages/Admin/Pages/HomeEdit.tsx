@@ -7,6 +7,7 @@ import FeaturesEdit from './FeaturesEdit';
 import HeroEdit from './HeroEdit';
 import LoanEdit from './LoanEdit';
 import RequirementsEdit from './RequirementsEdit';
+import TestimonialSectionEdit from './TestimonialsEdit';
 
 interface HeroSection {
     slogan?: { en: string; es: string };
@@ -75,9 +76,24 @@ interface HomeEditProps {
     featuresSection: FeaturesSection;
 
     featureItems: FeatureItem[];
+
+    testimonialsSection?: {
+        id?: number;
+        post: string;
+        full_name: string;
+        heading: string;
+    }[];
 }
 
-export default function HomeEdit({ hero, loanSection, loanItems, requirementsSection, featuresSection, featureItems }: HomeEditProps) {
+export default function HomeEdit({
+    hero,
+    loanSection,
+    loanItems,
+    requirementsSection,
+    featuresSection,
+    featureItems,
+    testimonialsSection,
+}: HomeEditProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Web Pages', href: null },
         { title: 'Homepage', href: '/admin/pages/home' },
@@ -100,6 +116,9 @@ export default function HomeEdit({ hero, loanSection, loanItems, requirementsSec
                         </SectionWrapper>
                         <SectionWrapper title="Features Section">
                             <FeaturesEdit featuresSection={featuresSection} featureItems={featureItems} />
+                        </SectionWrapper>
+                        <SectionWrapper title="Testimonial Section">
+                            <TestimonialSectionEdit testimonialsSection={testimonialsSection} />
                         </SectionWrapper>
                     </div>
                 </div>

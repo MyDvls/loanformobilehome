@@ -15,6 +15,7 @@ use App\Models\ServiceItem;
 use App\Models\ServiceSection;
 use App\Models\TeamMember;
 use App\Models\TeamSection;
+use App\Models\TestimonialSection;
 use App\Models\UnderstandingLoanSection;
 use Exception;
 use Illuminate\Http\Request;
@@ -38,6 +39,8 @@ class PageBuilderController extends Controller
         $featuresSection = FeatureSection::with(['featureItems' => function ($query) {
             $query->orderBy('id');
         }])->first();
+
+        $testimonialsSection = TestimonialSection::all();
 
         return Inertia::render('Admin/Pages/HomeEdit', [
             'hero' => $hero ? [
@@ -85,6 +88,14 @@ class PageBuilderController extends Controller
                     'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
                 ];
             })->toArray() : [],
+            'testimonialsSection' => $testimonialsSection->map(function ($testimonial) {
+                return [
+                    'id' => $testimonial->id,
+                    'post' => $testimonial->post,
+                    'full_name' => $testimonial->full_name,
+                    'heading' => $testimonial->heading,
+                ];
+            })->toArray(),
         ]);
     }
 
@@ -607,5 +618,33 @@ class PageBuilderController extends Controller
             Log::error('Error updating contact section: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Failed to update contact section']);
         }
+    }
+
+    public function updateTestimonialSection(Request $request)
+    {
+        $validated = $request->validate([
+            'testimonials.*.id' => 'nullable|integer|exists:testimonial_section,id',
+            'testimonials.*.post' => 'required|string',
+            'testimonials.*.full_name' => 'required|string|max:255',
+            'testimonials.*.heading' => 'required|string',
+        ]);
+
+        // Delete existing testimonials not in the request
+        $existingIds = collect($validated['testimonials'])->pluck('id')->filter()->toArray();
+        TestimonialSection::whereNotIn('id', $existingIds)->delete();
+
+        // Update or create testimonials
+        foreach ($validated['testimonials'] as $testimonialData) {
+            TestimonialSection::updateOrCreate(
+                ['id' => $testimonialData['id'] ?? null],
+                [
+                    'post' => $testimonialData['post'],
+                    'full_name' => $testimonialData['full_name'],
+                    'heading' => $testimonialData['heading'],
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Testimonial section updated successfully.');
     }
 }

@@ -28,10 +28,22 @@ interface Props {
     requirementItems: Step[];
     featuresSection: { title: string } | null;
     featureItems: FeatureItem[];
+
+    testimonialSection: any[];
     locale: string;
 }
 
-export default function Home({ hero, loanSection, loanItems, requirementsSection, requirementItems, featuresSection, featureItems, locale }: Props) {
+export default function Home({
+    hero,
+    loanSection,
+    loanItems,
+    requirementsSection,
+    requirementItems,
+    featuresSection,
+    featureItems,
+    testimonialSection,
+    locale,
+}: Props) {
     return (
         <LandingLayout>
             <Head title="Home" />
@@ -43,7 +55,7 @@ export default function Home({ hero, loanSection, loanItems, requirementsSection
                 <Requirements requirementsSection={requirementsSection} requirementItems={requirementItems} />
                 <Features featuresSection={featuresSection} featureItems={featureItems} />
                 <div className="h-[80px]"></div>
-                <TestimonialSection />
+                <TestimonialSection testimonialsSection={testimonialSection} />
             </div>
         </LandingLayout>
     );

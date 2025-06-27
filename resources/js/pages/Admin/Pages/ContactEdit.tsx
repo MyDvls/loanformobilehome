@@ -1,95 +1,96 @@
 import AppLayout from '@/layouts/app-layout';
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { Head, router, usePage } from '@inertiajs/react';
-import { Globe } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import AdminLayout from '../AdminLayout';
+import FileUpload from '../components/FileUpload';
+import TranslatedInput from '../components/TranslatedInput';
 
-export default function ContactEdit() {
-    const { props } = usePage();
-    const { contactSection } = props;
+interface ContactSection {
+    id?: number;
+    company_name?: string;
+    address?: string;
+    email?: string;
+    telephone?: string;
+    working_hours?: string;
+    logo_url?: string;
+}
 
-    const [companyName, setCompanyName] = useState({
-        en: contactSection?.company_name?.en || '',
-        es: contactSection?.company_name?.es || '',
-    });
-    const [address, setAddress] = useState({
-        en: contactSection?.address?.en || '',
-        es: contactSection?.address?.es || '',
-    });
-    const [email, setEmail] = useState({
-        en: contactSection?.email?.en || '',
-        es: contactSection?.email?.es || '',
-    });
-    const [telephone, setTelephone] = useState({
-        en: contactSection?.telephone?.en || '',
-        es: contactSection?.telephone?.es || '',
-    });
-    const [workingHours, setWorkingHours] = useState({
-        en: contactSection?.working_hours?.en || '',
-        es: contactSection?.working_hours?.es || '',
-    });
-    const [logo, setLogo] = useState(contactSection?.logo_url || '');
+interface ContactFormData {
+    company_name: string;
+    address: string;
+    email: string;
+    telephone: string;
+    working_hours: string;
+    logo: File | null;
+    logo_url?: string;
+}
 
-    const handleImageChange = (file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            setLogo(reader.result);
-        };
-        reader.readAsDataURL(file);
+interface Props {
+    contactSection?: ContactSection;
+}
+
+export default function ContactEdit({ contactSection }: Props) {
+    const { data, setData, post, errors, processing } = useForm<ContactFormData>({
+        company_name: contactSection?.company_name || '',
+        address: contactSection?.address || '',
+        email: contactSection?.email || '',
+        telephone: contactSection?.telephone || '',
+        working_hours: contactSection?.working_hours || '',
+        logo: null,
+        logo_url: contactSection?.logo_url || '',
+    });
+
+    const [imageError, setImageError] = useState<string | null>(null);
+
+    const handleImageChange = (file: File | null) => {
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                setImageError('Please upload a valid image file (PNG, JPG, GIF).');
+                setData('logo', null);
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                setImageError('File size exceeds 2MB limit.');
+                setData('logo', null);
+                return;
+            }
+            setImageError(null);
+            setData('logo', file);
+        } else {
+            setData('logo', null);
+            setImageError(null);
+        }
     };
 
     const resetChanges = () => {
-        setCompanyName({
-            en: contactSection?.company_name?.en || '',
-            es: contactSection?.company_name?.es || '',
+        setData({
+            company_name: contactSection?.company_name || '',
+            address: contactSection?.address || '',
+            email: contactSection?.email || '',
+            telephone: contactSection?.telephone || '',
+            working_hours: contactSection?.working_hours || '',
+            logo: null,
+            logo_url: contactSection?.logo_url || '',
         });
-        setAddress({
-            en: contactSection?.address?.en || '',
-            es: contactSection?.address?.es || '',
-        });
-        setEmail({
-            en: contactSection?.email?.en || '',
-            es: contactSection?.email?.es || '',
-        });
-        setTelephone({
-            en: contactSection?.telephone?.en || '',
-            es: contactSection?.telephone?.es || '',
-        });
-        setWorkingHours({
-            en: contactSection?.working_hours?.en || '',
-            es: contactSection?.working_hours?.es || '',
-        });
-        setLogo(contactSection?.logo_url || '');
+        setImageError(null);
     };
 
-    const saveChanges = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         const formData = new FormData();
-        formData.append('company_name[en]', companyName.en);
-        formData.append('company_name[es]', companyName.es);
-        formData.append('address[en]', address.en);
-        formData.append('address[es]', address.es);
-        formData.append('email[en]', email.en);
-        formData.append('email[es]', email.es);
-        formData.append('telephone[en]', telephone.en);
-        formData.append('telephone[es]', telephone.es);
-        formData.append('working_hours[en]', workingHours.en);
-        formData.append('working_hours[es]', workingHours.es);
-
-        if (logo && logo.startsWith('data:image')) {
-            const byteString = atob(logo.split(',')[1]);
-            const mimeString = logo.split(',')[0].split(':')[1].split(';')[0];
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            const blob = new Blob([ab], { type: mimeString });
-            formData.append('logo', blob, 'logo.png');
+        formData.append('_method', 'PUT');
+        formData.append('company_name', data.company_name);
+        formData.append('address', data.address);
+        formData.append('email', data.email);
+        formData.append('telephone', data.telephone);
+        formData.append('working_hours', data.working_hours);
+        if (data.logo instanceof File) {
+            formData.append('logo', data.logo);
         }
 
-        console.log('FormData:', Object.fromEntries(formData)); // Debug form data
-        router.post('/admin/pages/contact/section', formData, {
+        post('/admin/pages/contact/section', {
+            data: formData,
+            forceFormData: true,
             onSuccess: () => {
                 alert('Contact section updated successfully.');
             },
@@ -104,109 +105,76 @@ export default function ContactEdit() {
         <AppLayout>
             <Head title="Edit Contact Section" />
             <AdminLayout title="Edit Contact Section" subtitle="Contact">
-                <TabGroup>
-                    <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                        <Tab
-                            className={({ selected }) =>
-                                `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                    selected
-                                        ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                        : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                }`
-                            }
+                <form onSubmit={handleSubmit} className="space-y-6 p-6">
+                    <TranslatedInput
+                        label="Company Name"
+                        value={data.company_name}
+                        onChange={(value) => setData('company_name', value)}
+                        error={errors.company_name}
+                        placeholder="Enter company name"
+                        required
+                    />
+                    <TranslatedInput
+                        label="Address"
+                        value={data.address}
+                        onChange={(value) => setData('address', value)}
+                        error={errors.address}
+                        placeholder="Enter address"
+                        type="textarea"
+                        required
+                    />
+                    <TranslatedInput
+                        label="Email"
+                        value={data.email}
+                        onChange={(value) => setData('email', value)}
+                        error={errors.email}
+                        placeholder="Enter email"
+                        required
+                    />
+                    <TranslatedInput
+                        label="Telephone"
+                        value={data.telephone}
+                        onChange={(value) => setData('telephone', value)}
+                        error={errors.telephone}
+                        placeholder="Enter telephone"
+                        required
+                    />
+                    <TranslatedInput
+                        label="Working Hours"
+                        value={data.working_hours}
+                        onChange={(value) => setData('working_hours', value)}
+                        error={errors.working_hours}
+                        placeholder="Enter working hours"
+                        type="textarea"
+                        required
+                    />
+                    <FileUpload
+                        label="Logo"
+                        onChange={handleImageChange}
+                        error={imageError || errors.logo}
+                        currentImageUrl={data.logo_url && !data.logo ? data.logo_url : undefined}
+                        previewImage={data.logo}
+                        onRemove={() => handleImageChange(null)}
+                    />
+
+                    <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+                        <button
+                            type="button"
+                            onClick={resetChanges}
+                            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-800"
+                            disabled={processing}
                         >
-                            <Globe className="mr-2 h-4 w-4" /> English
-                        </Tab>
-                        <Tab
-                            className={({ selected }) =>
-                                `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                    selected
-                                        ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                        : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                }`
-                            }
+                            Discard
+                        </button>
+                        <button
+                            type="submit"
+                            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-neutral-800"
+                            disabled={processing}
                         >
-                            <Globe className="mr-2 h-4 w-4" /> Spanish
-                        </Tab>
-                    </TabList>
-                    <TabPanels className="mt-6">
-                        {['en', 'es'].map((lang, langIndex) => (
-                            <TabPanel key={lang} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Company Name *</label>
-                                    <input
-                                        value={companyName[lang]}
-                                        onChange={(e) => setCompanyName({ ...companyName, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Address *</label>
-                                    <textarea
-                                        value={address[lang]}
-                                        onChange={(e) => setAddress({ ...address, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                        rows={3}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>
-                                    <input
-                                        value={email[lang]}
-                                        onChange={(e) => setEmail({ ...email, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                        type="email"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Telephone *</label>
-                                    <input
-                                        value={telephone[lang]}
-                                        onChange={(e) => setTelephone({ ...telephone, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                        type="tel"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Working Hours *</label>
-                                    <textarea
-                                        value={workingHours[lang]}
-                                        onChange={(e) => setWorkingHours({ ...workingHours, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                        rows={3}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Logo</label>
-                                    <div className="relative mt-1 h-40 w-full overflow-hidden rounded border border-gray-300 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-                                        {logo && <img src={logo} alt="Logo" className="h-full w-full object-contain" />}
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                if (e.target.files && e.target.files[0]) {
-                                                    handleImageChange(e.target.files[0]);
-                                                }
-                                            }}
-                                            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                                        />
-                                    </div>
-                                </div>
-                            </TabPanel>
-                        ))}
-                    </TabPanels>
-                </TabGroup>
-                <div className="mt-6 flex gap-4">
-                    <button onClick={saveChanges} className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-                        Save Changes
-                    </button>
-                    <button
-                        onClick={resetChanges}
-                        className="rounded border border-gray-400 px-4 py-2 text-gray-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-300"
-                    >
-                        Discard
-                    </button>
-                </div>
+                            {processing ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    </div>
+                </form>
             </AdminLayout>
         </AppLayout>
     );

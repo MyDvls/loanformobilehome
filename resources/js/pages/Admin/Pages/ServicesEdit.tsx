@@ -1,117 +1,162 @@
 import AppLayout from '@/layouts/app-layout';
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { Head, router, usePage } from '@inertiajs/react';
-import { Globe } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import AdminLayout from '../AdminLayout';
+import FileUpload from '../components/FileUpload';
+import TranslatedInput from '../components/TranslatedInput';
 
-export default function ServicesEdit() {
-    const { props } = usePage();
-    const { serviceSection, serviceItems } = props;
+interface ServiceItem {
+    id?: number;
+    title: string;
+    description: string;
+    image_path?: string;
+}
 
-    const [heading, setHeading] = useState({
-        en: serviceSection?.heading?.en || '',
-        es: serviceSection?.heading?.es || '',
+interface ServiceSection {
+    id?: number;
+    heading?: string;
+    sub_heading?: string;
+}
+
+interface ServiceFormData {
+    heading: string;
+    sub_heading: string;
+    services: Array<{
+        id?: number;
+        title: string;
+        description: string;
+        image: File | null;
+        image_path?: string;
+    }>;
+}
+
+interface Props {
+    serviceSection?: ServiceSection;
+    serviceItems?: ServiceItem[];
+}
+
+export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
+    const { data, setData, post, errors, processing } = useForm<ServiceFormData>({
+        heading: serviceSection?.heading || '',
+        sub_heading: serviceSection?.sub_heading || '',
+        services:
+            serviceItems?.map((item) => ({
+                id: item.id,
+                title: item.title || '',
+                description: item.description || '',
+                image: null,
+                image_path: item.image_path || '',
+            })) || [
+                {
+                    title: '',
+                    description: '',
+                    image: null,
+                    image_path: '',
+                },
+            ],
     });
-    const [subHeading, setSubHeading] = useState({
-        en: serviceSection?.sub_heading?.en || '',
-        es: serviceSection?.sub_heading?.es || '',
-    });
-    const [services, setServices] = useState(
-        serviceItems?.map((item) => ({
-            id: item.id,
-            image: item.image_path ? `/storage/${item.image_path}` : '',
-            title: { en: item.title?.en || '', es: item.title?.es || '' },
-            description: { en: item.description?.en || '', es: item.description?.es || '' },
-        })) || [],
-    );
+
+    const [imageErrors, setImageErrors] = useState<{ [key: number]: string | null }>({});
     const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
 
-    const updateService = (index, key, lang, value) => {
-        const updated = [...services];
-        updated[index][key][lang] = value;
-        setServices(updated);
+    const updateService = (index: number, key: 'title' | 'description', value: string) => {
+        setData(
+            'services',
+            data.services.map((service, i) => (i === index ? { ...service, [key]: value } : service)),
+        );
     };
 
-    const handleImageChange = (index, file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            const updated = [...services];
-            updated[index].image = reader.result;
-            setServices(updated);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const addService = () => {
-        const newIndex = services.length;
-        setServices([...services, { id: null, image: '', title: { en: '', es: '' }, description: { en: '', es: '' } }]);
-        setSelectedServiceIndex(newIndex);
-    };
-
-    const resetService = (index) => {
-        if (serviceItems && serviceItems[index]) {
-            const original = serviceItems[index];
-            setServices((prev) =>
-                prev.map((service, i) =>
-                    i === index
-                        ? {
-                              id: original.id,
-                              image: original.image_path ? `/storage/${original.image_path}` : '',
-                              title: { en: original.title?.en || '', es: original.title?.es || '' },
-                              description: { en: original.description?.en || '', es: original.description?.es || '' },
-                          }
-                        : service,
-                ),
+    const handleImageChange = (index: number, file: File | null) => {
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                setImageErrors((prev) => ({ ...prev, [index]: 'Please upload a valid image file (PNG, JPG, GIF).' }));
+                setData(
+                    'services',
+                    data.services.map((service, i) => (i === index ? { ...service, image: null } : service)),
+                );
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                setImageErrors((prev) => ({ ...prev, [index]: 'File size exceeds 2MB limit.' }));
+                setData(
+                    'services',
+                    data.services.map((service, i) => (i === index ? { ...service, image: null } : service)),
+                );
+                return;
+            }
+            setImageErrors((prev) => ({ ...prev, [index]: null }));
+            setData(
+                'services',
+                data.services.map((service, i) => (i === index ? { ...service, image: file } : service)),
             );
         } else {
-            setServices((prev) => prev.filter((_, i) => i !== index));
-            setSelectedServiceIndex((prevIndex) => {
-                if (services.length - 1 === 0) return 0;
-                return Math.min(prevIndex, services.length - 2);
-            });
+            setData(
+                'services',
+                data.services.map((service, i) => (i === index ? { ...service, image: null } : service)),
+            );
+            setImageErrors((prev) => ({ ...prev, [index]: null }));
         }
     };
 
-    const deleteService = () => {
-        if (services.length === 0) return;
-        setServices((prev) => prev.filter((_, i) => i !== selectedServiceIndex));
-        setSelectedServiceIndex((prevIndex) => {
-            if (services.length - 1 === 0) return 0;
-            return Math.min(prevIndex, services.length - 2);
-        });
+    const addService = () => {
+        const newIndex = data.services.length;
+        setData('services', [
+            ...data.services,
+            { title: '', description: '', image: null, image_path: '' },
+        ]);
+        setSelectedServiceIndex(newIndex);
     };
 
-    const saveChanges = () => {
-        const formData = new FormData();
-        formData.append('heading[en]', heading.en);
-        formData.append('heading[es]', heading.es);
-        formData.append('sub_heading[en]', subHeading.en);
-        formData.append('sub_heading[es]', subHeading.es);
+    const resetService = () => {
+        setData({
+            heading: serviceSection?.heading || '',
+            sub_heading: serviceSection?.sub_heading || '',
+            services:
+                serviceItems?.map((item) => ({
+                    id: item.id,
+                    title: item.title || '',
+                    description: item.description || '',
+                    image: null,
+                    image_path: item.image_path || '',
+                })) || [{ title: '', description: '', image: null, image_path: '' }],
+        });
+        setImageErrors({});
+        setSelectedServiceIndex(0);
+    };
 
-        services.forEach((service, index) => {
-            if (service.id !== null && service.id !== undefined) {
+    const deleteService = () => {
+        if (data.services.length === 0) return;
+        setData(
+            'services',
+            data.services.filter((_, i) => i !== selectedServiceIndex),
+        );
+        setImageErrors((prev) => {
+            const newErrors = { ...prev };
+            delete newErrors[selectedServiceIndex];
+            return newErrors;
+        });
+        setSelectedServiceIndex((prevIndex) => Math.min(prevIndex, data.services.length - 2));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('heading', data.heading);
+        formData.append('sub_heading', data.sub_heading);
+
+        data.services.forEach((service, index) => {
+            if (service.id) {
                 formData.append(`services[${index}][id]`, service.id.toString());
             }
-            formData.append(`services[${index}][title][en]`, service.title.en);
-            formData.append(`services[${index}][title][es]`, service.title.es);
-            formData.append(`services[${index}][description][en]`, service.description.en);
-            formData.append(`services[${index}][description][es]`, service.description.es);
-            if (service.image && service.image.startsWith('data:image')) {
-                const byteString = atob(service.image.split(',')[1]);
-                const mimeString = service.image.split(',')[0].split(':')[1].split(';')[0];
-                const ab = new ArrayBuffer(byteString.length);
-                const ia = new Uint8Array(ab);
-                for (let i = 0; i < byteString.length; i++) {
-                    ia[i] = byteString.charCodeAt(i);
-                }
-                const blob = new Blob([ab], { type: mimeString });
-                formData.append(`services[${index}][image]`, blob, `service-${index}.png`);
-            }
+            formData.append(`services[${index}][title]`, service.title);
+            formData.append(`services[${index}][description]`, service.description);
+            formData.append(`services[${index}][image]`, service.image instanceof File ? service.image : '');
         });
 
-        console.log('FormData:', Object.fromEntries(formData)); // Debug form data
-        router.post('/admin/pages/services/section', formData, {
+        post('/admin/pages/services/section', {
+            data: formData,
+            forceFormData: true,
             onSuccess: () => {
                 alert('Services section updated successfully.');
             },
@@ -124,143 +169,112 @@ export default function ServicesEdit() {
 
     return (
         <AppLayout>
-            <Head title="Edit Homepage" />
+            <Head title="Edit Services Section" />
             <AdminLayout title="Edit Homepage" subtitle="Services">
-                <TabGroup>
-                    <TabList className="flex space-x-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700">
-                        <Tab
-                            className={({ selected }) =>
-                                `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                    selected
-                                        ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                        : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                }`
-                            }
-                        >
-                            <Globe className="mr-2 h-4 w-4" /> English
-                        </Tab>
-                        <Tab
-                            className={({ selected }) =>
-                                `flex w-full items-center justify-center rounded-md py-2.5 text-sm font-semibold transition-all ${
-                                    selected
-                                        ? 'bg-white text-blue-700 shadow-sm dark:bg-blue-600 dark:text-white'
-                                        : 'text-gray-500 hover:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-600'
-                                }`
-                            }
-                        >
-                            <Globe className="mr-2 h-4 w-4" /> Spanish
-                        </Tab>
-                    </TabList>
-                    <TabPanels className="mt-6">
-                        {['en', 'es'].map((lang, langIndex) => (
-                            <TabPanel key={lang} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Heading *</label>
-                                    <input
-                                        value={heading[lang]}
-                                        onChange={(e) => setHeading({ ...heading, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Sub-Heading</label>
-                                    <input
-                                        value={subHeading[lang]}
-                                        onChange={(e) => setSubHeading({ ...subHeading, [lang]: e.target.value })}
-                                        className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                    />
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    {services.map((_, index) => (
-                                        <button
-                                            key={index}
-                                            type="button"
-                                            className={`h-10 w-10 rounded-full border-2 p-2 px-2 py-1 text-sm font-medium ${
-                                                index === selectedServiceIndex ? 'bg-blue-600 text-white' : 'border-blue-600 text-blue-600'
-                                            }`}
-                                            onClick={() => setSelectedServiceIndex(index)}
-                                        >
-                                            {index + 1}
-                                        </button>
-                                    ))}
-                                    <button
-                                        onClick={addService}
-                                        type="button"
-                                        className="h-10 w-10 rounded-full border-2 border-gray-400 text-xl text-gray-600 dark:text-gray-300"
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                                {services.length > 0 && (
-                                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                        <div className="space-y-4 lg:col-span-2">
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Title *</label>
-                                                <input
-                                                    value={services[selectedServiceIndex].title[lang]}
-                                                    onChange={(e) => updateService(selectedServiceIndex, 'title', lang, e.target.value)}
-                                                    className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Paragraph *</label>
-                                                <textarea
-                                                    value={services[selectedServiceIndex].description[lang]}
-                                                    onChange={(e) => updateService(selectedServiceIndex, 'description', lang, e.target.value)}
-                                                    className="mt-1 w-full rounded border-gray-300 p-2 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
-                                                    rows={3}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
-                                            <div className="relative mt-1 h-40 w-full overflow-hidden rounded border border-gray-300 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-                                                {services[selectedServiceIndex].image && (
-                                                    <img
-                                                        src={services[selectedServiceIndex].image}
-                                                        alt="Service"
-                                                        className="h-full w-full object-contain"
-                                                    />
-                                                )}
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => {
-                                                        if (e.target.files && e.target.files[0]) {
-                                                            handleImageChange(selectedServiceIndex, e.target.files[0]);
-                                                        }
-                                                    }}
-                                                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </TabPanel>
+                <form onSubmit={handleSubmit} className="space-y-6 p-6">
+                    <TranslatedInput
+                        label="Services Section Heading"
+                        value={data.heading}
+                        onChange={(value) => setData('heading', value)}
+                        error={errors.heading}
+                        placeholder="Services section heading"
+                        required
+                    />
+                    <TranslatedInput
+                        label="Sub-Heading"
+                        value={data.sub_heading}
+                        onChange={(value) => setData('sub_heading', value)}
+                        error={errors.sub_heading}
+                        placeholder="Services section sub-heading"
+                    />
+
+                    <div className="flex items-center gap-4">
+                        {data.services.map((_, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                className={`h-10 w-10 rounded-full border-2 p-2 px-2 py-1 text-sm font-medium ${
+                                    index === selectedServiceIndex ? 'bg-blue-600 text-white' : 'border-blue-600 text-blue-600'
+                                }`}
+                                onClick={() => setSelectedServiceIndex(index)}
+                            >
+                                {index + 1}
+                            </button>
                         ))}
-                    </TabPanels>
-                </TabGroup>
-                <div className="mt-6 flex gap-4">
-                    <button
-                        onClick={saveChanges}
-                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                    >
-                        Save Changes
-                    </button>
-                    <button
-                        onClick={() => resetService(selectedServiceIndex)}
-                        className="rounded border border-gray-400 px-4 py-2 text-gray-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-300"
-                    >
-                        Discard
-                    </button>
-                    <button
-                        onClick={deleteService}
-                        className="rounded border border-red-400 px-4 py-2 text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-300 dark:hover:bg-red-900/20"
-                        disabled={services.length === 0}
-                    >
-                        Delete
-                    </button>
-                </div>
+                        <button
+                            onClick={addService}
+                            type="button"
+                            className="h-10 w-10 rounded-full border-2 border-gray-400 text-xl text-gray-600 dark:text-gray-300"
+                        >
+                            +
+                        </button>
+                    </div>
+
+                    {data.services.length > 0 && (
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="space-y-4 lg:col-span-2">
+                                <TranslatedInput
+                                    label={`Service ${selectedServiceIndex + 1} Title`}
+                                    value={data.services[selectedServiceIndex].title}
+                                    onChange={(value) => updateService(selectedServiceIndex, 'title', value)}
+                                    error={errors[`services.${selectedServiceIndex}.title`]}
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                <TranslatedInput
+                                    label={`Service ${selectedServiceIndex + 1} Description`}
+                                    value={data.services[selectedServiceIndex].description}
+                                    onChange={(value) => updateService(selectedServiceIndex, 'description', value)}
+                                    error={errors[`services.${selectedServiceIndex}.description`]}
+                                    placeholder="Enter description"
+                                    type="textarea"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <FileUpload
+                                    label={`Service ${selectedServiceIndex + 1} Image`}
+                                    onChange={(file) => handleImageChange(selectedServiceIndex, file)}
+                                    error={imageErrors[selectedServiceIndex] || errors[`services.${selectedServiceIndex}.image`]}
+                                    currentImageUrl={
+                                        data.services[selectedServiceIndex].image_path &&
+                                        !data.services[selectedServiceIndex].image
+                                            ? data.services[selectedServiceIndex].image_path
+                                            : undefined
+                                    }
+                                    previewImage={data.services[selectedServiceIndex].image}
+                                    onRemove={() => handleImageChange(selectedServiceIndex, null)}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+                        <button
+                            type="button"
+                            onClick={resetService}
+                            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-800"
+                            disabled={processing}
+                        >
+                            Discard
+                        </button>
+                        <button
+                            type="submit"
+                            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-neutral-800"
+                            disabled={processing}
+                        >
+                            {processing ? 'Saving...' : 'Save Changes'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={deleteService}
+                            className="inline-flex items-center rounded-md border border-red-400 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-600 dark:text-red-300 dark:hover:bg-red-900/20"
+                            disabled={data.services.length === 0 || processing}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </form>
             </AdminLayout>
         </AppLayout>
     );
