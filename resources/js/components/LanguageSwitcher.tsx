@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Language {
     code: 'en' | 'es';
@@ -13,6 +14,7 @@ interface LanguageSwitcherProps {
 }
 
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', currentLocale }) => {
+    const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,6 +30,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', cur
     const toggleDropdown = () => setIsOpen((prev) => !prev);
 
     const selectLanguage = (lang: Language) => {
+        i18n.changeLanguage(lang.code);
         setIsOpen(false);
         router.post(
             route('language.switch'),

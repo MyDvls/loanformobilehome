@@ -49,7 +49,7 @@ export function AppSidebar() {
                         <>
                             <SidebarMenuItem className="pl-6">
                                 <SidebarMenuButton asChild>
-                                    <Link href="/admin/pages/home">
+                                    <Link prefetch="mount" cache-for="5m" href="/admin/pages/home">
                                         <LayoutGrid className="mr-2 h-4 w-4" />
                                         Web Pages
                                     </Link>
@@ -57,7 +57,7 @@ export function AppSidebar() {
                             </SidebarMenuItem>
                             <SidebarMenuItem className="pl-6">
                                 <SidebarMenuButton asChild>
-                                    <Link href="/admin/pages/settings">
+                                    <Link prefetch="mount" cache-for="5m" href="/admin/pages/settings">
                                         <LayoutGrid className="mr-2 h-4 w-4" />
                                         Web Settings
                                     </Link>

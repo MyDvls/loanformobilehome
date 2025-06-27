@@ -26,7 +26,7 @@ class TranslationService
         // Cache translations to avoid repeated API calls
         $cacheKey = "translation." . md5($text . $targetLanguage . $sourceLanguage . $this->provider);
 
-        return Cache::remember($cacheKey, 86400, function () use ($text, $targetLanguage, $sourceLanguage) {
+        return Cache::rememberForever($cacheKey, function () use ($text, $targetLanguage, $sourceLanguage) {
             return $this->callTranslationApi($text, $targetLanguage, $sourceLanguage);
         });
     }

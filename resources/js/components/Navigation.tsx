@@ -25,6 +25,8 @@ export default function Navigation() {
                     { path: '/contact', label: 'nav.contact' },
                 ].map(({ path, label }) => (
                     <Link
+                        prefetch="mount"
+                        cache-for="5m"
                         key={path}
                         href={path}
                         className={`text-sm font-medium transition-colors duration-200 ${
@@ -50,7 +52,7 @@ export default function Navigation() {
                 >
                     {t('nav.login')}
                 </Link>
-                <Link href="/apply">
+                <Link prefetch="mount" cache-for="5m" href="/apply">
                     <Button variant="primary">
                         {t('nav.apply')}
                         <ArrowRight className="h-5 w-5" />
