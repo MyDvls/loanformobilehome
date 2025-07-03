@@ -29,86 +29,82 @@ use Inertia\Inertia;
 // ────────────────────────────────────────────────────────────────
 Route::get('/', function (TranslationService $translator) {
     $locale   = app()->getLocale();
-    $cacheKey = "page.home.payload.{$locale}";
+    $hero               = HeroSection::first();
+    $loanSection        = LoanSection::with(['loanItems' => fn($q) => $q->orderBy('id')])->first();
+    $requirements       = RequirementSection::with(['requirementItems' => fn($q) => $q->orderBy('id')])->first();
+    $featuresSection    = FeatureSection::with(['featureItems'   => fn($q) => $q->orderBy('id')])->first();
+    $testimonialSection = TestimonialSection::all();
 
-    $props = Cache::remember($cacheKey, now()->addDays(2), function () use ($translator, $locale) {
-        $hero               = HeroSection::first();
-        $loanSection        = LoanSection::with(['loanItems' => fn($q) => $q->orderBy('id')])->first();
-        $requirements       = RequirementSection::with(['requirementItems' => fn($q) => $q->orderBy('id')])->first();
-        $featuresSection    = FeatureSection::with(['featureItems'   => fn($q) => $q->orderBy('id')])->first();
-        $testimonialSection = TestimonialSection::all();
+    // Build raw arrays…
+    $heroData = $hero ? [
+        'slogan'        => $hero->slogan,
+        'heading_part1' => $hero->heading_part1,
+        'heading_part2' => $hero->heading_part2,
+        'heading_part3' => $hero->heading_part3,
+        'sub_heading'   => $hero->sub_heading,
+        'image_path'    => $hero->image_path ? Storage::url($hero->image_path) : null,
+    ] : null;
 
-        // Build raw arrays…
-        $heroData = $hero ? [
-            'slogan'        => $hero->slogan,
-            'heading_part1' => $hero->heading_part1,
-            'heading_part2' => $hero->heading_part2,
-            'heading_part3' => $hero->heading_part3,
-            'sub_heading'   => $hero->sub_heading,
-            'image_path'    => $hero->image_path ? Storage::url($hero->image_path) : null,
-        ] : null;
+    $loanData      = $loanSection ? ['title' => $loanSection->title] : null;
+    $loanItemsData = $loanSection
+        ? $loanSection->loanItems->map(fn($i) => [
+            'id'          => $i->id,
+            'title'       => $i->title,
+            'description' => $i->description,
+            'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+        ])->toArray()
+        : [];
 
-        $loanData      = $loanSection ? ['title' => $loanSection->title] : null;
-        $loanItemsData = $loanSection
-            ? $loanSection->loanItems->map(fn($i) => [
-                'id'          => $i->id,
-                'title'       => $i->title,
-                'description' => $i->description,
-                'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
-            ])->toArray()
-            : [];
+    $requirementsData     = $requirements ? ['title' => $requirements->title, 'subtitle' => $requirements->subtitle] : null;
+    $requirementItemsData = $requirements
+        ? $requirements->requirementItems->map(fn($i) => [
+            'id'          => $i->id,
+            'title'       => $i->title,
+            'description' => $i->description,
+            'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+        ])->toArray()
+        : [];
 
-        $requirementsData     = $requirements ? ['title' => $requirements->title, 'subtitle' => $requirements->subtitle] : null;
-        $requirementItemsData = $requirements
-            ? $requirements->requirementItems->map(fn($i) => [
-                'id'          => $i->id,
-                'title'       => $i->title,
-                'description' => $i->description,
-                'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
-            ])->toArray()
-            : [];
+    $featuresData     = $featuresSection ? ['title' => $featuresSection->title] : null;
+    $featureItemsData = $featuresSection
+        ? $featuresSection->featureItems->map(fn($i) => [
+            'id'          => $i->id,
+            'title'       => $i->title,
+            'description' => $i->description,
+            'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+        ])->toArray()
+        : [];
 
-        $featuresData     = $featuresSection ? ['title' => $featuresSection->title] : null;
-        $featureItemsData = $featuresSection
-            ? $featuresSection->featureItems->map(fn($i) => [
-                'id'          => $i->id,
-                'title'       => $i->title,
-                'description' => $i->description,
-                'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
-            ])->toArray()
-            : [];
+    $testimonialData = $testimonialSection->map(fn($t) => [
+        'id'    => $t->id,
+        'quote' => $t->post,
+        'name'  => $t->full_name,
+        'title' => $t->heading,
+    ])->toArray();
 
-        $testimonialData = $testimonialSection->map(fn($t) => [
-            'id'    => $t->id,
-            'quote' => $t->post,
-            'name'  => $t->full_name,
-            'title' => $t->heading,
-        ])->toArray();
+    // Translate if needed…
+    if ($locale !== 'en') {
+        $heroData             = $heroData             ? $translator->translateArray($heroData, $locale)               : null;
+        $loanData             = $loanData             ? $translator->translateArray($loanData, $locale)               : null;
+        $loanItemsData        = array_map(fn($i) => $translator->translateArray($i, $locale), $loanItemsData);
+        $requirementsData     = $requirementsData     ? $translator->translateArray($requirementsData, $locale)      : null;
+        $requirementItemsData = array_map(fn($i) => $translator->translateArray($i, $locale), $requirementItemsData);
+        $featuresData         = $featuresData         ? $translator->translateArray($featuresData, $locale)          : null;
+        $featureItemsData     = array_map(fn($i) => $translator->translateArray($i, $locale), $featureItemsData);
+        $testimonialData      = array_map(fn($i) => $translator->translateArray($i, $locale), $testimonialData);
+    }
 
-        // Translate if needed…
-        if ($locale !== 'en') {
-            $heroData             = $heroData             ? $translator->translateArray($heroData, $locale)               : null;
-            $loanData             = $loanData             ? $translator->translateArray($loanData, $locale)               : null;
-            $loanItemsData        = array_map(fn($i) => $translator->translateArray($i, $locale), $loanItemsData);
-            $requirementsData     = $requirementsData     ? $translator->translateArray($requirementsData, $locale)      : null;
-            $requirementItemsData = array_map(fn($i) => $translator->translateArray($i, $locale), $requirementItemsData);
-            $featuresData         = $featuresData         ? $translator->translateArray($featuresData, $locale)          : null;
-            $featureItemsData     = array_map(fn($i) => $translator->translateArray($i, $locale), $featureItemsData);
-            $testimonialData      = array_map(fn($i) => $translator->translateArray($i, $locale), $testimonialData);
-        }
-
-        return [
-            'hero'                => $heroData,
-            'loanSection'         => $loanData,
-            'loanItems'           => $loanItemsData,
-            'requirementsSection' => $requirementsData,
-            'requirementItems'    => $requirementItemsData,
-            'featuresSection'     => $featuresData,
-            'featureItems'        => $featureItemsData,
-            'testimonialSection'  => $testimonialData,
-            'locale'              => $locale,
-        ];
-    });
+    $props =  [
+        'hero'                => $heroData,
+        'loanSection'         => $loanData,
+        'loanItems'           => $loanItemsData,
+        'requirementsSection' => $requirementsData,
+        'requirementItems'    => $requirementItemsData,
+        'featuresSection'     => $featuresData,
+        'featureItems'        => $featureItemsData,
+        'testimonialSection'  => $testimonialData,
+        'locale'              => $locale,
+    ];
 
     return Inertia::render('Home', $props);
 })->name('home');
@@ -119,50 +115,48 @@ Route::get('/', function (TranslationService $translator) {
 // ────────────────────────────────────────────────────────────────
 Route::get('/services', function (TranslationService $translator) {
     $locale   = app()->getLocale();
-    $cacheKey = "page.services.payload.{$locale}";
 
-    $props = Cache::remember($cacheKey, now()->addDays(2), function () use ($translator, $locale) {
-        $serviceSection = ServiceSection::first();
-        $serviceItems   = ServiceItem::orderBy('id')->get();
-        $featuresSection = FeatureSection::with('featureItems')->first();
+    $serviceSection = ServiceSection::first();
+    $serviceItems   = ServiceItem::orderBy('id')->get();
+    $featuresSection = FeatureSection::with('featureItems')->first();
 
-        $sectionData = $serviceSection ? [
-            'heading'     => $serviceSection->heading,
-            'sub_heading' => $serviceSection->sub_heading,
-        ] : null;
+    $sectionData = $serviceSection ? [
+        'heading'     => $serviceSection->heading,
+        'sub_heading' => $serviceSection->sub_heading,
+    ] : null;
 
-        $itemsData = $serviceItems->map(fn($i) => [
+    $itemsData = $serviceItems->map(fn($i) => [
+        'id'          => $i->id,
+        'title'       => $i->title,
+        'description' => $i->description,
+        'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+    ])->toArray();
+
+    $featuresData = $featuresSection ? ['title' => $featuresSection->title] : null;
+    $featureItemsData = $featuresSection
+        ? $featuresSection->featureItems->map(fn($i) => [
             'id'          => $i->id,
             'title'       => $i->title,
             'description' => $i->description,
-            'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
-        ])->toArray();
+            'image_path'  => $i->image_path ? Storage::url($i->image_path) : null,
+        ])->toArray()
+        : [];
 
-        $featuresData = $featuresSection ? ['title' => $featuresSection->title] : null;
-        $featureItemsData = $featuresSection
-            ? $featuresSection->featureItems->map(fn($i) => [
-                'id'          => $i->id,
-                'title'       => $i->title,
-                'description' => $i->description,
-                'image_path'  => $i->image_path ? Storage::url($i->image_path) : null,
-            ])->toArray()
-            : [];
+    if ($locale !== 'en') {
+        $sectionData      = $sectionData      ? $translator->translateArray($sectionData, $locale)           : null;
+        $itemsData        = array_map(fn($i) => $translator->translateArray($i, $locale), $itemsData);
+        $featuresData     = $featuresData     ? $translator->translateArray($featuresData, $locale)         : null;
+        $featureItemsData = array_map(fn($i) => $translator->translateArray($i, $locale), $featureItemsData);
+    }
 
-        if ($locale !== 'en') {
-            $sectionData      = $sectionData      ? $translator->translateArray($sectionData, $locale)           : null;
-            $itemsData        = array_map(fn($i) => $translator->translateArray($i, $locale), $itemsData);
-            $featuresData     = $featuresData     ? $translator->translateArray($featuresData, $locale)         : null;
-            $featureItemsData = array_map(fn($i) => $translator->translateArray($i, $locale), $featureItemsData);
-        }
+    $props = [
+        'serviceSection' => $sectionData,
+        'serviceItems'   => $itemsData,
+        'featuresSection' => $featuresData,
+        'featureItems'   => $featureItemsData,
+        'locale'         => $locale,
+    ];
 
-        return [
-            'serviceSection' => $sectionData,
-            'serviceItems'   => $itemsData,
-            'featuresSection' => $featuresData,
-            'featureItems'   => $featureItemsData,
-            'locale'         => $locale,
-        ];
-    });
 
     return Inertia::render('Services', $props);
 })->name('services');
@@ -220,36 +214,34 @@ Route::get('/understanding-loan', function (TranslationService $translator) {
 // ────────────────────────────────────────────────────────────────
 Route::get('/team', function (TranslationService $translator) {
     $locale   = app()->getLocale();
-    $cacheKey = "page.team.payload.{$locale}";
 
-    $props = Cache::remember($cacheKey, now()->addDays(2), function () use ($translator, $locale) {
-        $teamSection = TeamSection::first();
-        $teamMembers = TeamMember::orderBy('id')->get();
+    $teamSection = TeamSection::first();
+    $teamMembers = TeamMember::orderBy('id')->get();
 
-        $sectionData = $teamSection ? [
-            'heading'     => $teamSection->heading,
-            'sub_heading' => $teamSection->sub_heading,
-        ] : null;
+    $sectionData = $teamSection ? [
+        'heading'     => $teamSection->heading,
+        'sub_heading' => $teamSection->sub_heading,
+    ] : null;
 
-        $membersData = $teamMembers->map(fn($m) => [
-            'id'        => $m->id,
-            'name'      => $m->name,
-            'role'      => $m->role,
-            'bio'       => $m->bio,
-            'image_url' => $m->image_path ? Storage::url($m->image_path) : null,
-        ])->toArray();
+    $membersData = $teamMembers->map(fn($m) => [
+        'id'        => $m->id,
+        'name'      => $m->name,
+        'role'      => $m->role,
+        'bio'       => $m->bio,
+        'image_url' => $m->image_path ? Storage::url($m->image_path) : null,
+    ])->toArray();
 
-        if ($locale !== 'en') {
-            $sectionData = $sectionData ? $translator->translateArray($sectionData, $locale) : null;
-            $membersData = array_map(fn($i) => $translator->translateArray($i, $locale), $membersData);
-        }
+    if ($locale !== 'en') {
+        $sectionData = $sectionData ? $translator->translateArray($sectionData, $locale) : null;
+        $membersData = array_map(fn($i) => $translator->translateArray($i, $locale), $membersData);
+    }
 
-        return [
-            'teamSection' => $sectionData,
-            'teamMembers' => $membersData,
-            'locale'      => $locale,
-        ];
-    });
+    $props = [
+        'teamSection' => $sectionData,
+        'teamMembers' => $membersData,
+        'locale'      => $locale,
+    ];
+
 
     return Inertia::render('Team', $props);
 })->name('team');
@@ -259,29 +251,27 @@ Route::get('/team', function (TranslationService $translator) {
 // ────────────────────────────────────────────────────────────────
 Route::get('/contact', function (TranslationService $translator) {
     $locale   = app()->getLocale();
-    $cacheKey = "page.contact.payload.{$locale}";
 
-    $props = Cache::remember($cacheKey, now()->addDays(2), function () use ($translator, $locale) {
-        $sec = ContactSection::first();
+    $sec = ContactSection::first();
 
-        $data = $sec ? [
-            'company_name'  => $sec->company_name,
-            'address'       => $sec->address,
-            'email'         => $sec->email,
-            'telephone'     => $sec->telephone,
-            'working_hours' => $sec->working_hours,
-            'logo_url'      => $sec->logo_path ? Storage::url($sec->logo_path) : null,
-        ] : null;
+    $data = $sec ? [
+        'company_name'  => $sec->company_name,
+        'address'       => $sec->address,
+        'email'         => $sec->email,
+        'telephone'     => $sec->telephone,
+        'working_hours' => $sec->working_hours,
+        'logo_url'      => $sec->logo_path ? Storage::url($sec->logo_path) : null,
+    ] : null;
 
-        if ($locale !== 'en' && $data) {
-            $data = $translator->translateArray($data, $locale);
-        }
+    if ($locale !== 'en' && $data) {
+        $data = $translator->translateArray($data, $locale);
+    }
 
-        return [
-            'contactSection' => $data,
-            'locale'         => $locale,
-        ];
-    });
+    $props = [
+        'contactSection' => $data,
+        'locale'         => $locale,
+    ];
+
 
     return Inertia::render('Contact', $props);
 })->name('contact');

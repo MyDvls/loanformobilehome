@@ -55,14 +55,6 @@ export function AppSidebar() {
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
-                            <SidebarMenuItem className="pl-6">
-                                <SidebarMenuButton asChild>
-                                    <Link prefetch="mount" cache-for="5m" href="/admin/pages/settings">
-                                        <LayoutGrid className="mr-2 h-4 w-4" />
-                                        Web Settings
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
                         </>
                     )}
                 </SidebarMenu>

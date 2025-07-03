@@ -31,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             SetLocale::class,
+            \App\Http\Middleware\ShareContactDetails::class, 
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

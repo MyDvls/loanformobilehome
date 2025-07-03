@@ -16,7 +16,11 @@ interface HeaderProps {
 
 export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen, locale }: HeaderProps) {
     const { appearance, updateAppearance } = useAppearance();
-    const { props } = usePage<{ locale: string }>();
+    const { props } = usePage<{
+        locale: string;
+        contactSection?: { logo_url?: string };
+    }>();
+    const logoUrl = props.contactSection?.logo_url;
 
     return (
         <header
@@ -28,7 +32,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
             <nav className="container mx-auto flex h-auto items-center justify-between px-[20px] py-5 md:px-[25px] xl:px-[40px]">
                 {/* Left: Logo */}
                 <Link href="/" className="z-10 my-auto flex items-center self-stretch">
-                    <Logo />
+                    <Logo logoUrl={logoUrl} />
                 </Link>
 
                 {/* Center & Right: Navigation (hidden on mobile) */}
