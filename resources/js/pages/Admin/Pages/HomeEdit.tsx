@@ -103,21 +103,21 @@ export default function HomeEdit({
         <AppLayout>
             <Head title="Edit Homepage" />
             <AdminLayout title="Edit Homepage" subtitle="Web Pages" breadcrumbs={breadcrumbs}>
-                <div className="container mx-auto py-6">
+                <div className="container px-6 border rounded-md py-6">
                     <div>
-                        <SectionWrapper title="Hero Section" defaultOpen={true}>
+                        <SectionWrapper title="Hero Section" defaultOpen={false}>
                             <HeroEdit hero={hero} />
                         </SectionWrapper>
-                        <SectionWrapper title="Loan Section">
+                        <SectionWrapper title="Loan Section" defaultOpen={false}>
                             <LoanEdit loanSection={loanSection} loanItems={loanItems} />
                         </SectionWrapper>
-                        <SectionWrapper title="Requirements Section">
+                        <SectionWrapper title="Requirements Section" defaultOpen={false}>
                             <RequirementsEdit requirementsSection={requirementsSection} />
                         </SectionWrapper>
-                        <SectionWrapper title="Features Section">
+                        <SectionWrapper title="Features Section" defaultOpen={false}>
                             <FeaturesEdit featuresSection={featuresSection} featureItems={featureItems} />
                         </SectionWrapper>
-                        <SectionWrapper title="Testimonial Section">
+                        <SectionWrapper title="Testimonial Section" defaultOpen={false}>
                             <TestimonialSectionEdit testimonialsSection={testimonialsSection} />
                         </SectionWrapper>
                     </div>

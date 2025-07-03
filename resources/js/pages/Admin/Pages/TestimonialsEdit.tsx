@@ -103,7 +103,7 @@ export default function TestimonialSectionEdit({ testimonialsSection }: Props) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap gap-2 sm:gap-4">
                 {data.testimonials.map((_, index) => (
                     <button
                         key={index}
@@ -156,7 +156,7 @@ export default function TestimonialSectionEdit({ testimonialsSection }: Props) {
                 </div>
             )}
 
-            <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+            <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                 <button
                     type="button"
                     onClick={resetTestimonial}

@@ -10,7 +10,14 @@ interface FileUploadProps {
     onRemove?: () => void;
 }
 
-export default function FileUpload({ label, onChange, error, currentImageUrl, previewImage, onRemove }: FileUploadProps) {
+export default function FileUpload({
+    label,
+    onChange,
+    error,
+    currentImageUrl,
+    previewImage,
+    onRemove,
+}: FileUploadProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,11 +35,12 @@ export default function FileUpload({ label, onChange, error, currentImageUrl, pr
     };
 
     const previewUrl = previewImage ? URL.createObjectURL(previewImage) : currentImageUrl;
-    console.log('Preview URL:', previewUrl);
+
     return (
         <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-neutral-200">{label}</label>
-            <div className="flex items-center gap-4">
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <input
                     type="file"
                     accept="image/*"
@@ -40,9 +48,14 @@ export default function FileUpload({ label, onChange, error, currentImageUrl, pr
                     ref={fileInputRef}
                     className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 dark:text-neutral-400 dark:file:bg-neutral-700 dark:file:text-neutral-200 dark:hover:file:bg-neutral-600"
                 />
+
                 {(previewUrl || currentImageUrl) && (
-                    <div className="relative">
-                        <img src={previewUrl} alt="Preview" className="h-40 w-40 rounded-md object-cover" />
+                    <div className="relative mt-2 sm:mt-0 w-full max-w-xs">
+                        <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="w-full h-auto max-h-60 rounded-md object-cover"
+                        />
                         {onRemove && (
                             <button
                                 type="button"
@@ -55,6 +68,7 @@ export default function FileUpload({ label, onChange, error, currentImageUrl, pr
                     </div>
                 )}
             </div>
+
             {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
     );

@@ -132,7 +132,7 @@ export default function HeroEdit({ hero }: { hero: HeroSection }) {
                 previewImage={data.image}
                 onRemove={() => handleHeroImageChange(null)}
             />
-            <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-6 dark:border-neutral-700">
+            <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                 <button
                     type="button"
                     onClick={handleHeroReset}

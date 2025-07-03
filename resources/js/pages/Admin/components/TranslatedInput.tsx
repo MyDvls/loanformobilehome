@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface TranslatedInputProps {
     label: string;
     value: string;
@@ -33,7 +31,7 @@ export default function TranslatedInput({
                     type="text"
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="block w-full rounded-md border-gray-300 bg-white p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+                    className="block w-full rounded-md border border-[#B3B3B3] bg-[#E6E6E6] p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
                     placeholder={placeholder}
                     required={required}
                 />
@@ -42,7 +40,7 @@ export default function TranslatedInput({
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     rows={rows}
-                    className="block w-full rounded-md border-gray-300 bg-white p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+                    className="block w-full rounded-md border border-[#B3B3B3] bg-[#E6E6E6] p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
                     placeholder={placeholder}
                     required={required}
                 />
@@ -50,7 +48,7 @@ export default function TranslatedInput({
                 <select
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="block w-full rounded-md border-gray-300 bg-white p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+                    className="block w-full rounded-md border border-[#B3B3B3] bg-[#E6E6E6] p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
                     required={required}
                 >
                     {options.map((option) => (
