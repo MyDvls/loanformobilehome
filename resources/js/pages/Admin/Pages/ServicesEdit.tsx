@@ -39,21 +39,20 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
     const { data, setData, post, errors, processing } = useForm<ServiceFormData>({
         heading: serviceSection?.heading || '',
         sub_heading: serviceSection?.sub_heading || '',
-        services:
-            serviceItems?.map((item) => ({
-                id: item.id,
-                title: item.title || '',
-                description: item.description || '',
+        services: serviceItems?.map((item) => ({
+            id: item.id,
+            title: item.title || '',
+            description: item.description || '',
+            image: null,
+            image_path: item.image_path || '',
+        })) || [
+            {
+                title: '',
+                description: '',
                 image: null,
-                image_path: item.image_path || '',
-            })) || [
-                {
-                    title: '',
-                    description: '',
-                    image: null,
-                    image_path: '',
-                },
-            ],
+                image_path: '',
+            },
+        ],
     });
 
     const [imageErrors, setImageErrors] = useState<{ [key: number]: string | null }>({});
@@ -100,10 +99,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
 
     const addService = () => {
         const newIndex = data.services.length;
-        setData('services', [
-            ...data.services,
-            { title: '', description: '', image: null, image_path: '' },
-        ]);
+        setData('services', [...data.services, { title: '', description: '', image: null, image_path: '' }]);
         setSelectedServiceIndex(newIndex);
     };
 
@@ -111,14 +107,13 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
         setData({
             heading: serviceSection?.heading || '',
             sub_heading: serviceSection?.sub_heading || '',
-            services:
-                serviceItems?.map((item) => ({
-                    id: item.id,
-                    title: item.title || '',
-                    description: item.description || '',
-                    image: null,
-                    image_path: item.image_path || '',
-                })) || [{ title: '', description: '', image: null, image_path: '' }],
+            services: serviceItems?.map((item) => ({
+                id: item.id,
+                title: item.title || '',
+                description: item.description || '',
+                image: null,
+                image_path: item.image_path || '',
+            })) || [{ title: '', description: '', image: null, image_path: '' }],
         });
         setImageErrors({});
         setSelectedServiceIndex(0);
@@ -171,7 +166,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
         <AppLayout>
             <Head title="Edit Services Section" />
             <AdminLayout title="Edit Homepage" subtitle="Services">
-                <form onSubmit={handleSubmit} className="space-y-6 p-6">
+                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border p-6">
                     <TranslatedInput
                         label="Services Section Heading"
                         value={data.heading}
@@ -188,7 +183,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
                         placeholder="Services section sub-heading"
                     />
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap gap-2 sm:gap-4">
                         {data.services.map((_, index) => (
                             <button
                                 key={index}
@@ -237,8 +232,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
                                     onChange={(file) => handleImageChange(selectedServiceIndex, file)}
                                     error={imageErrors[selectedServiceIndex] || errors[`services.${selectedServiceIndex}.image`]}
                                     currentImageUrl={
-                                        data.services[selectedServiceIndex].image_path &&
-                                        !data.services[selectedServiceIndex].image
+                                        data.services[selectedServiceIndex].image_path && !data.services[selectedServiceIndex].image
                                             ? data.services[selectedServiceIndex].image_path
                                             : undefined
                                     }
@@ -249,7 +243,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
                         </div>
                     )}
 
-                    <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+                    <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                         <button
                             type="button"
                             onClick={resetService}

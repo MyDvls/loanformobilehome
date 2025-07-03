@@ -176,7 +176,7 @@ export default function UnderstandingLoanEdit({ understandingLoanSection }: Prop
         <AppLayout>
             <Head title="Edit Understanding Loan Section" />
             <AdminLayout title="Edit Understanding Loan Section" subtitle="Loan Information">
-                <div className="container mx-auto">
+                <div className="container rounded-md border px-6 py-6">
                     {errors.error && <div className="mb-4 text-red-500">{errors.error}</div>}
                     <form onSubmit={handleSubmit}>
                         <SectionWrapper title="Loan Information">
@@ -324,7 +324,7 @@ export default function UnderstandingLoanEdit({ understandingLoanSection }: Prop
                                         />
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+                                <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                                     <Button
                                         type="button"
                                         onClick={() =>

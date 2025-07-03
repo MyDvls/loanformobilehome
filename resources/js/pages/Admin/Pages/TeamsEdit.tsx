@@ -172,7 +172,7 @@ export default function TeamEdit({ teamSection, teamMembers }: Props) {
         <AppLayout>
             <Head title="Edit Team" />
             <AdminLayout title="Edit Homepage" subtitle="Team">
-                <form onSubmit={handleSubmit} className="space-y-6 p-6">
+                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border px-6 py-6">
                     <TranslatedInput
                         label="Team Section Heading"
                         value={data.heading}
@@ -190,7 +190,7 @@ export default function TeamEdit({ teamSection, teamMembers }: Props) {
                         required
                     />
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap gap-2 sm:gap-4">
                         {data.team_members.map((_, index) => (
                             <button
                                 key={index}
@@ -258,7 +258,7 @@ export default function TeamEdit({ teamSection, teamMembers }: Props) {
                         </div>
                     )}
 
-                    <div className="flex items-center justify-end gap-4 border-t border-gray-200 pt-6 dark:border-neutral-700">
+                    <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                         <button
                             type="button"
                             onClick={resetMember}

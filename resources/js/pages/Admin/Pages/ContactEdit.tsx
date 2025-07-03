@@ -105,7 +105,7 @@ export default function ContactEdit({ contactSection }: Props) {
         <AppLayout>
             <Head title="Edit Contact Section" />
             <AdminLayout title="Edit Contact Section" subtitle="Contact">
-                <form onSubmit={handleSubmit} className="space-y-6 p-6">
+                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border px-6 py-6">
                     <TranslatedInput
                         label="Company Name"
                         value={data.company_name}
