@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApplyController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\ServicesController;
@@ -45,9 +46,7 @@ Route::get('/terms', fn() => Inertia::render('Terms'))->name('terms');
 
 // Admin Routes
 Route::middleware(['auth', 'verified', 'custom.trim'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/admin/pages/home', [PageBuilderController::class, 'editHome'])->name('admin.pages.home.edit');
     Route::post('/admin/pages/home/hero', [PageBuilderController::class, 'updateHero'])->name('admin.pages.home.hero.update');
