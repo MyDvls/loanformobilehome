@@ -29,7 +29,7 @@ use Inertia\Inertia;
 // ────────────────────────────────────────────────────────────────
 Route::get('/', function (TranslationService $translator) {
     $locale   = app()->getLocale();
-    $hero               = HeroSection::first();
+    $hero               = HeroSection::with(['heroItems' => fn($q) => $q->orderBy('id')])->first();
     $loanSection        = LoanSection::with(['loanItems' => fn($q) => $q->orderBy('id')])->first();
     $requirements       = RequirementSection::with(['requirementItems' => fn($q) => $q->orderBy('id')])->first();
     $featuresSection    = FeatureSection::with(['featureItems'   => fn($q) => $q->orderBy('id')])->first();
@@ -42,8 +42,15 @@ Route::get('/', function (TranslationService $translator) {
         'heading_part2' => $hero->heading_part2,
         'heading_part3' => $hero->heading_part3,
         'sub_heading'   => $hero->sub_heading,
-        'image_path'    => $hero->image_path ? Storage::url($hero->image_path) : null,
     ] : null;
+
+    $heroItemsData = $hero
+        ? $hero->heroItems->map(fn($item) => [
+            'id'           => $item->id,
+            'hero_section_id' => $item->hero_section_id,
+            'image_path'    => $item->image_path ? Storage::url($item->image_path) : null,
+        ])->toArray()
+        : [];
 
     $loanData      = $loanSection ? ['title' => $loanSection->title] : null;
     $loanItemsData = $loanSection
@@ -95,7 +102,8 @@ Route::get('/', function (TranslationService $translator) {
     }
 
     $props =  [
-        'hero'                => $heroData,
+        'hero'       => $heroData,
+        'heroItems'  => $heroItemsData,
         'loanSection'         => $loanData,
         'loanItems'           => $loanItemsData,
         'requirementsSection' => $requirementsData,

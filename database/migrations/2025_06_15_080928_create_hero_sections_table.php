@@ -15,6 +15,14 @@ return new class extends Migration
             $table->text('heading_part2');
             $table->text('heading_part3');
             $table->text('sub_heading');
+            $table->timestamps();
+        });
+
+         Schema::create('hero_items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('hero_section_id')
+                ->constrained('hero_section')
+                ->onDelete('cascade');
             $table->string('image_path')->nullable();
             $table->timestamps();
         });
@@ -23,5 +31,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('hero_section');
+        Schema::dropIfExists('hero_items');
     }
 };

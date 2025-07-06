@@ -22,6 +22,7 @@ interface FeatureItem {
 
 interface Props {
     hero: any;
+    heroItems: { id: number; image_path: string }[] | null;
     loanSection: { title: string } | null;
     loanItems: Step[];
     requirementsSection: any;
@@ -35,6 +36,7 @@ interface Props {
 
 export default function Home({
     hero,
+    heroItems,
     loanSection,
     loanItems,
     requirementsSection,
@@ -49,7 +51,7 @@ export default function Home({
             <Head title="Home" />
             <div className="flex min-h-screen flex-col">
                 <AnimateOnView delay={0.2}>
-                    <Hero hero={hero} />
+                    <Hero hero={hero} heroItems={heroItems} />
                 </AnimateOnView>
                 <ProcessSteps loanSection={loanSection} loanItems={loanItems} />
                 <Requirements requirementsSection={requirementsSection} requirementItems={requirementItems} />

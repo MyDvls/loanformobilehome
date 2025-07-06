@@ -3,13 +3,17 @@ import { useState } from 'react';
 import FileUpload from '../components/FileUpload';
 import TranslatedInput from '../components/TranslatedInput';
 
+interface HeroItem {
+    id?: number;
+    image_path?: string;
+}
+
 interface HeroSection {
     slogan?: string;
     heading_part1?: string;
     heading_part2?: string;
     heading_part3?: string;
     sub_heading?: string;
-    image_url?: string;
 }
 
 interface HeroFormData {
@@ -18,53 +22,87 @@ interface HeroFormData {
     heading_part2: string;
     heading_part3: string;
     sub_heading: string;
-    image: File | null;
+    heroItems: Array<{
+        id?: number;
+        image: File | null;
+        image_path?: string;
+    }>;
 }
 
-export default function HeroEdit({ hero }: { hero: HeroSection }) {
+interface Props {
+    hero?: HeroSection;
+    heroItems?: HeroItem[];
+}
+
+export default function HeroEdit({ hero, heroItems }: Props) {
+    console.log('HeroEdit component rendered with hero:', hero, 'and heroItems:', heroItems);
     const { data, setData, post, errors, processing } = useForm<HeroFormData>({
         slogan: hero?.slogan || '',
         heading_part1: hero?.heading_part1 || '',
         heading_part2: hero?.heading_part2 || '',
         heading_part3: hero?.heading_part3 || '',
         sub_heading: hero?.sub_heading || '',
-        image: null,
+        heroItems:
+            heroItems?.map((item) => ({
+                id: item.id,
+                image: null,
+                image_path: item.image_path ? `${item.image_path}` : '',
+            })) || [],
     });
 
-    const [heroImageError, setHeroImageError] = useState<string | null>(null);
+    const [imageErrors, setImageErrors] = useState<{ [key: number]: string | null }>({});
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const handleHeroSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('_method', 'PUT');
-        Object.entries(data).forEach(([key, value]) => {
-            if (key === 'image') {
-                formData.append('image', value instanceof File ? value : '');
-            } else {
-                formData.append(key, value);
-            }
-        });
-        post('/admin/pages/home/hero', { data: formData, forceFormData: true });
-    };
-
-    const handleHeroImageChange = (file: File | null) => {
+    const handleImageChange = (index: number, file: File | null) => {
         if (file) {
             if (!file.type.startsWith('image/')) {
-                setHeroImageError('Please upload a valid image file (PNG, JPG, GIF).');
-                setData('image', null);
+                setImageErrors((prev) => ({ ...prev, [index]: 'Please upload a valid image file (PNG, JPG, GIF).' }));
+                setData(
+                    'heroItems',
+                    data.heroItems.map((item, i) => (i === index ? { ...item, image: null } : item)),
+                );
                 return;
             }
             if (file.size > 2 * 1024 * 1024) {
-                setHeroImageError('File size exceeds 2MB limit.');
-                setData('image', null);
+                setImageErrors((prev) => ({ ...prev, [index]: 'File size exceeds 2MB limit.' }));
+                setData(
+                    'heroItems',
+                    data.heroItems.map((item, i) => (i === index ? { ...item, image: null } : item)),
+                );
                 return;
             }
-            setHeroImageError(null);
-            setData('image', file);
+            setImageErrors((prev) => ({ ...prev, [index]: null }));
+            setData(
+                'heroItems',
+                data.heroItems.map((item, i) => (i === index ? { ...item, image: file } : item)),
+            );
         } else {
-            setData('image', null);
-            setHeroImageError(null);
+            setData(
+                'heroItems',
+                data.heroItems.map((item, i) => (i === index ? { ...item, image: null } : item)),
+            );
+            setImageErrors((prev) => ({ ...prev, [index]: null }));
         }
+    };
+
+    const addItem = () => {
+        const newIndex = data.heroItems.length;
+        setData('heroItems', [...data.heroItems, { image: null, image_path: '' }]);
+        setSelectedIndex(newIndex);
+    };
+
+    const deleteItem = () => {
+        if (data.heroItems.length === 0) return;
+        setData(
+            'heroItems',
+            data.heroItems.filter((_, i) => i !== selectedIndex),
+        );
+        setImageErrors((prev) => {
+            const newErrors = { ...prev };
+            delete newErrors[selectedIndex];
+            return newErrors;
+        });
+        setSelectedIndex((prevIndex) => Math.min(prevIndex, data.heroItems.length - 2));
     };
 
     const handleHeroReset = () => {
@@ -74,9 +112,48 @@ export default function HeroEdit({ hero }: { hero: HeroSection }) {
             heading_part2: hero?.heading_part2 || '',
             heading_part3: hero?.heading_part3 || '',
             sub_heading: hero?.sub_heading || '',
-            image: null,
+            heroItems:
+                heroItems?.map((item) => ({
+                    id: item.id,
+                    image: null,
+                    image_path: item.image_path ? `${item.image_path}` : '',
+                })) || [],
         });
-        setHeroImageError(null);
+        setImageErrors({});
+        setSelectedIndex(0);
+    };
+
+    const handleHeroSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+
+        // Append hero section fields
+        formData.append('slogan', data.slogan);
+        formData.append('heading_part1', data.heading_part1);
+        formData.append('heading_part2', data.heading_part2);
+        formData.append('heading_part3', data.heading_part3);
+        formData.append('sub_heading', data.sub_heading);
+
+        // Append hero items
+        data.heroItems.forEach((item, index) => {
+            if (item.id) {
+                formData.append(`heroItems[${index}][id]`, item.id.toString());
+            }
+            formData.append(`heroItems[${index}][image]`, item.image instanceof File ? item.image : '');
+        });
+
+        post('/admin/pages/home/hero', {
+            data: formData,
+            forceFormData: true,
+            onSuccess: () => {
+                alert('Hero section updated successfully.');
+            },
+            onError: (errors) => {
+                console.error('Save errors:', errors);
+                alert('Failed to save changes: ' + Object.values(errors).join(', '));
+            },
+        });
     };
 
     return (
@@ -115,6 +192,7 @@ export default function HeroEdit({ hero }: { hero: HeroSection }) {
                     required
                 />
             </div>
+
             <TranslatedInput
                 label="Sub-Heading"
                 value={data.sub_heading}
@@ -124,14 +202,51 @@ export default function HeroEdit({ hero }: { hero: HeroSection }) {
                 type="textarea"
                 required
             />
-            <FileUpload
-                label="Hero Image"
-                onChange={handleHeroImageChange}
-                error={heroImageError || errors.image}
-                currentImageUrl={hero?.image_url && !data.image ? hero.image_url : undefined}
-                previewImage={data.image}
-                onRemove={() => handleHeroImageChange(null)}
-            />
+
+            {/* Hero Items Section */}
+            <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Hero Images</h3>
+
+                <div className="flex flex-wrap gap-2 sm:gap-4">
+                    {data.heroItems.map((_, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            className={`h-10 w-10 rounded-full border-2 p-2 px-2 py-1 text-sm font-medium ${
+                                index === selectedIndex ? 'bg-blue-600 text-white' : 'border-blue-600 text-blue-600'
+                            }`}
+                            onClick={() => setSelectedIndex(index)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        onClick={addItem}
+                        type="button"
+                        className="h-10 w-10 rounded-full border-2 border-gray-400 text-xl text-gray-600 dark:text-gray-300"
+                    >
+                        +
+                    </button>
+                </div>
+
+                {data.heroItems.length > 0 && (
+                    <div className="space-y-4">
+                        <FileUpload
+                            label={`Hero Image ${selectedIndex + 1}`}
+                            onChange={(file) => handleImageChange(selectedIndex, file)}
+                            error={imageErrors[selectedIndex] || errors[`heroItems.${selectedIndex}.image`]}
+                            currentImageUrl={
+                                data.heroItems[selectedIndex].image_path && !data.heroItems[selectedIndex].image
+                                    ? data.heroItems[selectedIndex].image_path
+                                    : undefined
+                            }
+                            previewImage={data.heroItems[selectedIndex].image}
+                            onRemove={() => handleImageChange(selectedIndex, null)}
+                        />
+                    </div>
+                )}
+            </div>
+
             <div className="flex flex-col items-start justify-end gap-4 border-t border-gray-200 pt-6 md:flex-row dark:border-neutral-700">
                 <button
                     type="button"
@@ -147,6 +262,14 @@ export default function HeroEdit({ hero }: { hero: HeroSection }) {
                     disabled={processing}
                 >
                     {processing ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button
+                    type="button"
+                    onClick={deleteItem}
+                    className="inline-flex items-center rounded-md border border-red-400 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-600 dark:text-red-300 dark:hover:bg-red-900/20"
+                    disabled={data.heroItems.length === 0 || processing}
+                >
+                    Delete
                 </button>
             </div>
         </form>

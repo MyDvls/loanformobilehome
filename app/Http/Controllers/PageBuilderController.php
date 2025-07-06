@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactSection;
 use App\Models\FeatureItem;
 use App\Models\FeatureSection;
+use App\Models\HeroItem;
 use App\Models\HeroSection;
 use App\Models\LoanItem;
 use App\Models\LoanSection;
@@ -27,7 +28,9 @@ class PageBuilderController extends Controller
 {
     public function editHome()
     {
-        $hero = HeroSection::first();
+        $hero = HeroSection::with(['heroItems' => function ($query) {
+            $query->orderBy('id');
+        }])->first();
         $loanSection = LoanSection::with(['loanItems' => function ($query) {
             $query->orderBy('id');
         }])->first();
@@ -49,8 +52,13 @@ class PageBuilderController extends Controller
                 'heading_part2' => $hero->heading_part2,
                 'heading_part3' => $hero->heading_part3,
                 'sub_heading' => $hero->sub_heading,
-                'image_url' => $hero->image_url,
             ] : null,
+            'heroItems' => $hero ? $hero->heroItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'image_path' => $item->image_path ? Storage::url($item->image_path) : null,
+                ];
+            })->toArray() : [],
             'loanSection' => $loanSection ? [
                 'id' => $loanSection->id,
                 'title' => $loanSection->title,
@@ -107,7 +115,9 @@ class PageBuilderController extends Controller
             'heading_part2' => 'required|string|max:255',
             'heading_part3' => 'required|string|max:255',
             'sub_heading' => 'required|string|max:500',
-            'image' => 'nullable|image|max:2048',
+            'heroItems' => 'required|array',
+            'heroItems.*.id' => 'sometimes|nullable|integer|exists:hero_items,id',
+            'heroItems.*.image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         Log::info('Updating hero section with data: ', $request->all());
@@ -118,16 +128,34 @@ class PageBuilderController extends Controller
         $hero->heading_part2 = $request->input('heading_part2');
         $hero->heading_part3 = $request->input('heading_part3');
         $hero->sub_heading = $request->input('sub_heading');
-
-        if ($request->hasFile('image')) {
-            if ($hero->image_path) {
-                Storage::disk('public')->delete($hero->image_path);
-            }
-            $path = $request->file('image')->store('hero', 'public');
-            $hero->image_path = $path;
-        }
-
         $hero->save();
+
+        $requestHeroItemIds = collect($request->input('heroItems'))
+            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->pluck('id')
+            ->toArray();
+
+        HeroItem::where('hero_section_id', $hero->id)
+            ->whereNotIn('id', $requestHeroItemIds)
+            ->delete();
+
+        foreach ($request->input('heroItems') as $index => $heroItemData) {
+            $heroItem = isset($heroItemData['id']) && $heroItemData['id']
+                ? HeroItem::find($heroItemData['id'])
+                : new HeroItem();
+
+            $heroItem->hero_section_id = $hero->id;
+
+            if ($request->hasFile("heroItems.{$index}.image")) {
+                if ($heroItem->image_path) {
+                    Storage::disk('public')->delete($heroItem->image_path);
+                }
+                $path = $request->file("heroItems.{$index}.image")->store('hero', 'public');
+                $heroItem->image_path = $path;
+            }
+
+            $heroItem->save();
+        }
 
         return redirect()->route('admin.pages.home.edit')->with('success', 'Hero section updated successfully.');
     }

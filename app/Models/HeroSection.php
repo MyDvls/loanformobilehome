@@ -13,6 +13,10 @@ class HeroSection extends Model
         'heading_part2',
         'heading_part3',
         'sub_heading',
-        'image_path',
     ];
+
+    public function heroItems()
+    {
+        return $this->hasMany(HeroItem::class, 'hero_section_id');
+    }
 }

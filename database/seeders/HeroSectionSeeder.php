@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\HeroItem;
 use App\Models\HeroSection;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +17,27 @@ class HeroSectionSeeder extends Seeder
             'heading_part2' => 'Mobile Home',
             'heading_part3' => ' Ownership Starts Here .',
             'sub_heading' => 'Simple, transparent financing solutions for your manufactured home, with competitive rates and personalized service.',
-            'image_path' => 'images/Mobile-home-autumn-comprimida.jpeg',
+        ]);
+
+        HeroItem::create([
+            'hero_section_id' => 1,
+            'image_path' => 'images/hero/hero-image-1.jpg',
+        ]);
+        HeroItem::create([
+            'hero_section_id' => 1,
+            'image_path' => 'images/hero/hero-image-2.jpg',
+        ]);
+        HeroItem::create([
+            'hero_section_id' => 1,
+            'image_path' => 'images/hero/hero-image-3.jpg',
+        ]);
+        HeroItem::create([
+            'hero_section_id' => 1,
+            'image_path' => 'images/hero/hero-image-4.jpg',
+        ]);
+        HeroItem::create([
+            'hero_section_id' => 1,
+            'image_path' => 'images/hero/hero-image-5.jpg',
         ]);
     }
 }

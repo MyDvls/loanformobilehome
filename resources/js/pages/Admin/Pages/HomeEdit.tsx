@@ -68,12 +68,18 @@ interface LoanSection {
     title?: { en: string; es: string };
 }
 
+interface HeroItem {
+    id?: number;
+    image_path?: string;
+}
+
 interface HomeEditProps {
     hero: HeroSection;
     loanSection: LoanSection;
     loanItems: LoanItem[];
     requirementsSection: RequirementsSection;
     featuresSection: FeaturesSection;
+    heroItems: HeroItem[];
 
     featureItems: FeatureItem[];
 
@@ -87,6 +93,7 @@ interface HomeEditProps {
 
 export default function HomeEdit({
     hero,
+    heroItems,
     loanSection,
     loanItems,
     requirementsSection,
@@ -103,10 +110,10 @@ export default function HomeEdit({
         <AppLayout>
             <Head title="Edit Homepage" />
             <AdminLayout title="Edit Homepage" subtitle="Web Pages" breadcrumbs={breadcrumbs}>
-                <div className="container px-6 border rounded-md py-6">
+                <div className="container rounded-md border px-6 py-6">
                     <div>
                         <SectionWrapper title="Hero Section" defaultOpen={false}>
-                            <HeroEdit hero={hero} />
+                            <HeroEdit hero={hero} heroItems={heroItems} />
                         </SectionWrapper>
                         <SectionWrapper title="Loan Section" defaultOpen={false}>
                             <LoanEdit loanSection={loanSection} loanItems={loanItems} />
