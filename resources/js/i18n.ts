@@ -122,6 +122,16 @@ const resources = {
             'footer.friday': 'Friday: 9:00 am – 5:00 pm',
             'footer.saturday': 'Saturday: Closed',
             'footer.sunday': 'Sunday: Closed',
+
+            loanCalculator: {
+                title: 'Loan Details',
+                loanAmount: 'Loan Amount',
+                downPayment: 'Down Payment',
+                termPeriod: 'Term (Months)',
+                interestRate: 'Interest Rate (Annual %)',
+                calculate: 'Calculate',
+                monthlyPayment: 'Monthly Payment',
+            },
         },
     },
     es: {
@@ -232,6 +242,16 @@ const resources = {
             'footer.friday': 'Viernes: 9:00 a. m. – 5:00 p. m.',
             'footer.saturday': 'Sábado: Cerrado',
             'footer.sunday': 'Domingo: Cerrado',
+
+            loanCalculator: {
+                title: 'Detalles del Préstamo',
+                loanAmount: 'Monto del Préstamo',
+                downPayment: 'Pago Inicial',
+                termPeriod: 'Plazo (Meses)',
+                interestRate: 'Tasa de Interés (% anual)',
+                calculate: 'Calcular',
+                monthlyPayment: 'Pago Mensual',
+            },
         },
     },
 };
