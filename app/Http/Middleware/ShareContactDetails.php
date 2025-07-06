@@ -15,34 +15,29 @@ class ShareContactDetails
     public function handle(Request $request, Closure $next)
     {
         $locale = app()->getLocale();
-        $cacheKey = "global.contact.payload.{$locale}";
 
-        $data = Cache::remember($cacheKey, now()->addDays(2), function () use ($locale) {
-            $sec = ContactSection::first();
+        $sec = ContactSection::first();
 
-            if (!$sec) {
-                return null;
-            }
+        if (!$sec) {
+            return null;
+        }
 
-            $payload = [
-                'company_name'  => $sec->company_name,
-                'address'       => $sec->address,
-                'email'         => $sec->email,
-                'telephone'     => $sec->telephone,
-                'working_hours' => $sec->working_hours,
-                'logo_url'      => $sec->logo_path ? Storage::url($sec->logo_path) : null,
-            ];
+        $payload = [
+            'company_name'  => $sec->company_name,
+            'address'       => $sec->address,
+            'email'         => $sec->email,
+            'telephone'     => $sec->telephone,
+            'working_hours' => $sec->working_hours,
+            'logo_url'      => $sec->logo_path ? Storage::url($sec->logo_path) : null,
+        ];
 
-            if ($locale !== 'en') {
-                $translator = app(TranslationService::class);
-                $payload = $translator->translateArray($payload, $locale);
-            }
-
-            return $payload;
-        });
+        if ($locale !== 'en') {
+            $translator = app(TranslationService::class);
+            $payload = $translator->translateArray($payload, $locale);
+        }
 
         // Share globally with all Inertia responses
-        Inertia::share('contactSection', $data);
+        Inertia::share('contactSection', $payload);
 
         return $next($request);
     }

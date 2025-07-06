@@ -110,7 +110,7 @@ const ProcessSteps = ({ loanSection, loanItems }: Props) => {
         const isCurrent = currentStep === index;
 
         return (
-            <div className="relative flex flex-col items-center" ref={(el) => (stepRefs.current[index] = el)}>
+            <div className="relative flex flex-col items-center pb-4" ref={(el) => (stepRefs.current[index] = el)}>
                 <button
                     onClick={() => {
                         setCurrentStep(index);
@@ -129,18 +129,6 @@ const ProcessSteps = ({ loanSection, loanItems }: Props) => {
                 >
                     {index + 1}
                 </button>
-
-                <span
-                    className={`mt-3 text-sm font-medium whitespace-nowrap transition-colors duration-300 ${
-                        isCurrent
-                            ? 'text-purple-500 dark:text-purple-300'
-                            : isActive
-                              ? 'text-gray-800 dark:text-gray-200'
-                              : 'text-gray-500 dark:text-gray-400'
-                    }`}
-                >
-                    {step.title}
-                </span>
             </div>
         );
     };

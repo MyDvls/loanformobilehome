@@ -14,6 +14,8 @@ const resources = {
             'nav.login': 'Login',
             'nav.apply': 'Apply Now',
 
+            'investors.title': 'Investors',
+
             //Contact Page
             contact: {
                 title: 'Contact Us',
