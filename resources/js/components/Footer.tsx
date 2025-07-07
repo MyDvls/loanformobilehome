@@ -1,9 +1,23 @@
+import { usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const Footer: React.FC = () => {
     const { t } = useTranslation();
     const [email, setEmail] = useState('');
+    const { props } = usePage<{
+        locale: string;
+        contactSection?: {
+            logo_url?: string;
+            address?: string;
+            phone?: string;
+            email?: string;
+        };
+    }>();
+    const logoUrl = props.contactSection?.logo_url;
+    const address = props.contactSection?.address;
+    const phone = props.contactSection?.phone;
+    const emailContact = props.contactSection?.email;
 
     const handleWhatsAppClick = () => {
         window.open('https://wa.me/17205601018', '_blank');
@@ -22,9 +36,12 @@ export const Footer: React.FC = () => {
                     <div className="min-w-[300px] flex-1 shrink basis-[0%]">
                         <div className="flex w-[183px] max-w-full items-center gap-1.5 rounded-lg bg-[#FDFAF8] px-3 py-2 text-lg font-bold text-[#191817]">
                             <img
-                                src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/5465d0c00c627e9e07b80a0796a13dfdc422f5b4?placeholderIfAbsent=true"
-                                className="my-auto aspect-[0.61] w-[27px] shrink-0 self-stretch object-contain"
-                                alt="Mobile Fund Services logo"
+                                src={
+                                    logoUrl ||
+                                    'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/ec2d3fb7bc2bddc14fc001b963b948d766c2f6b1?placeholderIfAbsent=true'
+                                }
+                                alt="Mobile Fund Services Logo"
+                                className="h-auto w-7 object-contain md:w-9"
                             />
                             <div className="my-auto self-stretch text-[#191817]">
                                 <span className="text-[#5B3D5C]">Mobile Fund</span>
@@ -39,7 +56,9 @@ export const Footer: React.FC = () => {
                                     className="my-auto aspect-[0.75] w-[18px] shrink-0 self-stretch object-contain"
                                     alt="Location icon"
                                 />
-                                <div className="my-auto w-[270px] self-stretch text-[#FDFAF8]">324 Main St. Unit D Lyons, CO 80540 United States</div>
+                                <div className="my-auto w-[270px] self-stretch text-[#FDFAF8]">
+                                    {address || '324 Main St. Unit D Lyons, CO 80540 United States'}
+                                </div>
                             </div>
                             <div className="mt-2.5 flex w-[306px] max-w-full items-center gap-3">
                                 <img

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -141,6 +142,7 @@ const states = [
 const ApplicationForm = () => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { toast } = useToast();
 
     const form = useForm({
@@ -725,6 +727,12 @@ const ApplicationForm = () => {
     };
 
     const onSubmit = async (data) => {
+        setIsSubmitting(true);
+        toast({
+            title: 'Please wait',
+            description: 'This can take some time',
+        });
+
         const payload = {
             customer: {
                 firstName: data.firstName,
@@ -828,12 +836,17 @@ const ApplicationForm = () => {
             });
             toast({
                 title: t('apply.form.submitSuccess'),
-                description: t('apply.form.submitSuccess'),
+                description: t('apply.form.submitSuccessDescription'),
             });
             console.log('Success:', response.data);
         } catch (error) {
-            alert(t('apply.form.submitError'));
+            toast({
+                title: t('apply.form.submitError'),
+                description: error.message,
+            });
             console.error('Error:', error.response?.data || error.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -858,6 +871,7 @@ const ApplicationForm = () => {
                     <Button
                         type="button"
                         className="ml-auto"
+                        disabled={isSubmitting}
                         onClick={async () => {
                             if (step === 4) {
                                 form.handleSubmit(onSubmit)();
@@ -875,7 +889,16 @@ const ApplicationForm = () => {
                             }
                         }}
                     >
-                        {step === 4 ? t('apply.form.submit') : t('apply.form.next')}
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                {'Submitting...'}
+                            </>
+                        ) : step === 4 ? (
+                            t('apply.form.submit')
+                        ) : (
+                            t('apply.form.next')
+                        )}
                     </Button>
                 </div>
             </form>

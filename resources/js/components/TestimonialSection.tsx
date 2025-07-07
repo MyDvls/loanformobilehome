@@ -2,39 +2,27 @@ import { motion } from 'framer-motion';
 import AnimateOnView from './AnimateOnView';
 
 interface Testimonial {
+    id?: number;
     quote: string;
     name: string;
     title: string;
 }
 
-const testimonials: Testimonial[] = [
-    {
-        quote: 'Manufactured is the future of housing.',
-        name: 'Grayson Gibson',
-        title: 'CEO, Mobile Fund Services',
-    },
-    {
-        quote: 'Innovation in manufactured housing is transforming communities.',
-        name: 'Sarah Martinez',
-        title: 'Housing Development Director',
-    },
-    {
-        quote: 'The next generation of affordable housing starts here.',
-        name: 'Michael Chen',
-        title: 'Urban Planning Consultant',
-    },
-];
+interface Props {
+    testimonialsSection: Testimonial[];
+}
 
-const TestimonialSection = () => {
+const TestimonialSection = ({ testimonialsSection }: Props) => {
+    console.log('Testimonials Section:', testimonialsSection);
     return (
         <div className="relative w-full">
-            {testimonials.map((testimonial, index) => (
+            {testimonialsSection.map((testimonial, index) => (
                 <div
-                    key={index}
+                    key={testimonial.id || index}
                     className="sticky h-[75vh] w-full rounded-t-2xl border-t-2 border-gray-600 bg-gray-800"
                     style={{
                         top: `calc(20vh + ${index * 10}px)`,
-                        zIndex: testimonials.length + index,
+                        zIndex: testimonialsSection.length + index,
                         background: 'linear-gradient(120deg, #958F8B 0%, #4A4745 43%, #191817 100%)',
                     }}
                 >

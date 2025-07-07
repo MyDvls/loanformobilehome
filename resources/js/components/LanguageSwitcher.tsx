@@ -1,42 +1,45 @@
+import { router } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Language {
-    code: 'en' | 'es' | 'fr';
+    code: 'en' | 'es';
     label: string;
     flag: string;
 }
 
 interface LanguageSwitcherProps {
     className?: string;
+    currentLocale: string;
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '' }) => {
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', currentLocale }) => {
     const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    console.log('LanguageSwitcher props:', { currentLocale });
 
     const languages: Language[] = [
-        {
-            code: 'en',
-            label: 'En',
-            flag: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/2e77c09c22b5f2cda9fdb1cbe654af1964fd4d38?placeholderIfAbsent=true',
-        },
-        {
-            code: 'es',
-            label: 'Es',
-            flag: 'https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/2e77c09c22b5f2cda9fdb1cbe654af1964fd4d38?placeholderIfAbsent=true',
-        },
+        { code: 'en', label: 'En', flag: 'https://flagcdn.com/w20/us.png' },
+        { code: 'es', label: 'Es', flag: 'https://flagcdn.com/w20/es.png' },
     ];
 
-    const currentLang = languages.find((lang) => lang.code === i18n.language) || languages[0];
-
+    const currentLang = languages.find((lang) => lang.code === currentLocale) || languages[0];
+    console.log('Current language:', currentLang);
     const toggleDropdown = () => setIsOpen((prev) => !prev);
 
     const selectLanguage = (lang: Language) => {
         i18n.changeLanguage(lang.code);
         setIsOpen(false);
+        router.post(
+            route('language.switch'),
+            { locale: lang.code },
+            {
+                preserveState: false,
+                preserveScroll: true,
+            },
+        );
     };
 
     useEffect(() => {
@@ -95,9 +98,9 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '' }) =
                                 <button
                                     type="button"
                                     onClick={() => selectLanguage(language)}
-                                    className="flex w-full items-center gap-2 px-2 py-1 text-left text-[#635F5C] hover:bg-gray-100"
+                                    className={`flex w-full items-center gap-2 px-2 py-1 text-left text-[#635F5C] hover:bg-gray-100 ${currentLocale === language.code ? 'font-bold' : ''}`}
                                     role="option"
-                                    aria-selected={i18n.language === language.code}
+                                    aria-selected={currentLocale === language.code}
                                 >
                                     <img src={language.flag} alt={`${language.label} flag`} className="aspect-[1] w-[18px] object-contain" />
                                     <span>{language.label}</span>

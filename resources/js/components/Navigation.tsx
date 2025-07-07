@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navigation() {
-    const { props } = usePage();
     const { t } = useTranslation();
     const { appearance, updateAppearance } = useAppearance();
+    const { props } = usePage<{ locale: string }>();
 
     const isActive = (path: string) => props.url === path;
 
@@ -25,6 +25,8 @@ export default function Navigation() {
                     { path: '/contact', label: 'nav.contact' },
                 ].map(({ path, label }) => (
                     <Link
+                        prefetch="mount"
+                        cache-for="5m"
                         key={path}
                         href={path}
                         className={`text-sm font-medium transition-colors duration-200 ${
@@ -41,7 +43,7 @@ export default function Navigation() {
                 <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
                     {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                 </button>
-                <LanguageSwitcher />
+                <LanguageSwitcher currentLocale={props.locale} />
                 <Link
                     href="/login"
                     className={`text-sm font-medium transition-colors duration-200 ${
@@ -50,7 +52,7 @@ export default function Navigation() {
                 >
                     {t('nav.login')}
                 </Link>
-                <Link href="/apply">
+                <Link prefetch="mount" cache-for="5m" href="/apply">
                     <Button variant="primary">
                         {t('nav.apply')}
                         <ArrowRight className="h-5 w-5" />
