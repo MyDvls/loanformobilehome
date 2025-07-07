@@ -21,23 +21,15 @@ class HeroSectionSeeder extends Seeder
 
         HeroItem::create([
             'hero_section_id' => 1,
-            'image_path' => 'images/hero/hero-image-1.jpg',
+            'image_path' => 'images/basket-ball-mobile-home-background-comprimida.jpeg',
         ]);
         HeroItem::create([
             'hero_section_id' => 1,
-            'image_path' => 'images/hero/hero-image-2.jpg',
+            'image_path' => 'images/Mobile-home-autumn-comprimida.jpeg',
         ]);
         HeroItem::create([
             'hero_section_id' => 1,
-            'image_path' => 'images/hero/hero-image-3.jpg',
-        ]);
-        HeroItem::create([
-            'hero_section_id' => 1,
-            'image_path' => 'images/hero/hero-image-4.jpg',
-        ]);
-        HeroItem::create([
-            'hero_section_id' => 1,
-            'image_path' => 'images/hero/hero-image-5.jpg',
+            'image_path' => 'images/Mobile-home-beautiful-background-comprimida.jpeg',
         ]);
     }
 }

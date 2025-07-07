@@ -119,7 +119,7 @@ const ProcessSteps = ({ loanSection, loanItems }: Props) => {
                     }}
                     className={`flex h-12 w-12 items-center justify-center rounded-full text-lg transition-all duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none ${
                         isCurrent
-                            ? 'bg-[#5B3D5C] text-white ring-4 ring-blue-200 dark:ring-blue-900'
+                            ? 'bg-[#5B3D5C] text-white ring-4 ring-purple-200 dark:ring-purple-400'
                             : isActive
                               ? 'border-[#C8BEC9] bg-[#5B3D5C] text-white'
                               : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
@@ -181,16 +181,16 @@ const ProcessSteps = ({ loanSection, loanItems }: Props) => {
                                         {/* Image Section */}
                                         <div className="w-full max-w-lg">
                                             <motion.div
-                                                className="overflow-hidden rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+                                                className="overflow-hidden rounded-lg p-2"
                                                 initial={{ y: 15, opacity: 0 }}
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ duration: 0.5, delay: 0.1 }}
                                             >
-                                                <div className="relative pt-[75%]">
+                                                <div className="relative h-0 pb-[75%]">
                                                     <img
                                                         src={steps[currentStep].image}
                                                         alt={steps[currentStep].title}
-                                                        className="absolute inset-0 h-full w-full rounded-lg object-cover"
+                                                        className="absolute inset-0 h-full w-full rounded-lg object-contain"
                                                         loading="lazy"
                                                     />
                                                 </div>

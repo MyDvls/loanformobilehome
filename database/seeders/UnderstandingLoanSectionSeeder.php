@@ -25,7 +25,7 @@ class UnderstandingLoanSectionSeeder extends Seeder
             'section2_term_shorten' => 'Loan term shortens — monthly payment stays the same.',
             'section2_result' => 'Result: You own your home sooner, and pay less in total.',
             'section2_graph2_tip' => 'Making additional payments reduces your principal balance faster, allowing you to build equity quicker and potentially saving thousands in interest over the life of your loan.',
-            'section2_image_url' => 'understanding_loan/payoff_loans_faster.png',
+            'section2_image_url' => 'images/payoff_loans_faster.png',
         ]);
     }
 }

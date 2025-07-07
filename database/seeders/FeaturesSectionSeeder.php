@@ -19,24 +19,29 @@ class FeaturesSectionSeeder extends Seeder
         // Define the features as an array
         $features = [
             [
+                'title' => 'Expert Guidance',
+                'description' => 'Over 35 years experience in the Financial services industry.',
+                'image_path' => 'images/2.png',
+            ],
+            [
+                'title' => 'Bilingual Support',
+                'description' => 'Friendly service in English and Spanish.',
+                'image_path' => 'images/1.png',
+            ],
+            [
                 'title' => 'Competitive Rates',
-                'description' => 'Enjoy some of the lowest interest rates in the market, tailored to your financial needs.',
+                'description' => 'We offer loan options with rates designed to save you money.',
+                'image_path' => 'images/5.png',
             ],
             [
-                'title' => 'Fast Approval Process',
-                'description' => 'Get pre-approved quickly with our streamlined online application process.',
+                'title' => 'Fast Appraisals and Closings',
+                'description' => 'Enjoy quick desktop appraisals, smooth closings, and speedy functions to get you into your home faster.',
+                'image_path' => 'images/4.png',
             ],
             [
-                'title' => 'Flexible Terms',
-                'description' => 'Choose from a variety of loan terms to fit your budget and lifestyle.',
-            ],
-            [
-                'title' => 'Expert Support',
-                'description' => 'Our dedicated team is here to guide you through every step of the loan process.',
-            ],
-            [
-                'title' => 'Online Management',
-                'description' => 'Manage your loan payments and track progress conveniently from anywhere.',
+                'title' => 'Trusted by Homeowners',
+                'description' => 'Hundreds of satisfied clients and families.',
+                'image_path' => 'images/3.png',
             ],
         ];
 
@@ -46,6 +51,7 @@ class FeaturesSectionSeeder extends Seeder
                 'feature_section_id' => $sectionId,
                 'title' => $feature['title'],
                 'description' => $feature['description'],
+                'image_path' => $feature['image_path'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

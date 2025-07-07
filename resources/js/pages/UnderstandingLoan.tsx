@@ -207,7 +207,7 @@ const UnderstandingLoan = ({ understandingLoanSection, locale }: UnderstandingLo
                                         </div>
                                         <div className="mt-4 flex w-full min-w-0 gap-2 rounded-lg border border-solid border-[#FFB840] bg-[rgba(255,160,0,0.10)] p-3 text-sm leading-6 font-normal text-[#C67C00] sm:mt-6 sm:p-4 sm:text-base md:mt-7">
                                             <img
-                                                src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/ae1ede54efacac98473befea74bc995933c1a720?placeholderIfAbsent=true"
+                                                src="/storage/images/light.png"
                                                 alt="Information icon"
                                                 className="my-auto aspect-[1] w-8 shrink-0 rounded-[50%] object-contain sm:w-10 md:w-12"
                                             />
@@ -276,7 +276,7 @@ const UnderstandingLoan = ({ understandingLoanSection, locale }: UnderstandingLo
                                             <div className="mt-3 flex w-full min-w-0 flex-col justify-center rounded-lg border border-solid border-[#4CB851] bg-[rgba(56,142,60,0.10)] p-3 sm:mt-4 sm:p-4 md:mt-[13px]">
                                                 <div className="flex w-full flex-wrap items-stretch gap-2 sm:gap-[15px]">
                                                     <img
-                                                        src="https://cdn.builder.io/api/v1/image/assets/8065c8e268d14015b7bf1ebd244b31e3/80db70d0a63d56d5c418f3105216023ddaaac175?placeholderIfAbsent=true"
+                                                        src="/storage/images/great.png"
                                                         alt="Success icon"
                                                         className="my-auto aspect-[1] w-8 shrink-0 rounded-[50%] object-contain sm:w-10 md:w-12"
                                                     />

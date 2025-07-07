@@ -15,7 +15,7 @@ class ContactSectionSeeder extends Seeder
             'email' => 'Arhemy@loanformobilehome.com',
             'telephone' => '(720) 560-1018',
             'working_hours' => "Monday to Friday: 9:00 am – 5:00 pm\nSaturday & Sunday: Closed",
-            'logo_path' => 'contact/logo.png',
+            'logo_path' => 'images/logo.svg',
         ]);
     }
 }

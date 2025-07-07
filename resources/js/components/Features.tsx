@@ -4,7 +4,9 @@ interface FeatureItem {
     id?: number;
     title: string;
     description: string;
-    image_path: string | null;
+    image_url: string | null;
+
+    image_path?: string;
 }
 
 interface Props {
@@ -16,7 +18,7 @@ const Features = ({ featuresSection, featureItems }: Props) => {
     console.log('Features Section:', featuresSection, 'Feature Items:', featureItems);
     // Map featureItems to features array
     const features = featureItems.map((item) => ({
-        image_path: item.image_path || '/images/placeholder-home.jpg',
+        image_path: item.image_url || item.image_path || '',
         title: item.title,
         description: item.description,
     }));

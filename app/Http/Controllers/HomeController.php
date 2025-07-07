@@ -55,7 +55,7 @@ class HomeController extends Controller
                 'id'          => $i->id,
                 'title'       => $i->title,
                 'description' => $i->description,
-                'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+                'image_path'   => $i->image_path ? Storage::url($i->image_path) : null,
             ])->toArray()
             : [];
 

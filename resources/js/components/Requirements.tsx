@@ -24,7 +24,7 @@ interface RequirementsProps {
 
 const Requirements = ({ requirementsSection, requirementItems }: RequirementsProps) => {
     const { t } = useTranslation();
-
+    console.log('Requirements component rendered with items:', requirementItems);
     const [activeIndex, setActiveIndex] = useState(0);
 
     // Separate amplitude configs for buttons and stroke
@@ -114,7 +114,7 @@ const Requirements = ({ requirementsSection, requirementItems }: RequirementsPro
                 {/* Desktop: Side-by-side layout with decaying oscillation */}
                 <div className="hidden flex-col gap-8 md:flex md:flex-row">
                     {/* Icons sidebar - 50% width with dynamic oscillation */}
-                    <div className="relative h-[600px] w-full md:w-1/2">
+                    <div className="relative mx-4 h-[600px] w-full md:w-1/2">
                         <div className="relative h-full w-full">
                             {requirementItems.map((item, index) => (
                                 <button

@@ -25,32 +25,32 @@ class RequirementsSectionSeeder extends Seeder
             [
                 'title' => 'Valid Colorado Drivers License or ID',
                 'description' => "A photo or scan of a non-expired driver's license or state ID.",
-                'image_path' => 'UserCheck',
+                'image_path' => 'images/file.svg',
             ],
             [
                 'title' => '2 Years of Personal Tax Returns',
                 'description' => 'The most recent two years of federal tax returns showing all income.',
-                'image_path' => 'FileText',
+                'image_path' => 'images/tax.svg',
             ],
             [
                 'title' => 'Last 2 Months Proof of Employment',
                 'description' => 'Photos or scans of pay stubs from the most recent two months.',
-                'image_path' => 'FileCheck',
+                'image_path' => 'images/proof.svg',
             ],
             [
                 'title' => 'Social Security Number or ITIN',
                 'description' => 'Your Social Security Number (SSN) or Individual Taxpayer Identification Number (ITIN) for identity verification and credit checks.',
-                'image_path' => 'CreditCard',
+                'image_path' => 'images/ssn.svg',
             ],
             [
                 'title' => 'Purchase Agreement',
                 'description' => 'A signed contract outlining the terms and conditions of the property purchase.',
-                'image_path' => 'FileKey',
+                'image_path' => 'images/handshake.svg',
             ],
             [
                 'title' => '20% Down Payment',
                 'description' => "At least 20% of the property's purchase price as a down payment.",
-                'image_path' => 'Banknote',
+                'image_path' => 'images/payment.svg',
             ],
         ];
 
