@@ -155,7 +155,7 @@ export default function RequirementsEdit({ requirementsSection }: Props) {
     };
 
     return (
-        <form onSubmit={handleRequirementsSubmit} className="space-y-6 p-6">
+        <form onSubmit={handleRequirementsSubmit} className="space-y-6 py-6">
             <TranslatedInput
                 label="Requirements Section Title"
                 value={data.title}

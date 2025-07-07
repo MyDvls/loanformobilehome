@@ -3,15 +3,12 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { ChevronDown, ChevronRight, LayoutGrid } from 'lucide-react';
-import { useState } from 'react';
+import { LayoutGrid, Newspaper } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
-    const [isWebLayoutOpen, setIsWebLayoutOpen] = useState(true);
-
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -26,7 +23,7 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="mt-10">
                 <SidebarMenu>
                     {/* Dashboard */}
                     <SidebarMenuItem>
@@ -38,25 +35,15 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
 
+                    {/** Web Pages */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => setIsWebLayoutOpen(!isWebLayoutOpen)} className="flex w-full items-center justify-between">
-                            <span>Web Layout</span>
-                            {isWebLayoutOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                        <SidebarMenuButton asChild>
+                            <Link href="/admin/pages/home">
+                                <Newspaper className="mr-2 h-4 w-4" />
+                                Web Pages
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
-
-                    {isWebLayoutOpen && (
-                        <>
-                            <SidebarMenuItem className="pl-6">
-                                <SidebarMenuButton asChild>
-                                    <Link prefetch="mount" cache-for="5m" href="/admin/pages/home">
-                                        <LayoutGrid className="mr-2 h-4 w-4" />
-                                        Web Pages
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </>
-                    )}
                 </SidebarMenu>
             </SidebarContent>
 

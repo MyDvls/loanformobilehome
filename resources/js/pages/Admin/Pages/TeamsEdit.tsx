@@ -172,7 +172,7 @@ export default function TeamEdit({ teamSection, teamMembers }: Props) {
         <AppLayout>
             <Head title="Edit Team" />
             <AdminLayout title="Edit Homepage" subtitle="Team">
-                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border px-6 py-6">
+                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border px-6 py-6 dark:border-neutral-700 dark:bg-neutral-800">
                     <TranslatedInput
                         label="Team Section Heading"
                         value={data.heading}

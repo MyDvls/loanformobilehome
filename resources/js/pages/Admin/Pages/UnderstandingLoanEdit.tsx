@@ -176,7 +176,7 @@ export default function UnderstandingLoanEdit({ understandingLoanSection }: Prop
         <AppLayout>
             <Head title="Edit Understanding Loan Section" />
             <AdminLayout title="Edit Understanding Loan Section" subtitle="Loan Information">
-                <div className="container rounded-md border px-6 py-6">
+                <div className="container">
                     {errors.error && <div className="mb-4 text-red-500">{errors.error}</div>}
                     <form onSubmit={handleSubmit}>
                         <SectionWrapper title="Loan Information">

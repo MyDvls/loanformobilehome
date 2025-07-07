@@ -110,7 +110,7 @@ export default function HomeEdit({
         <AppLayout>
             <Head title="Edit Homepage" />
             <AdminLayout title="Edit Homepage" subtitle="Web Pages" breadcrumbs={breadcrumbs}>
-                <div className="container rounded-md border px-6 py-6">
+                <div className="container">
                     <div>
                         <SectionWrapper title="Hero Section" defaultOpen={false}>
                             <HeroEdit hero={hero} heroItems={heroItems} />

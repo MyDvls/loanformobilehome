@@ -166,7 +166,7 @@ export default function ServicesEdit({ serviceSection, serviceItems }: Props) {
         <AppLayout>
             <Head title="Edit Services Section" />
             <AdminLayout title="Edit Homepage" subtitle="Services">
-                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border p-6">
+                <form onSubmit={handleSubmit} className="container space-y-6 rounded-md border p-6 dark:border-neutral-700 dark:bg-neutral-800">
                     <TranslatedInput
                         label="Services Section Heading"
                         value={data.heading}

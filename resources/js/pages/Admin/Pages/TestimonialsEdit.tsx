@@ -102,7 +102,7 @@ export default function TestimonialSectionEdit({ testimonialsSection }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
+        <form onSubmit={handleSubmit} className="space-y-6 py-6">
             <div className="flex flex-wrap gap-2 sm:gap-4">
                 {data.testimonials.map((_, index) => (
                     <button

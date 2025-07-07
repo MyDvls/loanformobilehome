@@ -151,7 +151,7 @@ export default function LoanEdit({ loanSection, loanItems }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
+        <form onSubmit={handleSubmit} className="space-y-6 py-6">
             <TranslatedInput
                 label="Loan Section Title"
                 value={data.title}

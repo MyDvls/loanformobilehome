@@ -157,7 +157,7 @@ export default function HeroEdit({ hero, heroItems }: Props) {
     };
 
     return (
-        <form onSubmit={handleHeroSubmit} className="space-y-6 p-6">
+        <form onSubmit={handleHeroSubmit} className="space-y-6 py-6">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <TranslatedInput
                     label="Slogan"

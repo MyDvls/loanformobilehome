@@ -156,7 +156,7 @@ export default function FeaturesEdit({ featuresSection, featureItems }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
+        <form onSubmit={handleSubmit} className="space-y-6 py-6">
             <TranslatedInput
                 label="Features Section Title"
                 value={data.title}
