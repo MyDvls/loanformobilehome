@@ -111,12 +111,6 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
-    --color-text-primary: #635f5c; /* Default text color */
-    --color-text-hover: #49274a; /* Hover text color */
-    --color-text-active: #49274a; /* Active text color */
-    --color-text-login: #5b3d5c; /* Login button text color */
-    --color-bg-header: #fdfaf8; /* Header background */
-    --color-purple-bar: #927d92; /* Purple bar background */
 }
 
 .dark {
@@ -152,12 +146,6 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
-    --color-text-primary: #e0e0e0; /* Light text for dark mode */
-    --color-text-hover: #bb86fc; /* Adjusted hover color */
-    --color-text-active: #bb86fc; /* Adjusted active color */
-    --color-text-login: #d1c4e9; /* Lighter login text */
-    --color-bg-header: #121212; /* Dark header background */
-    --color-purple-bar: #927d92; /* Keep purple bar consistent or adjust */
 }
 
 @layer base {
@@ -168,4 +156,49 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+.gradient-section {
+    background: linear-gradient(to right, #9f7199 0%, #764e72 30%, #3b2739 100%);
+    position: relative;
+    z-index: 0;
+}
+
+.dark .gradient-section::before {
+    background-color: #000;
+}
+
+.gradient-section::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gradient-section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 🔺 Bottom-left slant (white background) */
+.gradient-section::before {
+    top: 0;
+    background-color: white;
+    clip-path: polygon(0 0, 100% 0, 0 150px);
+    z-index: 0; /* Lower z-index to place it behind both gradients */
+}
+
+/* 🔺 Bottom-right slant (new opposite side) */
+.gradient-section::after {
+    top: 0;
+    background: linear-gradient(to right, #3b2739 0%, #764e72 70%, #9f7199 100%);
+    clip-path: polygon(0 100%, 0 0, 100% 15%, 100% 100%);
+    z-index: 1;
 }

@@ -1,8 +1,8 @@
-import { useState, useEffect, ReactNode } from 'react';
-import { usePage } from '@inertiajs/react';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import AnimateOnView from '@/components/AnimateOnView';
+import { Footer } from '@/components/Footer';
+import Header from '@/components/Header';
+import { usePage } from '@inertiajs/react';
+import { ReactNode, useEffect, useState } from 'react';
 
 interface LandingLayoutProps {
     children: ReactNode;
@@ -11,7 +11,7 @@ interface LandingLayoutProps {
 export default function LandingLayout({ children }: LandingLayoutProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { props } = usePage();
+    const { props } = usePage<{ locale: string }>();
 
     // Handle scroll effect for sticky navbar
     useEffect(() => {
@@ -33,16 +33,10 @@ export default function LandingLayout({ children }: LandingLayoutProps) {
     }, [props.url]);
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Header
-                isScrolled={isScrolled}
-                isMobileMenuOpen={isMobileMenuOpen}
-                setIsMobileMenuOpen={setIsMobileMenuOpen}
-            />
+        <div className="flex min-h-screen flex-col">
+            <Header isScrolled={isScrolled} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} locale={props.locale} />
             <main className="flex-1 pt-16">
-                <AnimateOnView>
-                    {children}
-                </AnimateOnView>
+                <AnimateOnView>{children}</AnimateOnView>
             </main>
             <Footer />
         </div>
