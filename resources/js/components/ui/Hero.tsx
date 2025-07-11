@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Link } from "@inertiajs/react";
 import { ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
