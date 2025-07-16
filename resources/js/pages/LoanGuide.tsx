@@ -22,12 +22,12 @@ const LoanGuide = ({ understandingLoanSection, locale, requirementSection, requi
     const { t } = useTranslation();
     return (
         <div className="container mx-auto px-4 py-12 pt-20">
-            <h1 className="mb-8 text-center text-3xl font-bold">{t('loanGuide.title', 'Loan Guide')}</h1>
+            <h1 className="my-8 text-center text-3xl font-bold">{t('loanGuide.title', 'Loan Guide')}</h1>
             <LoanGuideTabs tabLabels={[t('loanGuide.howToGet', 'How to Get Your Loan'), t('loanGuide.understanding', 'Understanding Your Loan')]}>
                 {/* Tab 1: How to Get Your Loan */}
                 <LandingLayout>
                     <Head title="How Yo Get Your Loan" />
-                    <div className="mt-[-250px] scale-80 space-y-12">
+                    <div className="-mt-15 scale-95 space-y-12">
                         {/* If you have ProcessSteps data, pass it here. For now, Requirements only. */}
                         <ProcessSteps loanSection={loanSection} loanItems={loanItems} />
                         <Requirements requirementsSection={requirementSection} requirementItems={requirementsData} />
