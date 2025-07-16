@@ -1,45 +1,64 @@
-import { router } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
-interface Language {
-    code: 'en' | 'es';
-    label: string;
-    flag: string;
-}
+const LANGUAGES = [
+    { code: 'en', label: 'En', flag: 'https://flagcdn.com/w20/us.png' },
+    { code: 'es', label: 'Es', flag: 'https://flagcdn.com/w20/es.png' },
+    { code: 'fr', label: 'Fr', flag: 'https://flagcdn.com/w20/fr.png' },
+    { code: 'de', label: 'De', flag: 'https://flagcdn.com/w20/de.png' },
+    { code: 'it', label: 'It', flag: 'https://flagcdn.com/w20/it.png' },
+    { code: 'hi', label: 'hi', flag: 'https://flagcdn.com/w20/in.png' },
+];
 
-interface LanguageSwitcherProps {
-    className?: string;
-    currentLocale: string;
-}
+const GOOGLE_TRANSLATE_ID = 'google_translate_element';
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', currentLocale }) => {
-    const { i18n } = useTranslation();
+const LanguageSwitcher: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    console.log('LanguageSwitcher props:', { currentLocale });
+    const [currentLang, setCurrentLang] = useState(LANGUAGES[0]);
 
-    const languages: Language[] = [
-        { code: 'en', label: 'En', flag: 'https://flagcdn.com/w20/us.png' },
-        { code: 'es', label: 'Es', flag: 'https://flagcdn.com/w20/es.png' },
-    ];
+    // Inject Google Translate script and widget
+    useEffect(() => {
+        if (!document.getElementById('google-translate-script')) {
+            const script = document.createElement('script');
+            script.id = 'google-translate-script';
+            script.type = 'text/javascript';
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(script);
+        }
+        (window as any).googleTranslateElementInit = function () {
+            if (!document.getElementById(GOOGLE_TRANSLATE_ID)) return;
+            new (window as any).google.translate.TranslateElement(
+                {
+                    pageLanguage: 'en',
+                    autoDisplay: false,
+                },
+                GOOGLE_TRANSLATE_ID,
+            );
+        };
+    }, []);
 
-    const currentLang = languages.find((lang) => lang.code === currentLocale) || languages[0];
-    console.log('Current language:', currentLang);
-    const toggleDropdown = () => setIsOpen((prev) => !prev);
+    // Hide the default Google Translate UI
+    useEffect(() => {
+        const hideWidget = () => {
+            const widget = document.getElementById(GOOGLE_TRANSLATE_ID);
+            if (widget) {
+                widget.style.display = 'none';
+            }
+        };
+        setTimeout(hideWidget, 1500);
+    }, []);
 
-    const selectLanguage = (lang: Language) => {
-        i18n.changeLanguage(lang.code);
+    // Handle language selection
+    const selectLanguage = (lang: { code: string; label: string; flag: string }) => {
         setIsOpen(false);
-        router.post(
-            route('language.switch'),
-            { locale: lang.code },
-            {
-                preserveState: false,
-                preserveScroll: true,
-            },
-        );
+        setCurrentLang(lang);
+        // Find the Google Translate select and set its value
+        const select = document.querySelector('select.goog-te-combo') as HTMLSelectElement;
+        if (select) {
+            select.value = lang.code;
+            select.dispatchEvent(new Event('change'));
+        }
     };
 
     useEffect(() => {
@@ -53,7 +72,6 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', cur
                 setIsOpen(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
@@ -66,10 +84,12 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', cur
     };
 
     return (
-        <div className={`relative ${className}`}>
+        <div className="relative">
+            {/* Hidden Google Translate widget */}
+            <div id={GOOGLE_TRANSLATE_ID} style={{ display: 'none' }} />
             <button
                 type="button"
-                onClick={toggleDropdown}
+                onClick={() => setIsOpen((prev) => !prev)}
                 ref={buttonRef}
                 className="flex min-h-8 w-[61px] flex-col items-stretch justify-center rounded-2xl border border-solid border-[#635F5C] px-2 py-1 text-center whitespace-nowrap text-[#635F5C] transition-colors duration-200 hover:bg-gray-50"
                 aria-expanded={isOpen}
@@ -85,22 +105,22 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '', cur
                     <span className="my-auto self-stretch text-[#635F5C]">{currentLang.label}</span>
                 </div>
             </button>
-
             {isOpen && (
                 <div
                     ref={dropdownRef}
                     onKeyDown={handleKeyDown}
-                    className="absolute top-full left-0 z-10 mt-1 w-full rounded-lg border border-[#635F5C] bg-white shadow-lg"
+                    className="absolute top-full left-0 z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-[#635F5C] bg-white shadow-lg"
+                    style={{ minWidth: 110 }}
                 >
                     <ul role="listbox" className="py-1">
-                        {languages.map((language) => (
+                        {LANGUAGES.map((language) => (
                             <li key={language.code}>
                                 <button
                                     type="button"
                                     onClick={() => selectLanguage(language)}
-                                    className={`flex w-full items-center gap-2 px-2 py-1 text-left text-[#635F5C] hover:bg-gray-100 ${currentLocale === language.code ? 'font-bold' : ''}`}
+                                    className={`flex w-full items-center gap-2 px-2 py-1 text-left text-[#635F5C] hover:bg-gray-100 ${currentLang.code === language.code ? 'font-bold' : ''}`}
                                     role="option"
-                                    aria-selected={currentLocale === language.code}
+                                    aria-selected={currentLang.code === language.code}
                                 >
                                     <img src={language.flag} alt={`${language.label} flag`} className="aspect-[1] w-[18px] object-contain" />
                                     <span>{language.label}</span>

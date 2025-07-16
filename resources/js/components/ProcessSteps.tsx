@@ -208,7 +208,13 @@ const ProcessSteps = ({ loanSection, loanItems }: Props) => {
                                                     {steps[currentStep].title}
                                                 </h2>
                                                 <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200">
-                                                    {mainText} <TypeAnimation text={lastFewWords} />
+                                                    {mainText}
+                                                    {/* Disabled because google translate doesnt work with it */}
+                                                    {/* <TypeAnimation text={lastFewWords} /> */}
+                                                    <span className="font-medium text-gray-700 dark:text-white">
+                                                        {lastFewWords}
+                                                        <span className="ml-0.5 inline-block h-5 w-0.5 animate-pulse bg-gray-700 dark:bg-white" />
+                                                    </span>
                                                 </p>
 
                                                 <div className="mt-8 flex justify-center gap-4 md:hidden">

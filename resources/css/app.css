@@ -202,3 +202,8 @@
     clip-path: polygon(0 100%, 0 0, 100% 15%, 100% 100%);
     z-index: 1;
 }
+
+/* Hide Google Translate top banner */
+.skiptranslate {
+    display: none !important;
+}

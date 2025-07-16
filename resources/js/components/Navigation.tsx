@@ -58,7 +58,7 @@ export default function Navigation() {
                 <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
                     {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                 </button>
-                <LanguageSwitcher currentLocale={props.locale} />
+                <LanguageSwitcher />
                 <Link
                     href="/login"
                     className={`text-sm font-medium transition-colors duration-200 ${

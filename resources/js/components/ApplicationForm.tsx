@@ -231,16 +231,20 @@ const ApplicationForm = () => {
                                 )}
                             />
                             <FormField
+                                translate="no"
+                                className="notranslate"
                                 control={form.control}
                                 name="generationCode"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step1.generationCode')}</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
+                                    <FormItem translate="no" className="notranslate">
+                                        <FormLabel translate="no" className="notranslate">
+                                            {t('apply.form.step1.generationCode')}
+                                        </FormLabel>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step1.selectGeneration')} />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent translate="no" className="notranslate">
                                                 <SelectItem value="customer.generationCode.none">{t('apply.form.step1.generation.none')}</SelectItem>
                                                 <SelectItem value="customer.generationCode.jr">{t('apply.form.step1.generation.jr')}</SelectItem>
                                                 <SelectItem value="customer.generationCode.sr">{t('apply.form.step1.generation.sr')}</SelectItem>
@@ -352,16 +356,20 @@ const ApplicationForm = () => {
                                 )}
                             />
                             <FormField
+                                translate="no"
+                                className="notranslate"
                                 control={form.control}
                                 name="state"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step2.state')}</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
+                                    <FormItem translate="no" className="notranslate">
+                                        <FormLabel translate="no" className="notranslate">
+                                            {t('apply.form.step2.state')}
+                                        </FormLabel>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step2.selectState')} />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent translate="no" className="notranslate">
                                                 {states.map((state) => (
                                                     <SelectItem key={state} value={state}>
                                                         {state}
@@ -473,16 +481,20 @@ const ApplicationForm = () => {
                                 )}
                             />
                             <FormField
+                                translate="no"
+                                className="notranslate"
                                 control={form.control}
                                 name="incomeFrequency"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step3.incomeFrequency')}</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
+                                    <FormItem translate="no" className="notranslate">
+                                        <FormLabel translate="no" className="notranslate">
+                                            {t('apply.form.step3.incomeFrequency')}
+                                        </FormLabel>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step3.selectFrequency')} />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent translate="no" className="notranslate">
                                                 <SelectItem value="customerEmployer.incomeFrequency.weekly">
                                                     {t('apply.form.step3.frequency.weekly')}
                                                 </SelectItem>
@@ -531,16 +543,20 @@ const ApplicationForm = () => {
                                 )}
                             />
                             <FormField
+                                translate="no"
+                                className="notranslate"
                                 control={form.control}
                                 name="empState"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step3.empState')}</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
+                                    <FormItem translate="no" className="notranslate">
+                                        <FormLabel translate="no" className="notranslate">
+                                            {t('apply.form.step3.empState')}
+                                        </FormLabel>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step3.selectState')} />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent translate="no" className="notranslate">
                                                 {states.map((state) => (
                                                     <SelectItem key={state} value={state}>
                                                         {state}
@@ -600,16 +616,20 @@ const ApplicationForm = () => {
                                 )}
                             />
                             <FormField
+                                translate="no"
+                                className="notranslate"
                                 control={form.control}
                                 name="collateralState"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralState')}</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
+                                    <FormItem translate="no" className="notranslate">
+                                        <FormLabel translate="no" className="notranslate">
+                                            {t('apply.form.step4.collateralState')}
+                                        </FormLabel>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step4.selectState')} />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent translate="no" className="notranslate">
                                                 {states.map((state) => (
                                                     <SelectItem key={state} value={state}>
                                                         {state}
