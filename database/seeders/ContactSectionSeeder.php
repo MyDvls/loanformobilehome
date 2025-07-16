@@ -11,7 +11,7 @@ class ContactSectionSeeder extends Seeder
     {
         ContactSection::create([
             'company_name' => 'Mobile Fund Services',
-            'address' => '324 Main St. Unit D. Lyons, CO 80540',
+            'address' => '8781 Sheridan Blvd # 6005 Westminster, CO 80003 United States',
             'email' => 'Arhemy@loanformobilehome.com',
             'telephone' => '(720) 560-1018',
             'working_hours' => "Monday to Friday: 9:00 am – 5:00 pm\nSaturday & Sunday: Closed",

@@ -134,22 +134,22 @@ export const Footer: React.FC = () => {
                         <h3 className="font-semibold text-[#FDFAF8]">{t('footer.support')}</h3>
                         <ul className="mt-6 flex w-full flex-col items-stretch justify-center space-y-3 font-normal">
                             <li>
-                                <a href="#help" className="text-[#FDFAF8] hover:underline">
-                                    {t('footer.help')}
-                                </a>
-                            </li>
-                            <li>
                                 <a href="/contact" className="text-[#FDFAF8] hover:underline">
                                     {t('footer.contact')}
                                 </a>
                             </li>
                             <li>
-                                <a href="/privacy" className="text-[#FDFAF8] hover:underline">
+                                <a href="/privacy-policy.pdf" className="text-[#FDFAF8] hover:underline" target="_blank" rel="noopener noreferrer">
                                     {t('footer.privacy')}
                                 </a>
                             </li>
                             <li>
-                                <a href="/terms" className="text-[#FDFAF8] hover:underline">
+                                <a
+                                    href="/terms-and-conditions.pdf"
+                                    className="text-[#FDFAF8] hover:underline"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     {t('footer.terms')}
                                 </a>
                             </li>

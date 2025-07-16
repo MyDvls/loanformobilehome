@@ -47,13 +47,12 @@ class TranslationService
 
     private function callGoogleTranslate(string $text, string $targetLanguage, string $sourceLanguage): string
     {
-        $response = Http::post('https://translation.googleapis.com/language/translate/v2', [
-            'key' => config('services.google_translate.key'),
+        $response = Http::post('https://translation.googleapis.com/language/translate/v2?key=' . config('services.google_translate.key'), [
             'q' => $text,
             'source' => $sourceLanguage,
             'target' => $targetLanguage,
+            'format' => 'text', // optional, but recommended
         ]);
-
         if ($response->successful()) {
             return $response->json()['data']['translations'][0]['translatedText'];
         }

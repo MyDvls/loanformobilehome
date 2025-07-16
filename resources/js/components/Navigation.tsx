@@ -23,19 +23,34 @@ export default function Navigation() {
                     { path: '/team', label: 'nav.team' },
                     { path: '/investors', label: 'nav.investors' },
                     { path: '/contact', label: 'nav.contact' },
-                ].map(({ path, label }) => (
-                    <Link
-                        prefetch="mount"
-                        cache-for="5m"
-                        key={path}
-                        href={path}
-                        className={`text-sm font-medium transition-colors duration-200 ${
-                            isActive(path) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
-                        }`}
-                    >
-                        {t(label)}
-                    </Link>
-                ))}
+                    { path: 'https://manufacturedmls.com', label: 'nav.home_worth' },
+                ].map(({ path, label }) =>
+                    path.startsWith('http') ? (
+                        <a
+                            key={path}
+                            href={path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`text-sm font-medium transition-colors duration-200 ${
+                                isActive(path) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
+                            }`}
+                        >
+                            {t(label)}
+                        </a>
+                    ) : (
+                        <Link
+                            prefetch="mount"
+                            cache-for="5m"
+                            key={path}
+                            href={path}
+                            className={`text-sm font-medium transition-colors duration-200 ${
+                                isActive(path) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600 dark:text-gray-400'
+                            }`}
+                        >
+                            {t(label)}
+                        </Link>
+                    ),
+                )}
             </div>
 
             {/* Right group: Language / Theme / Auth */}

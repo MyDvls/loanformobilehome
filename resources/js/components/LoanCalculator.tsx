@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 const LoanCalculator = () => {
     const { t } = useTranslation();
     console.log(t('loanCalculator.loanAmount'));
-    const [loanAmount, setLoanAmount] = useState('120000');
-    const [downPayment, setDownPayment] = useState('10000');
-    const [termPeriod, setTermPeriod] = useState('12');
-    const [interestRate, setInterestRate] = useState('5');
-    const [monthlyPayment, setMonthlyPayment] = useState('9930.97');
+    const [loanAmount, setLoanAmount] = useState('60000');
+    const [downPayment, setDownPayment] = useState('14000');
+    const [termPeriod, setTermPeriod] = useState('180');
+    const [interestRate, setInterestRate] = useState('12');
+    const [monthlyPayment, setMonthlyPayment] = useState('552');
 
     const calculateLoan = (event) => {
         event.preventDefault();

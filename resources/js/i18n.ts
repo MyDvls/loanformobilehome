@@ -13,6 +13,7 @@ const resources = {
             'nav.contact': 'Contact',
             'nav.login': 'Login',
             'nav.apply': 'Apply Now',
+            'nav.home_worth': 'What’s My Home Worth?',
 
             'investors.title': 'Investors',
 
@@ -43,7 +44,7 @@ const resources = {
             'apply.form.step1.firstName': 'First Name',
             'apply.form.step1.middleName': 'Middle Name',
             'apply.form.step1.lastName': 'Last Name',
-            'apply.form.step1.generationCode': 'Generation Code',
+            'apply.form.step1.generationCode': 'Suffix',
             'apply.form.step1.selectGeneration': 'Select generation code',
             'apply.form.step1.generation.none': 'None',
             'apply.form.step1.generation.jr': 'Jr.',
@@ -147,6 +148,7 @@ const resources = {
             'nav.contact': 'Contacto',
             'nav.login': 'Iniciar Sesión',
             'nav.apply': 'Aplicar Ahora',
+            'nav.home_worth': '¿Cuánto vale mi casa?',
 
             //Contact Page
             contact: {
@@ -175,7 +177,7 @@ const resources = {
             'apply.form.step1.firstName': 'Nombre',
             'apply.form.step1.middleName': 'Segundo Nombre',
             'apply.form.step1.lastName': 'Apellido',
-            'apply.form.step1.generationCode': 'Código de Generación',
+            'apply.form.step1.generationCode': 'sufijo',
             'apply.form.step1.selectGeneration': 'Seleccione el código de generación',
             'apply.form.step1.generation.none': 'Ninguno',
             'apply.form.step1.generation.jr': 'Jr.',

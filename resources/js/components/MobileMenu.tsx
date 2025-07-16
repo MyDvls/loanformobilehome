@@ -78,6 +78,15 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 >
                     {t('nav.contact')}
                 </Link>
+                <a
+                    href="https://manufacturedmls.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-lg font-medium ${isActive('/contact') ? 'text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
+                    onClick={onClose}
+                >
+                    {t('nav.home_worth')}
+                </a>
                 <Link
                     prefetch="mount"
                     cache-for="5m"

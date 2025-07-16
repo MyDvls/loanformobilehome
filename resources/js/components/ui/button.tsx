@@ -17,7 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props 
 }) => {
   const baseClasses = cn(
-    "flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg rounded-lg font-semibold shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)]",
+    "flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg rounded-lg font-semibold shadow-[0px_2px_4px_0px_rgba(0,0,0,0.20),0px_4px_5px_0px_rgba(0,0,0,0.14),0px_1px_10px_0px_rgba(0,0,0,0.12)] cursor-pointer",
     size === 'icon' ? 'h-7 w-7 p-0' : 'min-h-12 px-4 py-3 text-base' // Adjust for icon size
   );
 

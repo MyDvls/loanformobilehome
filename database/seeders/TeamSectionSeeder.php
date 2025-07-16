@@ -40,5 +40,21 @@ class TeamSectionSeeder extends Seeder
             'image_path' => 'images/cord-cfo.jpg',
             'order' => 2,
         ]);
+        TeamMember::create([
+            'team_section_id' => $section->id,
+            'name' => 'Chance Schaeffer',
+            'role' => 'Managing Broker',
+            'bio' => 'Navigating life’s intricate fabric, choices unfold paths to the extraordinary, demanding creativity, curiosity, and courage for a truly fulfilling journey.',
+            'image_path' => 'images/logo.svg',
+            'order' => 2,
+        ]);
+        TeamMember::create([
+            'team_section_id' => $section->id,
+            'name' => 'Arhemy Ozuna',
+            'role' => 'Office Manager',
+            'bio' => 'Arhemy Ozuna is responsible for customer service, policy management, and payment follow-ups at Mobile Fund Services Llc. She ensures all insurance policies are kept up to date and handles collections when necessary. As a bilingual professional fluent in both English and Spanish, she serves as the main point of contact for clients. Arhemy is committed to maintaining clear, effective communication and resolving day-to-day issues with efficiency and professionalism. She holds a degree in Business Administration and Finance from Universidad Panamericana in Mexico City.',
+            'image_path' => 'images/arhemy.jpg',
+            'order' => 2,
+        ]);
     }
 }
