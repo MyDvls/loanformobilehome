@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoanSection;
+use App\Models\RequirementSection;
 use App\Models\UnderstandingLoanSection;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class UnderstandingLoanController extends Controller
@@ -15,6 +18,8 @@ class UnderstandingLoanController extends Controller
         $cacheKey = "page.understanding-loan.payload.{$locale}";
 
         $sec = UnderstandingLoanSection::first();
+        $requirements       = RequirementSection::with(['requirementItems' => fn($q) => $q->orderBy('id')])->first();
+        $loanSection        = LoanSection::with(['loanItems' => fn($q) => $q->orderBy('id')])->first();
 
         $data = $sec ? [
             'title'    => $sec->title,
@@ -39,6 +44,26 @@ class UnderstandingLoanController extends Controller
             ],
         ] : null;
 
+        $requirementsData     = $requirements ? ['title' => $requirements->title, 'subtitle' => $requirements->subtitle] : null;
+        $requirementItemsData = $requirements
+            ? $requirements->requirementItems->map(fn($i) => [
+                'id'          => $i->id,
+                'title'       => $i->title,
+                'description' => $i->description,
+                'image_path'   => $i->image_path ? Storage::url($i->image_path) : null,
+            ])->toArray()
+            : [];
+
+        $loanData      = $loanSection ? ['title' => $loanSection->title] : null;
+        $loanItemsData = $loanSection
+            ? $loanSection->loanItems->map(fn($i) => [
+                'id'          => $i->id,
+                'title'       => $i->title,
+                'description' => $i->description,
+                'image_url'   => $i->image_path ? Storage::url($i->image_path) : null,
+            ])->toArray()
+            : [];
+
         if ($locale !== 'en' && $data) {
             $data = $translator->translateArray($data, $locale);
         }
@@ -46,8 +71,12 @@ class UnderstandingLoanController extends Controller
         $props = [
             'understandingLoanSection' => $data,
             'locale'                   => $locale,
+            'requirementSection' => $requirementsData,
+            'requirementsData'  => $requirementItemsData,
+            'loanSection' => $loanData,
+            'loanItems' => $loanItemsData,
         ];
 
-        return Inertia::render('UnderstandingLoan', $props);
+        return Inertia::render('LoanGuide', $props);
     }
 }

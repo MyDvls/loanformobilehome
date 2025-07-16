@@ -19,7 +19,7 @@ export default function Navigation() {
                 {[
                     { path: '/', label: 'nav.home' },
                     { path: '/services', label: 'nav.services' },
-                    { path: '/understanding-loan', label: 'nav.understanding-loan' },
+                    { path: '/loan-guide', label: 'nav.loan_guide' },
                     { path: '/team', label: 'nav.team' },
                     { path: '/investors', label: 'nav.investors' },
                     { path: '/contact', label: 'nav.contact' },

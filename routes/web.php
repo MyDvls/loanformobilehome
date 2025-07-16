@@ -32,7 +32,7 @@ use Inertia\Inertia;
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
-Route::get('/understanding-loan', [UnderstandingLoanController::class, 'index'])->name('understanding-loan');
+Route::get('/loan-guide', [UnderstandingLoanController::class, 'index'])->name('loan-guide');
 Route::get('/team', [TeamController::class, 'index'])->name('team');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

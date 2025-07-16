@@ -14,6 +14,7 @@ const resources = {
             'nav.login': 'Login',
             'nav.apply': 'Apply Now',
             'nav.home_worth': 'What’s My Home Worth?',
+            'nav.loan_guide': 'Loan Guide',
 
             'investors.title': 'Investors',
 
@@ -125,6 +126,7 @@ const resources = {
             'footer.friday': 'Friday: 9:00 am – 5:00 pm',
             'footer.saturday': 'Saturday: Closed',
             'footer.sunday': 'Sunday: Closed',
+            'footer.loan_guide': 'Loan Guide',
 
             loanCalculator: {
                 title: 'Loan Details',
@@ -149,6 +151,7 @@ const resources = {
             'nav.login': 'Iniciar Sesión',
             'nav.apply': 'Aplicar Ahora',
             'nav.home_worth': '¿Cuánto vale mi casa?',
+            'nav.loan_guide': 'Guía de Préstamos',
 
             //Contact Page
             contact: {
@@ -246,6 +249,7 @@ const resources = {
             'footer.friday': 'Viernes: 9:00 a. m. – 5:00 p. m.',
             'footer.saturday': 'Sábado: Cerrado',
             'footer.sunday': 'Domingo: Cerrado',
+            'footer.loan_guide': 'Guía de Préstamos',
 
             loanCalculator: {
                 title: 'Detalles del Préstamo',

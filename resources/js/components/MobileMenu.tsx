@@ -54,6 +54,15 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <Link
                     prefetch="mount"
                     cache-for="5m"
+                    href="/loan-guide"
+                    className={`text-lg font-medium ${isActive('/loan-guide') ? 'text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
+                    onClick={onClose}
+                >
+                    {t('nav.loan_guide')}
+                </Link>
+                <Link
+                    prefetch="mount"
+                    cache-for="5m"
                     href="/team"
                     className={`text-lg font-medium ${isActive('/team') ? 'text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
                     onClick={onClose}

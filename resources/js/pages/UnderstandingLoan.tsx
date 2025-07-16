@@ -100,8 +100,8 @@ const UnderstandingLoan = ({ understandingLoanSection, locale }: UnderstandingLo
     return (
         <LandingLayout>
             <Head title={pageTitle} />
-            <section className="relative overflow-visible py-12 sm:py-16 md:py-20">
-                <div className="relative z-10 container mx-auto px-4 py-20 sm:px-6 md:px-8">
+            <section className="relative overflow-visible">
+                <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-8">
                     <AnimateOnView delay={0.2}>
                         <h1 className="mb-4 text-center text-3xl font-bold text-gray-800 sm:text-3xl md:text-4xl lg:text-5xl dark:text-white">
                             {pageTitle}

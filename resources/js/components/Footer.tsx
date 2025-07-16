@@ -107,9 +107,10 @@ export const Footer: React.FC = () => {
                                     {t('footer.contact')}
                                 </a>
                             </li>
+                            
                             <li>
-                                <a href="/understanding-loan" className="text-[#FDFAF8] hover:underline">
-                                    {t('footer.how')}
+                                <a href="/loan-guide" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.loan_guide')}
                                 </a>
                             </li>
                             <li>
