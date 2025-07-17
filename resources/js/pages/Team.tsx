@@ -51,7 +51,7 @@ export default function Team({ teamSection, teamMembers }: Props) {
 
                     {/* Team member grid */}
                     {teamMembers.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
                             {teamMembers.map((member, index) => (
                                 <AnimateOnView key={member.id} delay={0.3 + index * 0.1}>
                                     <motion.div
