@@ -130,26 +130,23 @@ const UnderstandingLoan = ({ understandingLoanSection, locale }: UnderstandingLo
                                         <div className="mt-6 w-full max-w-full text-sm leading-6 font-normal sm:mt-8 sm:text-base">
                                             <div className="flex w-full gap-3 sm:gap-4 md:gap-[18px]">
                                                 <ArrowRight size={20} className="text-black dark:text-white" />
-                                                <div>
-                                                    <strong>Principal</strong>
-                                                    <br />
-                                                    {section1Data.principal}
+                                                <div className="space-y-1">
+                                                    <div className="font-bold">Principal</div>
+                                                    <div>{section1Data.principal}</div>
                                                 </div>
                                             </div>
                                             <div className="mt-6 flex w-full gap-3 sm:mt-8 sm:gap-4 md:gap-[17px]">
                                                 <ArrowRight size={20} className="text-black dark:text-white" />
-                                                <div>
-                                                    <strong>Interest</strong>
-                                                    <br />
-                                                    {section1Data.interest}
+                                                <div className="space-y-1">
+                                                    <div className="font-bold">Interest</div>
+                                                    <div>{section1Data.interest}</div>
                                                 </div>
                                             </div>
                                             <div className="mt-6 flex w-full gap-3 sm:mt-8 sm:gap-4 md:gap-[17px]">
                                                 <ArrowRight size={20} className="text-black dark:text-white" />
-                                                <div>
-                                                    <strong>Escrow</strong>
-                                                    <br />
-                                                    {section1Data.escrow}
+                                                <div className="space-y-1">
+                                                    <div className="font-bold">Escrow</div>
+                                                    <div>{section1Data.escrow}</div>
                                                 </div>
                                             </div>
                                         </div>

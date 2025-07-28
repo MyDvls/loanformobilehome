@@ -413,7 +413,7 @@ class PageBuilderController extends Controller
                 'teamMembers' => $teamMembers->map(function ($item) {
                     return [
                         'id' => $item->id,
-                        'image_path' => $item->image_path,
+                        'image_path' => $item->image_path ? Storage::path($item->image_path) : null,
                         'name' => $item->name,
                         'role' => $item->role,
                         'bio' => $item->bio,

@@ -1,11 +1,13 @@
 import { useAppearance } from '@/hooks/use-appearance';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, Moon, Sun } from 'lucide-react';
+import { ArrowRight, Menu, Moon, Sun } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import { Logo } from './Logo';
 import MobileMenu from './MobileMenu';
 import Navigation from './Navigation';
+import { Button } from './ui/button';
 
 interface HeaderProps {
     isScrolled: boolean;
@@ -21,6 +23,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
         contactSection?: { logo_url?: string };
     }>();
     const logoUrl = props.contactSection?.logo_url;
+    const { t } = useTranslation();
 
     return (
         <header
@@ -37,16 +40,39 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
 
                 {/* Center & Right: Navigation (hidden on mobile) */}
                 <Navigation />
-
+                <div className="">
+                    <LanguageSwitcher />
+                </div>
                 {/* Right (mobile only): Language/Theme toggle + menu */}
                 <div className="my-auto flex items-center gap-2 self-stretch lg:hidden">
                     <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
                         {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                     </button>
-                    <LanguageSwitcher />
                     <button className="p-2 text-gray-600" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Toggle menu">
                         <Menu size={24} />
                     </button>
+                </div>
+
+                {/* Right group: Language / Theme / Auth */}
+                <div className="hidden items-center gap-x-2 lg:flex">
+                    <div className="flex flex-1 justify-center">
+                        <button onClick={() => updateAppearance(appearance === 'light' ? 'dark' : 'light')}>
+                            {appearance === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                        </button>
+                    </div>
+                    <div className="flex flex-1 justify-center">
+                        <Link href="/login" className="text-sm font-medium transition-colors duration-200">
+                            {t('nav.login')}
+                        </Link>
+                    </div>
+                    <div className="flex flex-1 justify-center">
+                        <Link prefetch="mount" cache-for="5m" href="/apply">
+                            <Button variant="primary">
+                                {t('nav.apply')}
+                                <ArrowRight className="h-5 w-5" />
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Mobile menu */}

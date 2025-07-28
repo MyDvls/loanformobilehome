@@ -204,6 +204,38 @@
 }
 
 /* Hide Google Translate top banner */
-.skiptranslate {
+/* .skiptranslate {
     display: none !important;
+} */
+.goog-te-gadget-icon {
+    display: none !important;
+}
+
+#\:0\.targetLanguage > span > a > span:nth-child(5) {
+    display: none !important;
+}
+
+.goog-te-gadget-simple {
+    border: 0px !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+}
+.goog-te-gadget-simple span {
+    border-left: none !important;
+}
+
+#google_translate_element .goog-te-gadget-simple a span {
+    display: none; /* Hide the default "Select Language" text */
+}
+
+#google_translate_element .goog-te-gadget-simple a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background: url('/images/1.png') no-repeat center center;
+    background-size: contain;
 }
