@@ -257,7 +257,9 @@ const ApplicationForm = () => {
                                 name="firstName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.firstName')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.firstName')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -283,7 +285,9 @@ const ApplicationForm = () => {
                                 name="lastName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.lastName')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.lastName')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -299,7 +303,7 @@ const ApplicationForm = () => {
                                 render={({ field }) => (
                                     <FormItem translate="no" className="notranslate">
                                         <FormLabel translate="no" className="notranslate">
-                                            {t('apply.form.step1.generationCode')}
+                                            {t('apply.form.step1.generationCode')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
@@ -328,7 +332,9 @@ const ApplicationForm = () => {
                                 name="ssn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.ssn')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.ssn')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="text" placeholder="XXX-XX-XXXX" />
                                         </FormControl>
@@ -341,7 +347,9 @@ const ApplicationForm = () => {
                                 name="driverLicense"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.driverLicense')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.driverLicense')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -354,7 +362,9 @@ const ApplicationForm = () => {
                                 name="dateOfBirth"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.dateOfBirth')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.dateOfBirth')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="date" />
                                         </FormControl>
@@ -367,7 +377,9 @@ const ApplicationForm = () => {
                                 name="gender"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step1.gender')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step1.gender')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-4">
                                             <div className="flex items-center space-x-2">
                                                 <RadioGroupItem value="customer.gender.female" id="female" />
@@ -388,14 +400,16 @@ const ApplicationForm = () => {
             case 2:
                 return (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-semibold">{t('apply.form.step2.title')}</h2>
+                        <h2 className="text-2xl font-semibold">{t('apply.form.step2.title')} </h2>
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <FormField
                                 control={form.control}
                                 name="address"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step2.address')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step2.address')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -408,7 +422,9 @@ const ApplicationForm = () => {
                                 name="city"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step2.city')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step2.city')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -424,7 +440,7 @@ const ApplicationForm = () => {
                                 render={({ field }) => (
                                     <FormItem translate="no" className="notranslate">
                                         <FormLabel translate="no" className="notranslate">
-                                            {t('apply.form.step2.state')}
+                                            {t('apply.form.step2.state')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
@@ -447,7 +463,9 @@ const ApplicationForm = () => {
                                 name="zipCode"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step2.zipCode')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step2.zipCode')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -460,7 +478,9 @@ const ApplicationForm = () => {
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step2.phone')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step2.phone')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="tel" placeholder="1234567890" />
                                         </FormControl>
@@ -473,7 +493,9 @@ const ApplicationForm = () => {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step2.email')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step2.email')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="email" />
                                         </FormControl>
@@ -494,7 +516,9 @@ const ApplicationForm = () => {
                                 name="companyName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step3.companyName')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step3.companyName')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -507,7 +531,9 @@ const ApplicationForm = () => {
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step3.personalTitle')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step3.personalTitle')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -520,7 +546,9 @@ const ApplicationForm = () => {
                                 name="hireDate"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step3.hireDate')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step3.hireDate')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="date" />
                                         </FormControl>
@@ -533,7 +561,9 @@ const ApplicationForm = () => {
                                 name="income"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step3.income')}</FormLabel>
+                                        <FormLabel>
+                                            {t('apply.form.step3.income')} <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} type="number" step="0.01" />
                                         </FormControl>
@@ -549,7 +579,7 @@ const ApplicationForm = () => {
                                 render={({ field }) => (
                                     <FormItem translate="no" className="notranslate">
                                         <FormLabel translate="no" className="notranslate">
-                                            {t('apply.form.step3.incomeFrequency')}
+                                            {t('apply.form.step3.incomeFrequency')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
@@ -951,7 +981,7 @@ const ApplicationForm = () => {
 
                 <div className="mt-8 flex justify-between">
                     {step > 1 && (
-                        <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
+                        <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
                             {t('apply.form.previous')}
                         </Button>
                     )}
