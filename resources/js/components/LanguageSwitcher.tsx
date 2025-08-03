@@ -43,7 +43,7 @@ const LanguageSwitcher: React.FC = () => {
         <div
             style={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'end',
                 alignItems: 'center',
                 width: '100%',
             }}

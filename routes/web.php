@@ -39,6 +39,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/investors', fn() => Inertia::render('Investors'))->name('investors');
 Route::get('/login', fn() => Inertia::render('Login'))->name('login');
 Route::get('/apply', fn() => Inertia::render('Apply'))->name('apply');
+Route::get('/apply/mmls', fn() => Inertia::render('MMLSApplication'))->name('apply.mmls');
 Route::post('/apply', [ApplyController::class, 'apply'])->name('apply.store');
 Route::get('/about', fn() => Inertia::render('About'))->name('about');
 Route::get('/privacy', fn() => Inertia::render('Privacy'))->name('privacy');
