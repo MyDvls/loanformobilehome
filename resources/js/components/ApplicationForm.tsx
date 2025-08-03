@@ -143,6 +143,7 @@ const ApplicationForm = () => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const { toast } = useToast();
 
     const form = useForm({
@@ -183,6 +184,66 @@ const ApplicationForm = () => {
             backgroundCheckAccepted: false,
         },
     });
+
+    const renderThankYouPage = () => {
+        return (
+            <div className="mx-auto max-w-2xl space-y-8 py-12 text-center">
+                <div className="space-y-4">
+                    <h1 className="text-3xl font-bold text-green-600 dark:text-[#57B8A6]">Thank You!</h1>
+                    <p className="text-lg text-gray-700 dark:text-gray-300">
+                        Thank you for submitting an application for your mobile home! We will be in touch with you shortly. Please feel free to browse
+                        to search for homes and valuations.
+                    </p>
+                </div>
+
+                <div className="space-y-6">
+                    {/* ManufacturedMLS Card */}
+                    <div className="rounded-lg border border-blue-200 bg-blue-50 p-6 dark:border-[#57B8A6]/30 dark:bg-[#0A2A22]">
+                        <h3 className="mb-2 text-lg font-semibold text-blue-800 dark:text-[#57B8A6]">Find Mobile Home Valuations and Listings</h3>
+                        <p className="mb-4 text-blue-700 dark:text-[#57B8A6]/90">Find mobile home valuations and listings at manufacturedmls.com</p>
+                        <a
+                            href="https://manufacturedmls.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center rounded-lg bg-[#57B8A6] px-6 py-3 font-medium text-white transition-colors hover:bg-[#4CAE9B] dark:bg-[#57B8A6] dark:hover:bg-[#4CAE9B]"
+                        >
+                            Visit ManufacturedMLS.com
+                            <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    {/* Loan For Mobile Home Card */}
+                    <div className="rounded-lg border border-purple-200 bg-purple-50 p-6 dark:border-[#49274A]/50 dark:bg-[#1A0D1A]">
+                        <h3 className="mb-2 text-lg font-semibold text-purple-800 dark:text-[#D0A9D0]">Learn More About Our Services</h3>
+                        <p className="mb-4 text-purple-700 dark:text-[#D0A9D0]">Learn more about Mobile Fund Services at loanformobilehome.com</p>
+                        <a
+                            href="https://loanformobilehome.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center rounded-lg bg-[#49274A] px-6 py-3 font-medium text-white transition-colors hover:bg-[#3A1F3A] dark:bg-[#5B3D5C] dark:hover:bg-[#4A2E4B]"
+                        >
+                            Visit LoanForMobileHome.com
+                            <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const renderStep = () => {
         switch (step) {
@@ -859,6 +920,7 @@ const ApplicationForm = () => {
                 description: t('apply.form.submitSuccessDescription'),
             });
             console.log('Success:', response.data);
+            setIsSubmitted(true);
         } catch (error) {
             toast({
                 title: t('apply.form.submitError'),
@@ -869,6 +931,11 @@ const ApplicationForm = () => {
             setIsSubmitting(false);
         }
     };
+
+    // Show thank you page if form was successfully submitted
+    if (isSubmitted) {
+        return renderThankYouPage();
+    }
 
     return (
         <Form {...form}>

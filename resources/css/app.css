@@ -236,6 +236,19 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
-    background: url('/images/1.png') no-repeat center center;
+    background: url('/images/language.png') no-repeat center center;
     background-size: contain;
 }
+
+/* Dark mode styles for Google Translate */
+[data-theme="dark"] .goog-te-gadget-simple,
+.dark .goog-te-gadget-simple {
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] #google_translate_element .goog-te-gadget-simple a,
+.dark #google_translate_element .goog-te-gadget-simple a {
+    background-color: transparent !important;
+    filter: invert(1); /* This will invert the icon colors for dark mode */
+}
+

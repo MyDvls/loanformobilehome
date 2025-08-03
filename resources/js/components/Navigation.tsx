@@ -12,7 +12,7 @@ export default function Navigation() {
     return (
         <div className="my-auto hidden w-full flex-1 items-center self-stretch px-4 lg:flex">
             {/* Left group: nav links */}
-            <div className="flex w-full items-center justify-center gap-x-10">
+            <div className="flex w-full items-center justify-center gap-x-6">
                 {[
                     { path: '/', label: 'nav.home' },
                     { path: '/services', label: 'nav.services' },

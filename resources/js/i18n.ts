@@ -39,6 +39,7 @@ const resources = {
             'apply.form.previous': 'Previous',
             'apply.form.next': 'Next',
             'apply.form.submit': 'Submit',
+            'apply.form.submitError': 'Error',
             'apply.form.submitSuccess': 'Successful',
             'apply.form.submitSuccessDescription': 'Your application has been submitted successfully.',
             'apply.form.step1.title': 'Borrower Information',

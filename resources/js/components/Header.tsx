@@ -40,7 +40,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
 
                 {/* Center & Right: Navigation (hidden on mobile) */}
                 <Navigation />
-                <div className="">
+                <div className="mx-2">
                     <LanguageSwitcher />
                 </div>
                 {/* Right (mobile only): Language/Theme toggle + menu */}
@@ -65,7 +65,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
                             {t('nav.login')}
                         </Link>
                     </div>
-                    <div className="flex flex-1 justify-center">
+                    <div className="flex min-w-[150px] flex-1 justify-center">
                         <Link prefetch="mount" cache-for="5m" href="/apply">
                             <Button variant="primary">
                                 {t('nav.apply')}
