@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
                                     {t('footer.contact')}
                                 </a>
                             </li>
-                            
+
                             <li>
                                 <a href="/loan-guide" className="text-[#FDFAF8] hover:underline">
                                     {t('footer.loan_guide')}
@@ -140,7 +140,12 @@ export const Footer: React.FC = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="/privacy-policy.pdf" className="text-[#FDFAF8] hover:underline" target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href="/privacy-policy-updated.pdf"
+                                    className="text-[#FDFAF8] hover:underline"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     {t('footer.privacy')}
                                 </a>
                             </li>
