@@ -25,8 +25,9 @@ export default function MMLSApplication() {
                     </button>
                 </div>
 
-                <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">MMLS Application Form</h1>
-                <div className="mx-auto my-10 max-w-4xl rounded-xl border border-gray-300 bg-white p-10 dark:border-gray-600 dark:bg-black">
+                <img src="/images/brand-logo.svg" alt="Brand logo" className="mx-auto h-30 w-auto" />
+
+                <div className="mx-auto my-2 max-w-4xl rounded-xl border border-gray-300 bg-white p-10 dark:border-gray-600 dark:bg-black">
                     <MLSApplicationForm />
                 </div>
             </div>

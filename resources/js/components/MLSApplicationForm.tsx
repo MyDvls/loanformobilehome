@@ -187,20 +187,20 @@ const MLSApplicationForm = () => {
 
     const renderThankYouPage = () => {
         return (
-            <div className="mx-auto max-w-2xl space-y-8 py-12 text-center">
+            <div className="mx-auto max-w-3xl space-y-8  text-center">
                 <div className="space-y-4">
-                    <h1 className="text-3xl font-bold text-green-600 dark:text-[#57B8A6]">Thank You!</h1>
-                    <p className="text-lg text-gray-700 dark:text-gray-300">
+                    <img src="/images/thank-you.svg" alt="Brand logo" className="mx-auto h-40 w-auto" />
+                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">
                         Thank you for submitting an application for your mobile home! We will be in touch with you shortly. Please feel free to browse
                         to search for homes and valuations.
                     </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="flex gap-x-2">
                     {/* ManufacturedMLS Card */}
                     <div className="rounded-lg border border-blue-200 bg-blue-50 p-6 dark:border-[#57B8A6]/30 dark:bg-[#0A2A22]">
-                        <h3 className="mb-2 text-lg font-semibold text-blue-800 dark:text-[#57B8A6]">Find Mobile Home Valuations and Listings</h3>
-                        <p className="mb-4 text-blue-700 dark:text-[#57B8A6]/90">Find mobile home valuations and listings at manufacturedmls.com</p>
+                        <h3 className="text-md mb-2 font-semibold text-[#57B8A6] dark:text-[#57B8A6]">Find Mobile Home Valuations and Listings</h3>
+                        <p className="mb-4 text-sm text-black dark:text-white">Find mobile home valuations and listings at manufacturedmls.com</p>
                         <a
                             href="https://manufacturedmls.com"
                             target="_blank"
@@ -221,8 +221,8 @@ const MLSApplicationForm = () => {
 
                     {/* Loan For Mobile Home Card */}
                     <div className="rounded-lg border border-purple-200 bg-purple-50 p-6 dark:border-[#49274A]/50 dark:bg-[#1A0D1A]">
-                        <h3 className="mb-2 text-lg font-semibold text-purple-800 dark:text-[#D0A9D0]">Learn More About Our Services</h3>
-                        <p className="mb-4 text-purple-700 dark:text-[#D0A9D0]">Learn more about Mobile Fund Services at loanformobilehome.com</p>
+                        <h3 className="text-md mb-2 font-semibold text-purple-800 dark:text-[#D0A9D0]">Learn More About Our Services</h3>
+                        <p className="mb-4 text-sm text-black dark:text-white">Learn more about Mobile Fund Services at loanformobilehome.com</p>
                         <a
                             href="https://loanformobilehome.com"
                             target="_blank"
@@ -897,7 +897,7 @@ const MLSApplicationForm = () => {
                 },
             },
             loan: {
-                displayId: `Loan Application - ${Date.now()}`,
+                displayId: `MMLS Application - ${Date.now()}`,
                 LoanSetup: {
                     loanAmount: '0.00',
                     loanRate: '0.00',
@@ -968,58 +968,61 @@ const MLSApplicationForm = () => {
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="mb-8">
-                    <div className="h-2 rounded bg-gray-200">
-                        <div className="h-full rounded bg-blue-600 transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }}></div>
+        <>
+            <h1 className="transform-thanks pb-10 text-center text-3xl font-bold text-gray-900 dark:text-white">Application Form</h1>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <div className="mb-8">
+                        <div className="h-2 rounded bg-gray-200">
+                            <div className="h-full rounded bg-blue-600 transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }}></div>
+                        </div>
+                        <p className="mt-2 text-center text-gray-600">{t('apply.form.stepIndicator', { step, total: 4 })}</p>
                     </div>
-                    <p className="mt-2 text-center text-gray-600">{t('apply.form.stepIndicator', { step, total: 4 })}</p>
-                </div>
 
-                <div key={step}>{renderStep()}</div>
+                    <div key={step}>{renderStep()}</div>
 
-                <div className="mt-8 flex justify-between">
-                    {step > 1 && (
-                        <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
-                            {t('apply.form.previous')}
-                        </Button>
-                    )}
-                    <Button
-                        type="button"
-                        className="ml-auto"
-                        disabled={isSubmitting}
-                        onClick={async () => {
-                            if (step === 4) {
-                                form.handleSubmit(onSubmit)();
-                            } else {
-                                // Trigger validation for the current step's fields before proceeding
-                                const fieldsToValidate = {
-                                    1: ['firstName', 'lastName', 'ssn', 'driverLicense', 'dateOfBirth', 'gender'],
-                                    2: ['email', 'phone', 'address', 'city', 'state', 'zipCode'],
-                                    3: ['companyName', 'title', 'hireDate', 'income', 'incomeFrequency'],
-                                }[step];
-                                const isValid = await form.trigger(fieldsToValidate);
-                                if (isValid) {
-                                    setStep(step + 1);
-                                }
-                            }
-                        }}
-                    >
-                        {isSubmitting ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                {'Submitting...'}
-                            </>
-                        ) : step === 4 ? (
-                            t('apply.form.submit')
-                        ) : (
-                            t('apply.form.next')
+                    <div className="mt-8 flex justify-between">
+                        {step > 1 && (
+                            <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
+                                {t('apply.form.previous')}
+                            </Button>
                         )}
-                    </Button>
-                </div>
-            </form>
-        </Form>
+                        <Button
+                            type="button"
+                            className="ml-auto"
+                            disabled={isSubmitting}
+                            onClick={async () => {
+                                if (step === 4) {
+                                    form.handleSubmit(onSubmit)();
+                                } else {
+                                    // Trigger validation for the current step's fields before proceeding
+                                    const fieldsToValidate = {
+                                        1: ['firstName', 'lastName', 'ssn', 'driverLicense', 'dateOfBirth', 'gender'],
+                                        2: ['email', 'phone', 'address', 'city', 'state', 'zipCode'],
+                                        3: ['companyName', 'title', 'hireDate', 'income', 'incomeFrequency'],
+                                    }[step];
+                                    const isValid = await form.trigger(fieldsToValidate);
+                                    if (isValid) {
+                                        setStep(step + 1);
+                                    }
+                                }
+                            }}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    {'Submitting...'}
+                                </>
+                            ) : step === 4 ? (
+                                t('apply.form.submit')
+                            ) : (
+                                t('apply.form.next')
+                            )}
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+        </>
     );
 };
 
