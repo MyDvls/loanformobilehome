@@ -80,7 +80,10 @@ const formSchema = Yup.object({
             return /^\d{4}$/.test(value);
         }),
     collateralManufacturerName: Yup.string().optional(),
-    collateralSizeOfHome: Yup.string().optional(),
+    // collateralSizeOfHome: Yup.string().optional(),
+    collateralLength: Yup.string().optional(),
+    collateralWidth: Yup.string().optional(),
+    collateralLotRent: Yup.string().optional(),
 
     termsAccepted: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
     backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the backgroudn check'),
@@ -179,7 +182,10 @@ const ApplicationForm = () => {
             collateralVin: '',
             collateralYear: '',
             collateralManufacturerName: '',
-            collateralSizeOfHome: '',
+            // collateralSizeOfHome: '',
+            collateralLength: '',
+            collateralWidth: '',
+            collateralLotRent: '',
             termsAccepted: false,
             backgroundCheckAccepted: false,
         },
@@ -786,10 +792,36 @@ const ApplicationForm = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="collateralSizeOfHome"
+                                name="collateralLength"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralSizeOfHome')}</FormLabel>
+                                        <FormLabel>{t('apply.form.step4.collateralLength')}</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="collateralWidth"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('apply.form.step4.collateralWidth')}</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="collateralLotRent"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('apply.form.step4.collateralLotRent')}</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -932,8 +964,16 @@ const ApplicationForm = () => {
                     customFieldValue: data.collateralManufacturerName,
                 },
                 {
-                    customFieldId: 13,
-                    customFieldValue: data.collateralSizeOfHome,
+                    customFieldId: 21,
+                    customFieldValue: data.collateralLength,
+                },
+                {
+                    customFieldId: 22,
+                    customFieldValue: data.collateralWidth,
+                },
+                {
+                    customFieldId: 20,
+                    customFieldValue: data.collateralLotRent,
                 },
             ],
         };

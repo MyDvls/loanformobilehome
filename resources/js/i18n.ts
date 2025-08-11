@@ -100,6 +100,9 @@ const resources = {
             'apply.form.step4.collateralYear': 'Year',
             'apply.form.step4.collateralManufacturerName': 'Manufacture Name',
             'apply.form.step4.collateralSizeOfHome': 'Size of Home (Length x Width)',
+            'apply.form.step4.collateralLength': 'Length',
+            'apply.form.step4.collateralWidth': 'Width',
+            'apply.form.step4.collateralLotRent': 'What is your Lot Rent?',
             'apply.form.step4.homeSizePlaceholder': 'e.g., 60x12',
             'apply.form.step4.termsAccepted':
                 'I understand and agree that I am applying for credit by completing and submitting this credit application. I certify that the information on the application is true and complete. I understand that false statements may subject me to legal consequences.',
