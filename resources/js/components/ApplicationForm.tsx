@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -81,12 +81,20 @@ const formSchema = Yup.object({
         }),
     collateralManufacturerName: Yup.string().optional(),
     // collateralSizeOfHome: Yup.string().optional(),
-    collateralLength: Yup.string().optional(),
-    collateralWidth: Yup.string().optional(),
-    collateralLotRent: Yup.string().optional(),
+    collateralLength: Yup.string()
+        .optional()
+        .matches(/^\d+(\.\d{1,2})?$/, 'Length must be a valid number'),
+    collateralWidth: Yup.string()
+        .optional()
+        .matches(/^\d+(\.\d{1,2})?$/, 'Width must be a valid number'),
+    collateralLotRent: Yup.string()
+        .optional()
+        .matches(/^\d+(\.\d{1,2})?$/, 'Lot rent must be a valid number'),
 
     termsAccepted: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
-    backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the backgroudn check'),
+    backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the background check'),
+    shareReport: Yup.boolean().oneOf([true], 'You must accept the sharing of report'),
+    messageAccepted: Yup.boolean().oneOf([true], 'You must accept to receive messages'),
 });
 
 const states = [
@@ -149,6 +157,14 @@ const ApplicationForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const { toast } = useToast();
 
+    useEffect(() => {
+        if (!isSubmitted) return;
+        const timer = setTimeout(() => {
+            window.location.href = 'https://manufacturedmls.com';
+        }, 30000);
+        return () => clearTimeout(timer);
+    }, [isSubmitted]);
+
     const form = useForm({
         resolver: yupResolver(formSchema),
         defaultValues: {
@@ -188,6 +204,8 @@ const ApplicationForm = () => {
             collateralLotRent: '',
             termsAccepted: false,
             backgroundCheckAccepted: false,
+            shareReport: false,
+            messageAccepted: false,
         },
     });
 
@@ -856,6 +874,36 @@ const ApplicationForm = () => {
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
                                             <FormLabel>{t('apply.form.step4.backgroundCheckAccepted')}</FormLabel>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="shareReport"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                        <FormControl>
+                                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                        </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>{t('apply.form.step4.shareReport')}</FormLabel>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="messageAccepted"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                        <FormControl>
+                                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                        </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>{t('apply.form.step4.messageAccepted')}</FormLabel>
                                         </div>
                                         <FormMessage />
                                     </FormItem>

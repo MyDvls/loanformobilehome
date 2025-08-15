@@ -108,6 +108,10 @@ const resources = {
                 'I understand and agree that I am applying for credit by completing and submitting this credit application. I certify that the information on the application is true and complete. I understand that false statements may subject me to legal consequences.',
             'apply.form.step4.backgroundCheckAccepted':
                 'I hereby authorize Mobile Fund Services LLC and its designated agents to conduct a comprehensive review of my background causing a consumer report and/or an investigative consumer report to be generated for loan application.',
+            'apply.form.step4.shareReport':
+                'I authorize Mobile Fund Services to share my mortgage application and related financial information, including my credit report, with other licensed mortgage loan originators for the purpose of exploring additional financing options. This authorization is valid for 90 days and may be revoked in writing at any time.',
+            'apply.form.step4.messageAccepted':
+                'I agree to receive text messages from Mobile Fund Services at the number provided. Msg & data rates may apply. Frequency varies. Reply STOP to cancel. Help: (720) 560-1018 or Support@loanformobilehome.com.',
 
             // Footer
             'footer.quick': 'Quick Links',
