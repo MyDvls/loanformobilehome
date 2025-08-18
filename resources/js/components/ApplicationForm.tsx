@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Autocomplete, Libraries, useLoadScript } from '@react-google-maps/api';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -150,12 +151,51 @@ const states = [
     'Wyoming',
 ];
 
+// Component for Google Places Autocomplete using @react-google-maps/api
+const PlacesAutocompleteField = ({ onPlaceSelect, placeholder, value, onChange, ...props }) => {
+    const [autocomplete, setAutocomplete] = useState(null);
+
+    const onLoad = (autoC) => {
+        setAutocomplete(autoC);
+    };
+
+    const onPlaceChanged = () => {
+        if (autocomplete !== null) {
+            const place = autocomplete.getPlace();
+            if (place && place.formatted_address) {
+                onPlaceSelect(place);
+            }
+        }
+    };
+
+    return (
+        <Autocomplete
+            onLoad={onLoad}
+            onPlaceChanged={onPlaceChanged}
+            options={{
+                types: ['address'],
+                componentRestrictions: { country: 'us' },
+            }}
+        >
+            <Input {...props} value={value} onChange={onChange} placeholder={placeholder} />
+        </Autocomplete>
+    );
+};
+
+const libraries: Libraries = ['places'];
+
 const ApplicationForm = () => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const { toast } = useToast();
+
+    // Load Google Places API using @react-google-maps/api
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
+        libraries,
+    });
 
     useEffect(() => {
         if (!isSubmitted) return;
@@ -208,6 +248,60 @@ const ApplicationForm = () => {
             messageAccepted: false,
         },
     });
+
+    // Helper function to extract address components
+    const extractAddressComponents = (place) => {
+        const components = place.address_components || [];
+        const result = {
+            address: place.formatted_address || '',
+            street1: '',
+            city: '',
+            state: '',
+            zipCode: '',
+        };
+
+        components.forEach((component) => {
+            const types = component.types;
+            if (types.includes('street_number')) {
+                result.street1 = component.long_name;
+            } else if (types.includes('route')) {
+                result.street1 = result.street1 ? `${result.street1} ${component.long_name}` : component.long_name;
+            } else if (types.includes('locality')) {
+                result.city = component.long_name;
+            } else if (types.includes('administrative_area_level_1')) {
+                result.state = component.long_name;
+            } else if (types.includes('postal_code')) {
+                result.zipCode = component.long_name;
+            }
+        });
+
+        return result;
+    };
+
+    // Handlers for different autocomplete fields
+    const handleAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('address', addressData.address);
+        form.setValue('city', addressData.city);
+        form.setValue('state', addressData.state);
+        form.setValue('zipCode', addressData.zipCode);
+    };
+
+    const handleEmpAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('empAddress', addressData.address);
+        form.setValue('empCity', addressData.city);
+        form.setValue('empState', addressData.state);
+        form.setValue('empZipCode', addressData.zipCode);
+    };
+
+    const handleCollateralAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('collateralAddress', addressData.address);
+        form.setValue('collateralCity', addressData.city);
+        form.setValue('collateralState', addressData.state);
+        form.setValue('collateralZipCode', addressData.zipCode);
+    };
 
     const renderThankYouPage = () => {
         return (
@@ -435,7 +529,15 @@ const ApplicationForm = () => {
                                             {t('apply.form.step2.address')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleAddressSelect}
+                                                    placeholder="Start typing your address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -638,7 +740,15 @@ const ApplicationForm = () => {
                                     <FormItem>
                                         <FormLabel>{t('apply.form.step3.empAddress')}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleEmpAddressSelect}
+                                                    placeholder="Start typing company address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -711,7 +821,15 @@ const ApplicationForm = () => {
                                     <FormItem>
                                         <FormLabel>{t('apply.form.step4.collateralAddress')}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleCollateralAddressSelect}
+                                                    placeholder="Start typing mobile home address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
