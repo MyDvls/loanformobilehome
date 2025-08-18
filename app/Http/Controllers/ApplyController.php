@@ -7,6 +7,8 @@ use App\Http\Requests\ApplyLoanRequest;
 use App\Jobs\ProcessLoanAndCollateral;
 use App\Jobs\SaveCustomerDetails;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ApplyController extends Controller
 {
@@ -55,6 +57,13 @@ class ApplyController extends Controller
                 $request->input('collateralCustomFields'),
                 $headers
             );
+
+            $loanData = $request->input('loan');
+            $displayId = $loanData['displayId'] ?? null;
+
+            if ($displayId && Str::contains($displayId, 'MMLS')) {
+                Log::info('Apply Loan Request for MMLS', ['displayId' => $displayId]);
+            }
 
             return response()->json(['message' => 'Loan application processed successfully'], 200);
         } catch (\Exception $e) {

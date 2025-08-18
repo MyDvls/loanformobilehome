@@ -83,13 +83,28 @@ const formSchema = Yup.object({
     collateralManufacturerName: Yup.string().optional(),
     collateralLength: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Length must be a valid number'),
+        .test('valid-number', 'Length must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
     collateralWidth: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Width must be a valid number'),
+        .test('valid-number', 'Width must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
     collateralLotRent: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Lot rent must be a valid number'),
+        .test('valid-number', 'Lot rent must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
+
+    // Additional fields
+    vaLoanEligibleYes: Yup.boolean(),
+    vaLoanEligibleNo: Yup.boolean(),
+    workingWithRealtorYes: Yup.boolean(),
+    workingWithRealtorNo: Yup.boolean(),
 
     termsAccepted: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
     backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the background check'),
@@ -240,6 +255,10 @@ const MLSApplicationForm = () => {
             collateralLength: '',
             collateralWidth: '',
             collateralLotRent: '',
+            vaLoanEligibleYes: false,
+            vaLoanEligibleNo: false,
+            workingWithRealtorYes: false,
+            workingWithRealtorNo: false,
             termsAccepted: false,
             backgroundCheckAccepted: false,
             shareReport: false,
@@ -927,32 +946,6 @@ const MLSApplicationForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="collateralLength"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralLength')}</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="collateralWidth"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralWidth')}</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
                                 name="collateralLotRent"
                                 render={({ field }) => (
                                     <FormItem>
@@ -965,6 +958,144 @@ const MLSApplicationForm = () => {
                                 )}
                             />
                         </div>
+
+                        {/* Mobile Home Dimensions Section */}
+                        <div className="mt-6">
+                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">Mobile Home Dimensions</h3>
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <FormField
+                                    control={form.control}
+                                    name="collateralLength"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t('apply.form.step4.collateralLength')} (in ft)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="e.g., 60" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="collateralWidth"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t('apply.form.step4.collateralWidth')} (in ft)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="e.g., 14" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2"></div>
+
+                        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div className="space-y-4">
+                                <h3 className="font-medium">Are you (or your spouse) eligible for a VA home loan?</h3>
+                                <FormField
+                                    control={form.control}
+                                    name="vaLoanEligibleYes"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('vaLoanEligibleNo', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>Yes</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="vaLoanEligibleNo"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('vaLoanEligibleYes', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>No</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            <div className="space-y-4">
+                                <h3 className="font-medium">Are you currently working with a realtor or sales agent?</h3>
+                                <FormField
+                                    control={form.control}
+                                    name="workingWithRealtorYes"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('workingWithRealtorNo', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>Yes</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="workingWithRealtorNo"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('workingWithRealtorYes', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>No</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
                         <div className="mt-6 space-y-4">
                             <FormField
                                 control={form.control}
@@ -1139,6 +1270,30 @@ const MLSApplicationForm = () => {
                 {
                     customFieldId: 20,
                     customFieldValue: data.collateralLotRent,
+                },
+                {
+                    customFieldId: 23,
+                    customFieldValue: data.vaLoanEligibleYes ? true : data.vaLoanEligibleNo ? false : false,
+                },
+                {
+                    customFieldId: 24,
+                    customFieldValue: data.workingWithRealtorYes ? true : data.workingWithRealtorNo ? false : false,
+                },
+                {
+                    customFieldId: 25,
+                    customFieldValue: data.termsAccepted,
+                },
+                {
+                    customFieldId: 26,
+                    customFieldValue: data.backgroundCheckAccepted,
+                },
+                {
+                    customFieldId: 27,
+                    customFieldValue: data.shareReport,
+                },
+                {
+                    customFieldId: 28,
+                    customFieldValue: data.messageAccepted,
                 },
             ],
         };

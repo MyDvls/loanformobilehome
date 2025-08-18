@@ -89,7 +89,7 @@ class ApplyLoanRequest extends FormRequest
             // Collateral custom fields validation
             'collateralCustomFields' => 'required|array',
             'collateralCustomFields.*.customFieldId' => 'nullable|integer',
-            'collateralCustomFields.*.customFieldValue' => 'nullable|string',
+            'collateralCustomFields.*.customFieldValue' => 'nullable',
         ];
     }
 
