@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Autocomplete, Libraries, useLoadScript } from '@react-google-maps/api';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -80,16 +81,30 @@ const formSchema = Yup.object({
             return /^\d{4}$/.test(value);
         }),
     collateralManufacturerName: Yup.string().optional(),
-    // collateralSizeOfHome: Yup.string().optional(),
     collateralLength: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Length must be a valid number'),
+        .test('valid-number', 'Length must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
     collateralWidth: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Width must be a valid number'),
+        .test('valid-number', 'Width must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
     collateralLotRent: Yup.string()
         .optional()
-        .matches(/^\d+(\.\d{1,2})?$/, 'Lot rent must be a valid number'),
+        .test('valid-number', 'Lot rent must be a valid number', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+(\.\d{1,2})?$/.test(value);
+        }),
+
+    // Additional fields
+    vaLoanEligibleYes: Yup.boolean(),
+    vaLoanEligibleNo: Yup.boolean(),
+    workingWithRealtorYes: Yup.boolean(),
+    workingWithRealtorNo: Yup.boolean(),
 
     termsAccepted: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
     backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the background check'),
@@ -150,12 +165,51 @@ const states = [
     'Wyoming',
 ];
 
+// Component for Google Places Autocomplete using @react-google-maps/api
+const PlacesAutocompleteField = ({ onPlaceSelect, placeholder, value, onChange, ...props }) => {
+    const [autocomplete, setAutocomplete] = useState(null);
+
+    const onLoad = (autoC) => {
+        setAutocomplete(autoC);
+    };
+
+    const onPlaceChanged = () => {
+        if (autocomplete !== null) {
+            const place = autocomplete.getPlace();
+            if (place && place.formatted_address) {
+                onPlaceSelect(place);
+            }
+        }
+    };
+
+    return (
+        <Autocomplete
+            onLoad={onLoad}
+            onPlaceChanged={onPlaceChanged}
+            options={{
+                types: ['address'],
+                componentRestrictions: { country: 'us' },
+            }}
+        >
+            <Input {...props} value={value} onChange={onChange} placeholder={placeholder} />
+        </Autocomplete>
+    );
+};
+
+const libraries: Libraries = ['places'];
+
 const MLSApplicationForm = () => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const { toast } = useToast();
+
+    // Load Google Places API using @react-google-maps/api
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
+        libraries,
+    });
 
     useEffect(() => {
         if (!isSubmitted) return;
@@ -198,16 +252,73 @@ const MLSApplicationForm = () => {
             collateralVin: '',
             collateralYear: '',
             collateralManufacturerName: '',
-            // collateralSizeOfHome: '',
             collateralLength: '',
             collateralWidth: '',
             collateralLotRent: '',
+            vaLoanEligibleYes: false,
+            vaLoanEligibleNo: false,
+            workingWithRealtorYes: false,
+            workingWithRealtorNo: false,
             termsAccepted: false,
             backgroundCheckAccepted: false,
             shareReport: false,
             messageAccepted: false,
         },
     });
+
+    // Helper function to extract address components
+    const extractAddressComponents = (place) => {
+        const components = place.address_components || [];
+        const result = {
+            address: place.formatted_address || '',
+            street1: '',
+            city: '',
+            state: '',
+            zipCode: '',
+        };
+
+        components.forEach((component) => {
+            const types = component.types;
+            if (types.includes('street_number')) {
+                result.street1 = component.long_name;
+            } else if (types.includes('route')) {
+                result.street1 = result.street1 ? `${result.street1} ${component.long_name}` : component.long_name;
+            } else if (types.includes('locality')) {
+                result.city = component.long_name;
+            } else if (types.includes('administrative_area_level_1')) {
+                result.state = component.long_name;
+            } else if (types.includes('postal_code')) {
+                result.zipCode = component.long_name;
+            }
+        });
+
+        return result;
+    };
+
+    // Handlers for different autocomplete fields
+    const handleAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('address', addressData.address);
+        form.setValue('city', addressData.city);
+        form.setValue('state', addressData.state);
+        form.setValue('zipCode', addressData.zipCode);
+    };
+
+    const handleEmpAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('empAddress', addressData.address);
+        form.setValue('empCity', addressData.city);
+        form.setValue('empState', addressData.state);
+        form.setValue('empZipCode', addressData.zipCode);
+    };
+
+    const handleCollateralAddressSelect = (place) => {
+        const addressData = extractAddressComponents(place);
+        form.setValue('collateralAddress', addressData.address);
+        form.setValue('collateralCity', addressData.city);
+        form.setValue('collateralState', addressData.state);
+        form.setValue('collateralZipCode', addressData.zipCode);
+    };
 
     const renderThankYouPage = () => {
         return (
@@ -435,7 +546,15 @@ const MLSApplicationForm = () => {
                                             {t('apply.form.step2.address')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleAddressSelect}
+                                                    placeholder="Start typing your address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -466,7 +585,7 @@ const MLSApplicationForm = () => {
                                         <FormLabel translate="no" className="notranslate">
                                             {t('apply.form.step2.state')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
-                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step2.selectState')} />
                                             </SelectTrigger>
@@ -638,7 +757,15 @@ const MLSApplicationForm = () => {
                                     <FormItem>
                                         <FormLabel>{t('apply.form.step3.empAddress')}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleEmpAddressSelect}
+                                                    placeholder="Start typing company address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -667,7 +794,7 @@ const MLSApplicationForm = () => {
                                         <FormLabel translate="no" className="notranslate">
                                             {t('apply.form.step3.empState')}
                                         </FormLabel>
-                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step3.selectState')} />
                                             </SelectTrigger>
@@ -711,7 +838,15 @@ const MLSApplicationForm = () => {
                                     <FormItem>
                                         <FormLabel>{t('apply.form.step4.collateralAddress')}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            {isLoaded && !loadError ? (
+                                                <PlacesAutocompleteField
+                                                    {...field}
+                                                    onPlaceSelect={handleCollateralAddressSelect}
+                                                    placeholder="Start typing mobile home address..."
+                                                />
+                                            ) : (
+                                                <Input {...field} placeholder="Loading autocomplete..." disabled={!isLoaded} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -740,7 +875,7 @@ const MLSApplicationForm = () => {
                                         <FormLabel translate="no" className="notranslate">
                                             {t('apply.form.step4.collateralState')}
                                         </FormLabel>
-                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step4.selectState')} />
                                             </SelectTrigger>
@@ -811,32 +946,6 @@ const MLSApplicationForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="collateralLength"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralLength')}</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="collateralWidth"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('apply.form.step4.collateralWidth')}</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
                                 name="collateralLotRent"
                                 render={({ field }) => (
                                     <FormItem>
@@ -849,6 +958,144 @@ const MLSApplicationForm = () => {
                                 )}
                             />
                         </div>
+
+                        {/* Mobile Home Dimensions Section */}
+                        <div className="mt-6">
+                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">Mobile Home Dimensions</h3>
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <FormField
+                                    control={form.control}
+                                    name="collateralLength"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t('apply.form.step4.collateralLength')} (in ft)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="e.g., 60" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="collateralWidth"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t('apply.form.step4.collateralWidth')} (in ft)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="e.g., 14" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2"></div>
+
+                        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div className="space-y-4">
+                                <h3 className="font-medium">Are you (or your spouse) eligible for a VA home loan?</h3>
+                                <FormField
+                                    control={form.control}
+                                    name="vaLoanEligibleYes"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('vaLoanEligibleNo', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>Yes</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="vaLoanEligibleNo"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('vaLoanEligibleYes', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>No</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            <div className="space-y-4">
+                                <h3 className="font-medium">Are you currently working with a realtor or sales agent?</h3>
+                                <FormField
+                                    control={form.control}
+                                    name="workingWithRealtorYes"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('workingWithRealtorNo', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>Yes</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="workingWithRealtorNo"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        field.onChange(checked);
+                                                        if (checked) {
+                                                            form.setValue('workingWithRealtorYes', false);
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>No</FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
                         <div className="mt-6 space-y-4">
                             <FormField
                                 control={form.control}
@@ -1023,6 +1270,30 @@ const MLSApplicationForm = () => {
                 {
                     customFieldId: 20,
                     customFieldValue: data.collateralLotRent,
+                },
+                {
+                    customFieldId: 23,
+                    customFieldValue: data.vaLoanEligibleYes ? true : data.vaLoanEligibleNo ? false : false,
+                },
+                {
+                    customFieldId: 24,
+                    customFieldValue: data.workingWithRealtorYes ? true : data.workingWithRealtorNo ? false : false,
+                },
+                {
+                    customFieldId: 25,
+                    customFieldValue: data.termsAccepted,
+                },
+                {
+                    customFieldId: 26,
+                    customFieldValue: data.backgroundCheckAccepted,
+                },
+                {
+                    customFieldId: 27,
+                    customFieldValue: data.shareReport,
+                },
+                {
+                    customFieldId: 28,
+                    customFieldValue: data.messageAccepted,
                 },
             ],
         };
