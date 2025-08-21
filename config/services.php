@@ -47,5 +47,9 @@ return [
     'translation' => [
         'provider' => env('TRANSLATION_PROVIDER', 'google'), // 'google' or 'amazon'
     ],
+    'mmls' => [
+        'webhook_url' => env('MMLS_WEBHOOK_URL'),
+        'auth_token' => env('MMLS_AUTH_TOKEN'),
+    ],
 
 ];

@@ -22,7 +22,19 @@ const formSchema = Yup.object({
     middleName: Yup.string().optional(),
     lastName: Yup.string().required('Last name is required').max(50, 'Last name cannot exceed 50 characters'),
     generationCode: Yup.string().optional(),
-    ssn: Yup.string().required('SSN is required'),
+    ssn: Yup.string()
+        .required('SSN is required')
+        .test('valid-ssn', 'SSN must be 9 digits (dashes optional)', (value) => {
+            if (!value) return false;
+            const digitsOnly = value.replace(/\D/g, '');
+            if (digitsOnly.length !== 9) return false;
+            // If dashes are present, they must be in ###-##-#### format
+            if (value.includes('-')) {
+                return /^\d{3}-\d{2}-\d{4}$/.test(value);
+            }
+            // Otherwise must be exactly 9 digits
+            return /^\d{9}$/.test(value);
+        }),
     driverLicense: Yup.string().required('Driver license is required').max(20, 'Driver license cannot exceed 20 characters'),
     dateOfBirth: Yup.string()
         .required('Date of birth is required')
@@ -440,9 +452,14 @@ const ApplicationForm = () => {
                                 render={({ field }) => (
                                     <FormItem translate="no" className="notranslate">
                                         <FormLabel translate="no" className="notranslate">
-                                            {t('apply.form.step1.generationCode')} <span className="ml-1 text-red-500">*</span>
+                                            {t('apply.form.step1.generationCode')}
                                         </FormLabel>
-                                        <Select translate="no" className="notranslate" onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select
+                                            translate="no"
+                                            className="notranslate"
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value || 'customer.generationCode.none'}
+                                        >
                                             <SelectTrigger translate="no" className="notranslate">
                                                 <SelectValue placeholder={t('apply.form.step1.selectGeneration')} />
                                             </SelectTrigger>
@@ -473,7 +490,19 @@ const ApplicationForm = () => {
                                             {t('apply.form.step1.ssn')} <span className="ml-1 text-red-500">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <Input {...field} type="text" placeholder="XXX-XX-XXXX" />
+                                            <Input
+                                                {...field}
+                                                type="text"
+                                                placeholder="XXX-XX-XXXX"
+                                                inputMode="numeric"
+                                                maxLength={field.value?.includes('-') ? 11 : 9}
+                                                onChange={(e) => {
+                                                    // Allow only digits and dashes while typing
+                                                    const val = e.target.value.replace(/[^\d-]/g, '');
+                                                    const maxLen = val.includes('-') ? 11 : 9;
+                                                    field.onChange(val.slice(0, maxLen));
+                                                }}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

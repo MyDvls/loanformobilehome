@@ -63,6 +63,21 @@ class ApplyController extends Controller
 
             if ($displayId && Str::contains($displayId, 'MMLS')) {
                 Log::info('Apply Loan Request for MMLS', ['displayId' => $displayId]);
+                // Get webhook url from services 
+                $webhookUrl = config('services.mmls.webhook_url');
+                $mmlsResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . config('services.mmls.auth_token'),
+                ])->post(
+                    $webhookUrl,
+                    [
+                        'customer_id' => $customerId,
+                    ]
+                );
+
+                if (!$mmlsResponse->successful()) {
+                    \Log::error('MMLS Response Failed', $mmlsResponse->json());
+                    return response()->json(['error' => 'Failed to send customer id to MMLS'], 500);
+                }
             }
 
             return response()->json(['message' => 'Loan application processed successfully'], 200);
