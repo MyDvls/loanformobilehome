@@ -70,12 +70,17 @@ class ApplyController extends Controller
                 ])->post(
                     $webhookUrl,
                     [
-                        'customer_id' => $customerId,
+                        'customer_id' => (string) $customerId,
                     ]
                 );
 
                 if (!$mmlsResponse->successful()) {
                     \Log::error('MMLS Response Failed', $mmlsResponse->json() ?? []);
+                    \Log::error('MMLS Response Failed', [
+                        'status' => $mmlsResponse->status(),
+                        'body'   => $mmlsResponse->body(),
+                        'headers' => $mmlsResponse->headers(),
+                    ]);
                     return response()->json(['error' => 'Failed to send customer id to MMLS'], 500);
                 }
             }
