@@ -36,7 +36,7 @@ class ApplyController extends Controller
             );
 
             if (!$customerResponse->successful()) {
-                \Log::error('Customer Creation Failed', $customerResponse->json());
+                \Log::error('Customer Creation Failed', $customerResponse->json() ?? []);
                 return response()->json(['error' => 'Failed to create customer'], 500);
             }
 
@@ -75,7 +75,7 @@ class ApplyController extends Controller
                 );
 
                 if (!$mmlsResponse->successful()) {
-                    \Log::error('MMLS Response Failed', $mmlsResponse->json());
+                    \Log::error('MMLS Response Failed', $mmlsResponse->json() ?? []);
                     return response()->json(['error' => 'Failed to send customer id to MMLS'], 500);
                 }
             }
