@@ -83,7 +83,24 @@ class ProcessLoanAndCollateral implements ShouldQueue
         $collateralId = $collateral['id'];
 
         // Step 3: Update Collateral Custom Fields
-        $collateral['CustomFieldValues'] = ['results' => $this->collateralCustomFields];
+        $customFields = collect($this->collateralCustomFields)->map(function ($field) {
+            $value = $field['customFieldValue'];
+
+            // Normalize booleans to "1"/"0"
+            if (is_bool($value)) {
+                $value = $value ? "1" : "0";
+            } elseif ($value === null) {
+                $value = ""; // keep nulls as empty string
+            } else {
+                $value = (string) $value; // fallback for text/numbers
+            }
+
+            return [
+                'customFieldId'    => (int) $field['customFieldId'],
+                'customFieldValue' => $value,
+            ];
+        })->toArray();
+        $collateral['CustomFieldValues'] = ['results' => $customFields];
         $collateral['__update'] = true;
         $collateral['__id'] = $collateralId;
         $collateral['__metadata'] = [
