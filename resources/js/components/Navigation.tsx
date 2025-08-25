@@ -19,6 +19,7 @@ export default function Navigation() {
                     { path: '/loan-guide', label: 'nav.loan_guide' },
                     { path: '/team', label: 'nav.team' },
                     { path: '/investors', label: 'nav.investors' },
+                    { path: '/customers', label: 'nav.customers' },
                     { path: '/contact', label: 'nav.contact' },
                     { path: 'https://manufacturedmls.com', label: 'nav.home_worth' },
                 ].map(({ path, label }) =>

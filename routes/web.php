@@ -37,6 +37,7 @@ Route::get('/team', [TeamController::class, 'index'])->name('team');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/investors', fn() => Inertia::render('Investors'))->name('investors');
+Route::get('/customers', fn() => Inertia::render('Customers'))->name('customers');
 Route::get('/login', fn() => Inertia::render('Login'))->name('login');
 Route::get('/apply', fn() => Inertia::render('Apply'))->name('apply');
 Route::get('/apply/mmls', fn() => Inertia::render('MMLSApplication'))->name('apply.mmls');

@@ -10,6 +10,7 @@ const resources = {
             'nav.understanding-loan': 'Loan Guide',
             'nav.team': 'Team',
             'nav.investors': 'Investors',
+            'nav.customers': 'Customers',
             'nav.contact': 'Contact',
             'nav.login': 'Login',
             'nav.apply': 'Apply Now',
@@ -17,6 +18,7 @@ const resources = {
             'nav.loan_guide': 'Loan Guide',
 
             'investors.title': 'Investors',
+            'customers.title': 'Customer Login',
 
             //Contact Page
             contact: {
@@ -121,6 +123,7 @@ const resources = {
             'footer.loan': 'Get a Loan',
             'footer.team': 'Team',
             'footer.investors': 'Investors',
+            'footer.customers': 'Customers',
             'footer.support': 'Support',
             'footer.help': 'Help',
             'footer.privacy': 'Privacy Policy',
@@ -155,6 +158,7 @@ const resources = {
             'nav.understanding-loan': 'Guía de préstamos',
             'nav.team': 'Equipo',
             'nav.investors': 'Inversores',
+            'nav.customers': 'Customer Login',
             'nav.contact': 'Contacto',
             'nav.login': 'Iniciar Sesión',
             'nav.apply': 'Aplicar Ahora',
@@ -177,6 +181,9 @@ const resources = {
 
             //Investors Page
             'investors.title': 'Inversores',
+
+            // Borrowers Page
+            'customers.title': 'Customers',
 
             // Apply Page
             'apply.title': 'Nueva Solicitud',
@@ -244,6 +251,7 @@ const resources = {
             'footer.loan': 'Solicitar un préstamo',
             'footer.team': 'Equipo',
             'footer.investors': 'Inversores',
+            'footer.customers': 'Customers',
             'footer.support': 'Soporte',
             'footer.help': 'Ayuda',
             'footer.privacy': 'Política de privacidad',
