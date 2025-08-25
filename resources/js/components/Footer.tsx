@@ -128,6 +128,11 @@ export const Footer: React.FC = () => {
                                     {t('footer.investors')}
                                 </a>
                             </li>
+                            <li>
+                                <a href="/customers" className="text-[#FDFAF8] hover:underline">
+                                    {t('footer.customers')}
+                                </a>
+                            </li>
                         </ul>
                     </nav>
 
