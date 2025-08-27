@@ -94,6 +94,7 @@ const resources = {
             'apply.form.step3.selectState': 'Select state',
             'apply.form.step4.title': 'New Home Information',
             'apply.form.step4.collateralAddress': 'Address',
+            'apply.form.step4.collateralLotNumber': 'Lot Number',
             'apply.form.step4.collateralCity': 'City',
             'apply.form.step4.collateralState': 'State',
             'apply.form.step4.selectState': 'Select state',

@@ -82,6 +82,12 @@ const formSchema = Yup.object({
 
     // Collateral Information
     collateralAddress: Yup.string().optional(),
+    collateralLotNumber: Yup.string()
+        .optional()
+        .test('valid-number', 'Lot number must be numeric', (value) => {
+            if (!value || value === '') return true;
+            return /^\d+$/.test(value);
+        }),
     collateralCity: Yup.string().optional(),
     collateralState: Yup.string().optional(),
     collateralZipCode: Yup.string().optional(),
@@ -885,6 +891,19 @@ const ApplicationForm = () => {
                             />
                             <FormField
                                 control={form.control}
+                                name="collateralLotNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('apply.form.step4.collateralLotNumber')}</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="collateralCity"
                                 render={({ field }) => (
                                     <FormItem>
@@ -1321,6 +1340,10 @@ const ApplicationForm = () => {
                 {
                     customFieldId: 28,
                     customFieldValue: data.messageAccepted,
+                },
+                {
+                    customFieldId: 29,
+                    customFieldValue: data.collateralLotNumber,
                 },
             ],
         };
