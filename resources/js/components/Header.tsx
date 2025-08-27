@@ -61,7 +61,7 @@ export default function Header({ isScrolled, isMobileMenuOpen, setIsMobileMenuOp
                         </button>
                     </div>
                     <div className="flex flex-1 justify-center">
-                        <Link href="/login" className="text-sm font-medium transition-colors duration-200">
+                        <Link href="/customers" className="text-sm font-medium transition-colors duration-200">
                             {t('nav.login')}
                         </Link>
                     </div>

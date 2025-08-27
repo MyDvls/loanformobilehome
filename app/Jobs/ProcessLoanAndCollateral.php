@@ -41,6 +41,8 @@ class ProcessLoanAndCollateral implements ShouldQueue
             ],
         ];
 
+        \Log::info('Creating Loan', $this->loanData);
+
         $loanResponse = Http::withHeaders($this->headers)->post(
             'https://loanpro.simnang.com/api/public/api/1/odata.svc/Loans',
             $this->loanData
@@ -112,6 +114,7 @@ class ProcessLoanAndCollateral implements ShouldQueue
             'Collateral' => ['results' => [$collateral]],
         ];
 
+        \Log::info('Updating Collateral Custom Fields', $updatePayload);
         $updateResponse = Http::withHeaders($this->headers)->put(
             "https://loanpro.simnang.com/api/public/api/1/odata.svc/Loans({$loanId})",
             $updatePayload

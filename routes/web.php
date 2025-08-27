@@ -42,7 +42,6 @@ Route::get('/login', fn() => Inertia::render('Login'))->name('login');
 Route::get('/apply', fn() => Inertia::render('Apply'))->name('apply');
 Route::get('/apply/mmls', fn() => Inertia::render('MMLSApplication'))->name('apply.mmls');
 Route::post('/apply', [ApplyController::class, 'apply'])->name('apply.store');
-Route::get('/about', fn() => Inertia::render('About'))->name('about');
 Route::get('/privacy', fn() => Inertia::render('Privacy'))->name('privacy');
 Route::get('/terms', fn() => Inertia::render('Terms'))->name('terms');
 
