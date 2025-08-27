@@ -23,6 +23,7 @@ class SaveCustomerDetails implements ShouldQueue
 
     public function handle(): void
     {
+        \Log::info('Saving Customer Details', $this->customerData);
         $customer = Customer::create([
             'first_name' => $this->customerData['firstName'],
             'middle_name' => $this->customerData['middleName'] ?? null,
