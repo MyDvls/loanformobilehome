@@ -96,6 +96,18 @@ export default function Customers() {
                                         />
                                     )}
                                 </div>
+
+                                {/* Forgot Password Link */}
+                                <div className="mt-6 text-center">
+                                    <a
+                                        href="https://mobilefundservices.loanpro.software/forgotPassword.html"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm font-medium text-blue-600 underline transition-colors duration-200 hover:text-blue-800"
+                                    >
+                                        {t('customers.forgot_password', 'Forgot Password?')}
+                                    </a>
+                                </div>
                             </div>
                         </AnimateOnView>
                     </div>
