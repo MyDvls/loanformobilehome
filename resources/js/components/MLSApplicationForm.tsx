@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +18,9 @@ import * as Yup from 'yup';
 
 // Define the Yup schema for validation
 const formSchema = Yup.object({
+    // Application State Selection
+    applicationState: Yup.string().required('Please select a state where you want to apply for a mortgage'),
+
     // Personal Information
     firstName: Yup.string().required('First name is required').max(50, 'First name cannot exceed 50 characters'),
     middleName: Yup.string().optional(),
@@ -218,9 +222,11 @@ const libraries: Libraries = ['places'];
 
 const MLSApplicationForm = () => {
     const { t } = useTranslation();
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [showStateModal, setShowStateModal] = useState(false);
+    const [selectedStateName, setSelectedStateName] = useState('');
     const { toast } = useToast();
 
     // Load Google Places API using @react-google-maps/api
@@ -240,6 +246,7 @@ const MLSApplicationForm = () => {
     const form = useForm({
         resolver: yupResolver(formSchema),
         defaultValues: {
+            applicationState: '',
             firstName: '',
             middleName: '',
             lastName: '',
@@ -401,6 +408,41 @@ const MLSApplicationForm = () => {
 
     const renderStep = () => {
         switch (step) {
+            case 0:
+                return (
+                    <div className="space-y-6">
+                        <h2 className="text-center text-2xl font-semibold">Select Application State</h2>
+                        <p className="mb-6 text-center text-gray-600">Please select the state where you want to apply for a mobile home mortgage.</p>
+                        <div className="mx-auto max-w-md">
+                            <FormField
+                                control={form.control}
+                                name="applicationState"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="flex items-center justify-center">
+                                            State <span className="ml-1 text-red-500">*</span>
+                                        </FormLabel>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a state" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {states.map((state) => (
+                                                    <SelectItem key={state} value={state}>
+                                                        {state}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                );
             case 1:
                 return (
                     <div className="space-y-6">
@@ -1389,13 +1431,13 @@ const MLSApplicationForm = () => {
                         <div className="h-2 rounded bg-gray-200">
                             <div className="h-full rounded bg-blue-600 transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }}></div>
                         </div>
-                        <p className="mt-2 text-center text-gray-600">{t('apply.form.stepIndicator', { step, total: 4 })}</p>
+                        <p className="mt-2 text-center text-gray-600">{step === 0 ? 'State Selection' : `Step ${step} of 4`}</p>
                     </div>
 
                     <div key={step}>{renderStep()}</div>
 
                     <div className="mt-8 flex justify-between">
-                        {step > 1 && (
+                        {step > 0 && (
                             <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
                                 {t('apply.form.previous')}
                             </Button>
@@ -1410,12 +1452,23 @@ const MLSApplicationForm = () => {
                                 } else {
                                     // Trigger validation for the current step's fields before proceeding
                                     const fieldsToValidate = {
+                                        0: ['applicationState'],
                                         1: ['firstName', 'lastName', 'ssn', 'driverLicense', 'dateOfBirth', 'gender'],
                                         2: ['email', 'phone', 'address', 'city', 'state', 'zipCode'],
                                         3: ['companyName', 'title', 'hireDate', 'income', 'incomeFrequency'],
                                     }[step];
                                     const isValid = await form.trigger(fieldsToValidate);
                                     if (isValid) {
+                                        // Check for non-Colorado states on step 0
+                                        if (step === 0) {
+                                            const selectedState = form.getValues('applicationState');
+                                            if (selectedState !== 'Colorado') {
+                                                // For non-Colorado states, show a modal message
+                                                setSelectedStateName(selectedState);
+                                                setShowStateModal(true);
+                                                return;
+                                            }
+                                        }
                                         setStep(step + 1);
                                     }
                                 }
@@ -1435,6 +1488,23 @@ const MLSApplicationForm = () => {
                     </div>
                 </form>
             </Form>
+
+            {/* State Modal */}
+            <Dialog open={showStateModal} onOpenChange={setShowStateModal}>
+                <DialogContent className="max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Application Notice</DialogTitle>
+                        <DialogDescription>
+                            Applications for {selectedStateName} will be handled through a specialized process. This feature will be available soon.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button onClick={() => setShowStateModal(false)} className="w-full">
+                            Understood
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
