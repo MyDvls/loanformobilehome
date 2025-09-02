@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class FeatureSection extends Model
 {
     protected $table = 'feature_section';
+
     protected $fillable = [
         'title',
     ];

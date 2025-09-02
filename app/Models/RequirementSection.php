@@ -11,6 +11,7 @@ class RequirementSection extends Model
     use HasFactory;
 
     protected $table = 'requirement_section';
+
     protected $fillable = [
         'title',
         'subtitle',

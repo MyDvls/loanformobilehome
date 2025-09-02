@@ -8,25 +8,8 @@ use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UnderstandingLoanController;
-use App\Http\Middleware\CustomTrimStrings;
-use App\Models\ContactSection;
-use App\Models\FeatureSection;
-use App\Models\FeaturesSection;
-use App\Models\HeroSection;
-use App\Models\LoanSection;
-use App\Models\RequirementSection;
-use App\Models\ServiceItem;
-use App\Models\ServiceSection;
-use App\Models\TeamMember;
-use App\Models\TeamSection;
-use App\Models\TestimonialSection;
-use App\Models\UnderstandingLoanSection;
-use App\Services\TranslationService;
-use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 // Public Routes
@@ -36,14 +19,14 @@ Route::get('/loan-guide', [UnderstandingLoanController::class, 'index'])->name('
 Route::get('/team', [TeamController::class, 'index'])->name('team');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-Route::get('/investors', fn() => Inertia::render('Investors'))->name('investors');
-Route::get('/customers', fn() => Inertia::render('Customers'))->name('customers');
-Route::get('/login', fn() => Inertia::render('Login'))->name('login');
-Route::get('/apply', fn() => Inertia::render('Apply'))->name('apply');
-Route::get('/apply/mmls', fn() => Inertia::render('MMLSApplication'))->name('apply.mmls');
+Route::get('/investors', fn () => Inertia::render('Investors'))->name('investors');
+Route::get('/customers', fn () => Inertia::render('Customers'))->name('customers');
+Route::get('/login', fn () => Inertia::render('Login'))->name('login');
+Route::get('/apply', fn () => Inertia::render('Apply'))->name('apply');
+Route::get('/apply/mmls', fn () => Inertia::render('MMLSApplication'))->name('apply.mmls');
 Route::post('/apply', [ApplyController::class, 'apply'])->name('apply.store');
-Route::get('/privacy', fn() => Inertia::render('Privacy'))->name('privacy');
-Route::get('/terms', fn() => Inertia::render('Terms'))->name('terms');
+Route::get('/privacy', fn () => Inertia::render('Privacy'))->name('privacy');
+Route::get('/terms', fn () => Inertia::render('Terms'))->name('terms');
 
 // Admin Routes
 Route::middleware(['auth', 'verified', 'custom.trim'])->group(function () {
@@ -80,9 +63,8 @@ Route::post('/language/switch', function (Request $request) {
     return redirect()->back();
 })->name('language.switch');
 
-
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';
 
 Route::get('/{any}', function () {
     return Inertia::render('NotFound');

@@ -8,13 +8,8 @@ trait ApiResponseTrait
 {
     /**
      * Send a success response.
-     *
-     * @param array|string|object $data
-     * @param string|null $message
-     * @param int $status
-     * @return JsonResponse
      */
-    public function successResponse(array|string|object $data, string $message = null, int $status = 200): JsonResponse
+    public function successResponse(array|string|object $data, ?string $message = null, int $status = 200): JsonResponse
     {
         $response = [
             'data' => $data,
@@ -27,11 +22,9 @@ trait ApiResponseTrait
     /**
      * Send an error response.
      *
-     * @param array|string $message
-     * @param int $status
-     * @return JsonResponse
+     * @param  array|string  $message
      */
-    public function errorResponse(string $message, array $errors=[], int $status = 500): JsonResponse
+    public function errorResponse(string $message, array $errors = [], int $status = 500): JsonResponse
     {
         $response = [
             'message' => $message,

@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Models\Visit;
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class LogVisit
 {
@@ -16,7 +15,7 @@ class LogVisit
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!session('visit_logged')) {
+        if (! session('visit_logged')) {
             Visit::create([
                 'visited_at' => now(),
                 'ip_address' => $request->ip(), // Optional
@@ -24,6 +23,7 @@ class LogVisit
             ]);
             session(['visit_logged' => true]);
         }
+
         return $next($request);
     }
 }

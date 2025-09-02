@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\ContactSection;
 use App\Models\FeatureItem;
 use App\Models\FeatureSection;
@@ -131,7 +130,7 @@ class PageBuilderController extends Controller
         $hero->save();
 
         $requestHeroItemIds = collect($request->input('heroItems'))
-            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->filter(fn ($item) => isset($item['id']) && $item['id'])
             ->pluck('id')
             ->toArray();
 
@@ -142,7 +141,7 @@ class PageBuilderController extends Controller
         foreach ($request->input('heroItems') as $index => $heroItemData) {
             $heroItem = isset($heroItemData['id']) && $heroItemData['id']
                 ? HeroItem::find($heroItemData['id'])
-                : new HeroItem();
+                : new HeroItem;
 
             $heroItem->hero_section_id = $hero->id;
 
@@ -176,7 +175,7 @@ class PageBuilderController extends Controller
         $loanSection->save();
 
         $requestLoanItemIds = collect($request->input('loanItems'))
-            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->filter(fn ($item) => isset($item['id']) && $item['id'])
             ->pluck('id')
             ->toArray();
 
@@ -187,7 +186,7 @@ class PageBuilderController extends Controller
         foreach ($request->input('loanItems') as $index => $loanItemData) {
             $loanItem = isset($loanItemData['id']) && $loanItemData['id']
                 ? LoanItem::find($loanItemData['id'])
-                : new LoanItem();
+                : new LoanItem;
 
             $loanItem->loan_section_id = $loanSection->id;
             $loanItem->title = $loanItemData['title'];
@@ -227,7 +226,7 @@ class PageBuilderController extends Controller
         $requirements->save();
 
         $requestItemIds = collect($request->input('requirementItems'))
-            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->filter(fn ($item) => isset($item['id']) && $item['id'])
             ->pluck('id')
             ->toArray();
 
@@ -238,7 +237,7 @@ class PageBuilderController extends Controller
         foreach ($request->input('requirementItems') as $index => $itemData) {
             $requirementItem = isset($itemData['id']) && $itemData['id']
                 ? RequirementItem::find($itemData['id'])
-                : new RequirementItem();
+                : new RequirementItem;
 
             $requirementItem->requirement_section_id = $requirements->id;
             $requirementItem->title = $itemData['title'];
@@ -276,7 +275,7 @@ class PageBuilderController extends Controller
         $featuresSection->save();
 
         $requestFeatureItemIds = collect($request->input('featureItems'))
-            ->filter(fn($item) => isset($item['id']) && $item['id'])
+            ->filter(fn ($item) => isset($item['id']) && $item['id'])
             ->pluck('id')
             ->toArray();
 
@@ -287,7 +286,7 @@ class PageBuilderController extends Controller
         foreach ($request->input('featureItems') as $index => $featureItemData) {
             $featureItem = isset($featureItemData['id']) && $featureItemData['id']
                 ? FeatureItem::find($featureItemData['id'])
-                : new FeatureItem();
+                : new FeatureItem;
 
             $featureItem->feature_section_id = $featuresSection->id;
             $featureItem->title = $featureItemData['title'];
@@ -314,8 +313,9 @@ class PageBuilderController extends Controller
             $serviceItems = ServiceItem::orderBy('id', 'asc')->get();
             Log::info('Fetched services data: ', [
                 'serviceSection' => $serviceSection,
-                'serviceItems' => $serviceItems
+                'serviceItems' => $serviceItems,
             ]);
+
             return Inertia::render('Admin/Pages/ServicesEdit', [
                 'serviceSection' => $serviceSection ? [
                     'id' => $serviceSection->id,
@@ -332,11 +332,12 @@ class PageBuilderController extends Controller
                 })->toArray(),
             ]);
         } catch (Exception $e) {
-            Log::error('Error fetching services data: ' . $e->getMessage());
+            Log::error('Error fetching services data: '.$e->getMessage());
+
             return Inertia::render('Admin/Pages/ServicesEdit', [
                 'serviceSection' => null,
                 'serviceItems' => [],
-                'error' => 'Failed to load services data'
+                'error' => 'Failed to load services data',
             ]);
         }
     }
@@ -362,7 +363,7 @@ class PageBuilderController extends Controller
             $serviceSection->save();
 
             $requestServiceIds = collect($request->input('services'))
-                ->filter(fn($service) => isset($service['id']) && $service['id'])
+                ->filter(fn ($service) => isset($service['id']) && $service['id'])
                 ->pluck('id')
                 ->toArray();
 
@@ -371,7 +372,7 @@ class PageBuilderController extends Controller
             foreach ($request->input('services') as $index => $serviceData) {
                 $serviceItem = isset($serviceData['id']) && $serviceData['id']
                     ? ServiceItem::find($serviceData['id'])
-                    : new ServiceItem();
+                    : new ServiceItem;
 
                 $serviceItem->service_section_id = $serviceSection->id;
                 $serviceItem->title = $serviceData['title'];
@@ -390,7 +391,8 @@ class PageBuilderController extends Controller
 
             return redirect()->route('admin.pages.services.edit')->with('success', 'Services section updated successfully.');
         } catch (Exception $e) {
-            Log::error('Error updating services section: ' . $e->getMessage());
+            Log::error('Error updating services section: '.$e->getMessage());
+
             return redirect()->back()->withErrors(['error' => 'Failed to update services section']);
         }
     }
@@ -402,8 +404,9 @@ class PageBuilderController extends Controller
             $teamMembers = TeamMember::orderBy('order', 'asc')->get();
             Log::info('Fetched team data: ', [
                 'teamSection' => $teamSection,
-                'teamMembers' => $teamMembers
+                'teamMembers' => $teamMembers,
             ]);
+
             return Inertia::render('Admin/Pages/TeamsEdit', [
                 'teamSection' => $teamSection ? [
                     'id' => $teamSection->id,
@@ -422,11 +425,12 @@ class PageBuilderController extends Controller
                 })->toArray(),
             ]);
         } catch (Exception $e) {
-            Log::error('Error fetching team data: ' . $e->getMessage());
+            Log::error('Error fetching team data: '.$e->getMessage());
+
             return Inertia::render('Admin/Pages/TeamEdit', [
                 'teamSection' => null,
                 'teamMembers' => [],
-                'error' => 'Failed to load team data'
+                'error' => 'Failed to load team data',
             ]);
         }
     }
@@ -453,7 +457,7 @@ class PageBuilderController extends Controller
             $teamSection->save();
 
             $requestMemberIds = collect($request->input('team_members'))
-                ->filter(fn($member) => isset($member['id']) && $member['id'])
+                ->filter(fn ($member) => isset($member['id']) && $member['id'])
                 ->pluck('id')
                 ->toArray();
 
@@ -462,7 +466,7 @@ class PageBuilderController extends Controller
             foreach ($request->input('team_members') as $index => $memberData) {
                 $teamMember = isset($memberData['id']) && $memberData['id']
                     ? TeamMember::find($memberData['id'])
-                    : new TeamMember();
+                    : new TeamMember;
 
                 $teamMember->team_section_id = $teamSection->id;
                 $teamMember->name = $memberData['name'];
@@ -483,7 +487,8 @@ class PageBuilderController extends Controller
 
             return redirect()->route('admin.pages.team.edit')->with('success', 'Team section updated successfully.');
         } catch (Exception $e) {
-            Log::error('Error updating team section: ' . $e->getMessage());
+            Log::error('Error updating team section: '.$e->getMessage());
+
             return redirect()->back()->withErrors(['error' => 'Failed to update team section']);
         }
     }
@@ -519,7 +524,8 @@ class PageBuilderController extends Controller
                 ] : null,
             ]);
         } catch (Exception $e) {
-            Log::error('Error fetching understanding loan section data: ' . $e->getMessage());
+            Log::error('Error fetching understanding loan section data: '.$e->getMessage());
+
             return Inertia::render('Admin/Pages/UnderstandingLoanEdit', [
                 'understandingLoanSection' => null,
                 'error' => 'Failed to load understanding loan section data',
@@ -580,7 +586,8 @@ class PageBuilderController extends Controller
 
             return redirect()->route('admin.pages.get-a-loan.edit')->with('success', 'Understanding Loan section updated successfully.');
         } catch (Exception $e) {
-            Log::error('Error updating understanding loan section: ' . $e->getMessage());
+            Log::error('Error updating understanding loan section: '.$e->getMessage());
+
             return redirect()->back()->withErrors(['error' => 'Failed to update understanding loan section']);
         }
     }
@@ -602,7 +609,8 @@ class PageBuilderController extends Controller
                 ] : null,
             ]);
         } catch (Exception $e) {
-            Log::error('Error fetching contact section data: ' . $e->getMessage());
+            Log::error('Error fetching contact section data: '.$e->getMessage());
+
             return Inertia::render('Admin/Pages/ContactEdit', [
                 'contactSection' => null,
                 'error' => 'Failed to load contact section data',
@@ -643,7 +651,8 @@ class PageBuilderController extends Controller
 
             return redirect()->route('admin.pages.contact.edit')->with('success', 'Contact section updated successfully.');
         } catch (Exception $e) {
-            Log::error('Error updating contact section: ' . $e->getMessage());
+            Log::error('Error updating contact section: '.$e->getMessage());
+
             return redirect()->back()->withErrors(['error' => 'Failed to update contact section']);
         }
     }

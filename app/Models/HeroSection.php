@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class HeroSection extends Model
 {
     protected $table = 'hero_section';
+
     protected $fillable = [
         'slogan',
         'heading_part1',

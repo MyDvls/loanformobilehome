@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class TeamSection extends Model
 {
     protected $table = 'team_section';
+
     protected $fillable = [
         'heading',
         'sub_heading',

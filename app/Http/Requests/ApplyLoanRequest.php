@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class ApplyLoanRequest extends FormRequest
 {
     use ApiResponseTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -96,7 +97,6 @@ class ApplyLoanRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     * @param Validator $validator
      * @return void
      */
     protected function failedValidation(Validator $validator)
