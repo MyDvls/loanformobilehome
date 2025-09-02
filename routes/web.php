@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GeolocationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\ServicesController;
@@ -26,6 +27,7 @@ Route::get('/apply', fn () => Inertia::render('Apply'))->name('apply');
 Route::get('/apply/mmls', fn () => Inertia::render('MMLSApplication'))->name('apply.mmls');
 Route::post('/apply', [ApplyController::class, 'apply'])->name('apply.store');
 Route::get('/privacy', fn () => Inertia::render('Privacy'))->name('privacy');
+Route::get('/api/geolocation', [GeolocationController::class, 'getUserLocation'])->name('geolocation');
 Route::get('/terms', fn () => Inertia::render('Terms'))->name('terms');
 
 // Admin Routes

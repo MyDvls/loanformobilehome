@@ -227,6 +227,7 @@ const MLSApplicationForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showStateModal, setShowStateModal] = useState(false);
     const [selectedStateName, setSelectedStateName] = useState('');
+    const [isDetectingLocation, setIsDetectingLocation] = useState(false);
     const { toast } = useToast();
 
     // Load Google Places API using @react-google-maps/api
@@ -291,6 +292,34 @@ const MLSApplicationForm = () => {
             messageAccepted: false,
         },
     });
+
+    // Auto-detect user's state based on IP address
+    useEffect(() => {
+        const detectUserLocation = async () => {
+            setIsDetectingLocation(true);
+            try {
+                const response = await axios.get('/api/geolocation');
+                if (response.data.success && response.data.state) {
+                    // Auto-select the detected state
+                    form.setValue('applicationState', response.data.state);
+                    toast({
+                        title: 'Location Detected',
+                        description: `We've automatically selected ${response.data.state} based on your location.`,
+                    });
+                }
+            } catch (error) {
+                console.log('Could not detect location:', error);
+                // Silently fail - user can still manually select state
+            } finally {
+                setIsDetectingLocation(false);
+            }
+        };
+
+        // Only detect location when component first loads and no state is selected
+        if (!form.getValues('applicationState')) {
+            detectUserLocation();
+        }
+    }, [form, toast]);
 
     // Helper function to extract address components
     const extractAddressComponents = (place) => {
@@ -413,6 +442,14 @@ const MLSApplicationForm = () => {
                     <div className="space-y-6">
                         <h2 className="text-center text-2xl font-semibold">Select Application State</h2>
                         <p className="mb-6 text-center text-gray-600">Please select the state where you want to apply for a mobile home mortgage.</p>
+
+                        {isDetectingLocation && (
+                            <div className="mb-4 flex items-center justify-center space-x-2">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                <span className="text-sm text-gray-600">Detecting your location...</span>
+                            </div>
+                        )}
+
                         <div className="mx-auto max-w-md">
                             <FormField
                                 control={form.control}
@@ -424,8 +461,8 @@ const MLSApplicationForm = () => {
                                         </FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a state" />
+                                                <SelectTrigger disabled={isDetectingLocation}>
+                                                    <SelectValue placeholder={isDetectingLocation ? 'Detecting location...' : 'Select a state'} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
