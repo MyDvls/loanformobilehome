@@ -18,8 +18,8 @@ class ApplyController extends Controller
             \Log::info('Apply Loan Request', $request->all());
             // Headers for all API requests
             $headers = [
-                'Authorization' => 'Bearer ' . env('LOANPRO_AUTH_TOKEN'),
-                'Autopal-Instance-Id' => env('LOANPRO_INSTANCE_ID'),
+                'Authorization' => 'Bearer ' . config('services.loanpro.auth_token'),
+                'Autopal-Instance-Id' => config('services.loanpro.instance_id'),
             ];
 
             // Step 1: Create Customer
