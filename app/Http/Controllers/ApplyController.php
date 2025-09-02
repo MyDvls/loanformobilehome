@@ -35,9 +35,18 @@ class ApplyController extends Controller
             );
 
             if (! $customerResponse->successful()) {
-                \Log::error('Customer Creation Failed', $customerResponse->json() ?? []);
+                $errorData = $customerResponse->json() ?? [];
+                \Log::error('Customer Creation Failed', $errorData);
 
-                return response()->json(['error' => 'Failed to create customer'], 500);
+                // Extract the specific error message if available
+                $errorMessage = 'Failed to create customer';
+                if (isset($errorData['error']['message'])) {
+                    $errorMessage = $errorData['error']['message'];
+                } elseif (isset($errorData['message'])) {
+                    $errorMessage = $errorData['message'];
+                }
+
+                return response()->json(['error' => $errorMessage], 500);
             }
 
             $customer = $customerResponse->json();
@@ -75,22 +84,47 @@ class ApplyController extends Controller
                 );
 
                 if (! $mmlsResponse->successful()) {
-                    \Log::error('MMLS Response Failed', $mmlsResponse->json() ?? []);
+                    $mmlsErrorData = $mmlsResponse->json() ?? [];
+                    \Log::error('MMLS Response Failed', $mmlsErrorData);
                     \Log::error('MMLS Response Failed', [
                         'status' => $mmlsResponse->status(),
                         'body' => $mmlsResponse->body(),
                         'headers' => $mmlsResponse->headers(),
                     ]);
 
-                    return response()->json(['error' => 'Failed to send customer id to MMLS'], 500);
+                    // Extract MMLS-specific error message
+                    $mmlsErrorMessage = 'Failed to send customer information to MMLS';
+                    if (isset($mmlsErrorData['error']['message'])) {
+                        $mmlsErrorMessage = 'MMLS Error: '.$mmlsErrorData['error']['message'];
+                    } elseif (isset($mmlsErrorData['message'])) {
+                        $mmlsErrorMessage = 'MMLS Error: '.$mmlsErrorData['message'];
+                    }
+
+                    return response()->json(['error' => $mmlsErrorMessage], 500);
                 }
             }
 
             return response()->json(['message' => 'Loan application processed successfully'], 200);
         } catch (\Exception $e) {
-            \Log::error('Error in Apply Loan', ['error' => $e->getMessage()]);
+            \Log::error('Error in Apply Loan', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-            return response()->json(['error' => 'An error occurred while processing the loan application'], 500);
+            // Return more specific error messages based on the exception
+            $errorMessage = $e->getMessage();
+
+            // Check if it's a validation error or HTTP error
+            if (str_contains($errorMessage, 'validation') || str_contains($errorMessage, 'validate')) {
+                return response()->json(['error' => $errorMessage], 422);
+            }
+
+            // For other errors, provide a more informative message
+            if (str_contains($errorMessage, 'HTTP') || str_contains($errorMessage, 'connection')) {
+                return response()->json(['error' => 'Service temporarily unavailable. Please try again later.'], 503);
+            }
+
+            return response()->json(['error' => $errorMessage], 500);
         }
     }
 }
