@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-         Schema::create('hero_items', function (Blueprint $table) {
+        Schema::create('hero_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hero_section_id')
                 ->constrained('hero_section')

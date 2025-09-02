@@ -14,8 +14,11 @@ class ProcessLoanAndCollateral implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $loanData;
+
     protected $customerId;
+
     protected $collateralCustomFields;
+
     protected $headers;
 
     public function __construct(array $loanData, int $customerId, array $collateralCustomFields, array $headers)
@@ -29,7 +32,7 @@ class ProcessLoanAndCollateral implements ShouldQueue
     public function handle(): void
     {
         // Step 1: Create Loan
-        if (isset($this->loanData['Collateral']) && is_array($this->loanData['Collateral']) && !isset($this->loanData['Collateral']['results'])) {
+        if (isset($this->loanData['Collateral']) && is_array($this->loanData['Collateral']) && ! isset($this->loanData['Collateral']['results'])) {
             $this->loanData['Collateral'] = ['results' => $this->loanData['Collateral']];
         }
         $this->loanData['Customers'] = [
@@ -48,18 +51,20 @@ class ProcessLoanAndCollateral implements ShouldQueue
             $this->loanData
         );
 
-        if (!$loanResponse->successful()) {
+        if (! $loanResponse->successful()) {
             \Log::error('Loan Creation Failed', $loanResponse->json());
             $this->fail(new \Exception('Failed to create loan'));
+
             return;
         }
 
         $loan = $loanResponse->json();
         \Log::info('Loan Created', $loan);
         $loanId = $loan['d']['id'] ?? null;
-        if (!$loanId) {
+        if (! $loanId) {
             \Log::error('Loan ID not found in response');
             $this->fail(new \Exception('Loan ID not found'));
+
             return;
         }
 
@@ -68,18 +73,20 @@ class ProcessLoanAndCollateral implements ShouldQueue
             "https://loanpro.simnang.com/api/public/api/1/odata.svc/Loans({$loanId})/Collateral"
         );
 
-        if (!$collateralResponse->successful()) {
+        if (! $collateralResponse->successful()) {
             \Log::error('Collateral Retrieval Failed', $collateralResponse->json());
             $this->fail(new \Exception('Failed to retrieve collateral'));
+
             return;
         }
 
         $collateralData = $collateralResponse->json();
         \Log::info('Collateral Retrieved', $collateralData);
         $collateral = $collateralData['d']['results'][0] ?? null;
-        if (!$collateral) {
+        if (! $collateral) {
             \Log::error('Collateral not found');
             $this->fail(new \Exception('Collateral not found'));
+
             return;
         }
         $collateralId = $collateral['id'];
@@ -90,15 +97,15 @@ class ProcessLoanAndCollateral implements ShouldQueue
 
             // Normalize booleans to "1"/"0"
             if (is_bool($value)) {
-                $value = $value ? "1" : "0";
+                $value = $value ? '1' : '0';
             } elseif ($value === null) {
-                $value = ""; // keep nulls as empty string
+                $value = ''; // keep nulls as empty string
             } else {
                 $value = (string) $value; // fallback for text/numbers
             }
 
             return [
-                'customFieldId'    => (int) $field['customFieldId'],
+                'customFieldId' => (int) $field['customFieldId'],
                 'customFieldValue' => $value,
             ];
         })->toArray();
@@ -120,9 +127,10 @@ class ProcessLoanAndCollateral implements ShouldQueue
             $updatePayload
         );
 
-        if (!$updateResponse->successful()) {
+        if (! $updateResponse->successful()) {
             \Log::error('Collateral Custom Fields Update Failed', $updateResponse->json());
             $this->fail(new \Exception('Failed to update collateral custom fields'));
+
             return;
         }
 

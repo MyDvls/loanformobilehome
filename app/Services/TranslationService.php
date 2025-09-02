@@ -24,7 +24,7 @@ class TranslationService
         }
 
         // Cache translations to avoid repeated API calls
-        $cacheKey = "translation." . md5($text . $targetLanguage . $sourceLanguage . $this->provider);
+        $cacheKey = 'translation.'.md5($text.$targetLanguage.$sourceLanguage.$this->provider);
 
         return Cache::rememberForever($cacheKey, function () use ($text, $targetLanguage, $sourceLanguage) {
             return $this->callTranslationApi($text, $targetLanguage, $sourceLanguage);
@@ -40,14 +40,15 @@ class TranslationService
                 default => $this->callGoogleTranslate($text, $targetLanguage, $sourceLanguage),
             };
         } catch (Exception $e) {
-            Log::error('Translation error: ' . $e->getMessage());
+            Log::error('Translation error: '.$e->getMessage());
+
             return $text; // Fallback to original text if translation fails
         }
     }
 
     private function callGoogleTranslate(string $text, string $targetLanguage, string $sourceLanguage): string
     {
-        $response = Http::post('https://translation.googleapis.com/language/translate/v2?key=' . config('services.google_translate.key'), [
+        $response = Http::post('https://translation.googleapis.com/language/translate/v2?key='.config('services.google_translate.key'), [
             'q' => $text,
             'source' => $sourceLanguage,
             'target' => $targetLanguage,
@@ -69,7 +70,7 @@ class TranslationService
             'credentials' => [
                 'key' => config('services.aws.key'),
                 'secret' => config('services.aws.secret'),
-            ]
+            ],
         ]);
 
         $result = $client->translateText([

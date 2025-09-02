@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\ContactSection;
-use App\Models\RequirementsSection;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

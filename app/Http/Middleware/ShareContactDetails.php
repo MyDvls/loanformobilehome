@@ -6,7 +6,6 @@ use App\Models\ContactSection;
 use App\Services\TranslationService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -18,17 +17,17 @@ class ShareContactDetails
 
         $sec = ContactSection::first();
 
-        if (!$sec) {
+        if (! $sec) {
             return null;
         }
 
         $payload = [
-            'company_name'  => $sec->company_name,
-            'address'       => $sec->address,
-            'email'         => $sec->email,
-            'telephone'     => $sec->telephone,
+            'company_name' => $sec->company_name,
+            'address' => $sec->address,
+            'email' => $sec->email,
+            'telephone' => $sec->telephone,
             'working_hours' => $sec->working_hours,
-            'logo_url'      => $sec->logo_path ? Storage::url($sec->logo_path) : null,
+            'logo_url' => $sec->logo_path ? Storage::url($sec->logo_path) : null,
         ];
 
         if ($locale !== 'en') {

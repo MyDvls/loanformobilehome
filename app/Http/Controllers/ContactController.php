@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Models\ContactSection;
 use App\Services\TranslationService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
-
     public function index(TranslationService $translator)
     {
         $locale = app()->getLocale();

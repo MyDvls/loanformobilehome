@@ -49,7 +49,7 @@ class DashboardController extends Controller
             ->map(function ($customer) {
                 return [
                     'id' => $customer->id,
-                    'name' => trim($customer->first_name . ' ' . $customer->last_name),
+                    'name' => trim($customer->first_name.' '.$customer->last_name),
                     'email' => $customer->email,
                     'date' => $customer->created_at->diffForHumans(),
                     'status' => $customer->status ?? 'active',
@@ -88,7 +88,7 @@ class DashboardController extends Controller
             $customer->primary_state,
         ]);
 
-        return !empty($parts) ? implode(', ', $parts) : 'Location not specified';
+        return ! empty($parts) ? implode(', ', $parts) : 'Location not specified';
     }
 
     /**
@@ -96,7 +96,7 @@ class DashboardController extends Controller
      */
     private function calculateAge($birthDate)
     {
-        if (!$birthDate) {
+        if (! $birthDate) {
             return null;
         }
 
@@ -111,7 +111,7 @@ class DashboardController extends Controller
         $first = $firstName ? strtoupper(substr($firstName, 0, 1)) : '';
         $last = $lastName ? strtoupper(substr($lastName, 0, 1)) : '';
 
-        return $first . $last;
+        return $first.$last;
     }
 
     /**
@@ -136,7 +136,7 @@ class DashboardController extends Controller
                 ->get()
                 ->map(function ($item) {
                     return [
-                        'location' => $item->primary_city . ', ' . $item->primary_state,
+                        'location' => $item->primary_city.', '.$item->primary_state,
                         'count' => $item->count,
                     ];
                 }),
@@ -194,7 +194,7 @@ class DashboardController extends Controller
         $customers->getCollection()->transform(function ($customer) {
             return [
                 'id' => $customer->id,
-                'name' => trim($customer->first_name . ' ' . $customer->last_name),
+                'name' => trim($customer->first_name.' '.$customer->last_name),
                 'email' => $customer->email,
                 'status' => $customer->status ?? 'active',
                 'customer_type' => $customer->customer_type ?? 'standard',

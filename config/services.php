@@ -51,5 +51,9 @@ return [
         'webhook_url' => env('MMLS_WEBHOOK_URL'),
         'auth_token' => env('MMLS_AUTH_TOKEN'),
     ],
+    'loanpro' => [
+        'auth_token' => env('LOANPRO_AUTH_TOKEN'),
+        'instance_id' => env('LOANPRO_INSTANCE_ID'),
+    ],
 
 ];

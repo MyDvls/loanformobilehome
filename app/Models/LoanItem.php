@@ -20,7 +20,6 @@ class LoanItem extends Model
         return $this->belongsTo(LoanSection::class);
     }
 
-
     protected static function boot()
     {
         parent::boot();

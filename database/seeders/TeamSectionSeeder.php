@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\TeamSection;
 use App\Models\TeamMember;
+use App\Models\TeamSection;
 use Illuminate\Database\Seeder;
 
 class TeamSectionSeeder extends Seeder
