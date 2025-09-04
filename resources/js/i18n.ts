@@ -114,7 +114,8 @@ const resources = {
             'apply.form.step4.shareReport':
                 'I authorize Mobile Fund Services to share my mortgage application and related financial information, including my credit report, with other licensed mortgage loan originators for the purpose of exploring additional financing options. This authorization is valid for 90 days and may be revoked in writing at any time.',
             'apply.form.step4.messageAccepted':
-                'I agree to receive text messages from Mobile Fund Services at the number provided. Msg & data rates may apply. Frequency varies. Reply STOP to cancel. Help: (720) 560-1018 or Support@loanformobilehome.com.',
+                'By clicking "I Accept", you are providing your electronic signature for express written consent to Mobile Fund Services, LLC, Manufactured Home Lending and/or parties making contact on our or their behalf to communicate with you regarding mortgage options and related products or services by text or calls at the phone number you provided using any automated telephone dialing device or system, prerecorded/artificial voice and/or artificial technology (Data and msg rates may apply, msg frequency varies: Text HELP for help; STOP to cancel) even if your telephone number is listed on any state or federal Do-Not-Call registry. This consent will not be shared with third parties for their marketing purposes. I may revoke this consent anytime and consent is not required as a condition to purchase goods or services. Print, save or download this screen using your computer or device and web browser to retain a copy of this consent.',
+            'apply.form.step4.iAccept': 'I Accept',
 
             // Footer
             'footer.quick': 'Quick Links',
@@ -243,6 +244,11 @@ const resources = {
                 'Entiendo y acepto que al completar y enviar esta solicitud de crédito estoy solicitando crédito. Certifico que la información en la solicitud es verdadera y completa. Entiendo que las declaraciones falsas pueden someterme a consecuencias legales.',
             'apply.form.step4.backgroundCheckAccepted':
                 'Por la presente autorizo a Mobile Fund Services LLC y a sus agentes designados a realizar una revisión exhaustiva de mi historial, lo que generará un informe de consumidor y/o un informe de investigación de consumidor para la solicitud de préstamo.',
+            'apply.form.step4.shareReport':
+                'Autorizo a Mobile Fund Services a compartir mi solicitud de hipoteca e información financiera relacionada, incluido mi informe de crédito, con otros originadores de préstamos hipotecarios con licencia con el propósito de explorar opciones de financiamiento adicionales. Esta autorización es válida por 90 días y puede ser revocada por escrito en cualquier momento.',
+            'apply.form.step4.messageAccepted':
+                'Al hacer clic en "Acepto", usted está proporcionando su firma electrónica para el consentimiento expreso por escrito a Mobile Fund Services, LLC, Manufactured Home Lending y/o partes que se comunican en nuestro nombre o en el suyo para comunicarse con usted sobre opciones de hipoteca y productos o servicios relacionados por texto o llamadas al número de teléfono que proporcionó usando cualquier dispositivo o sistema de marcado telefónico automatizado, voz pregrabada/artificial y/o tecnología artificial (Pueden aplicar tarifas de datos y mensajes, la frecuencia de mensajes varía: Envíe HELP para ayuda; STOP para cancelar) incluso si su número de teléfono está listado en cualquier registro estatal o federal de No Llamar. Este consentimiento no será compartido con terceros para sus propósitos de marketing. Puedo revocar este consentimiento en cualquier momento y el consentimiento no es requerido como condición para comprar bienes o servicios. Imprima, guarde o descargue esta pantalla usando su computadora o dispositivo y navegador web para conservar una copia de este consentimiento.',
+            'apply.form.step4.iAccept': 'Acepto',
 
             // Footer (Spanish)
             'footer.quick': 'Enlaces rápidos',

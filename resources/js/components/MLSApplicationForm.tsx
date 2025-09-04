@@ -131,7 +131,7 @@ const formSchema = Yup.object({
     termsAccepted: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
     backgroundCheckAccepted: Yup.boolean().oneOf([true], 'You must accept the background check'),
     shareReport: Yup.boolean().oneOf([true], 'You must accept the sharing of report'),
-    messageAccepted: Yup.boolean().oneOf([true], 'You must accept to receive messages'),
+    messageAccepted: Yup.boolean().oneOf([true], 'You must accept the terms by clicking "I Accept"'),
 });
 
 const states = [
@@ -1270,6 +1270,20 @@ const MLSApplicationForm = () => {
                                     </FormItem>
                                 )}
                             />
+
+                            {/* New Consent Text and I Accept Checkbox */}
+                            <FormField
+                                control={form.control}
+                                name="messageAccepted"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                        <div className="space-y-1 px-7 leading-none">
+                                            <FormLabel>{t('apply.form.step4.messageAccepted')}</FormLabel>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="messageAccepted"
@@ -1279,7 +1293,7 @@ const MLSApplicationForm = () => {
                                             <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
-                                            <FormLabel>{t('apply.form.step4.messageAccepted')}</FormLabel>
+                                            <FormLabel>{t('apply.form.step4.iAccept')}</FormLabel>
                                         </div>
                                         <FormMessage />
                                     </FormItem>
